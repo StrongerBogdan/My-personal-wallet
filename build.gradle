@@ -15,7 +15,6 @@ ext {
     RELEASE_KEY_PASSWORD = props.getProperty("key.password")
 }
 
-
 task clean(type: Delete) {
     delete rootProject.buildDir
 }
