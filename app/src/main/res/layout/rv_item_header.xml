@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/light_gray">
+
+    <TextView
+        android:id="@+id/day_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="50sp"
+        android:layout_marginStart="@dimen/viewSideMargin"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="01" />
+
+    <TextView
+        android:id="@+id/day_of_the_week_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="25sp"
+        android:layout_marginStart="@dimen/viewSideMargin"
+        app:layout_constraintStart_toEndOf="@id/day_tv"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="TODAY" />
+
+    <TextView
+        android:id="@+id/month_year_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="25sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="@id/day_of_the_week_tv"
+        app:layout_constraintTop_toBottomOf="@id/day_of_the_week_tv"
+        tools:text="JUNE 2022" />
+
+    <TextView
+        android:id="@+id/transaction_amount_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="25sp"
+        android:layout_marginEnd="@dimen/viewSideMargin"
+        app:layout_constraintBaseline_toBaselineOf="@+id/day_of_the_week_tv"
+        app:layout_constraintEnd_toEndOf="parent"
+        tools:text="+$2,550" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
