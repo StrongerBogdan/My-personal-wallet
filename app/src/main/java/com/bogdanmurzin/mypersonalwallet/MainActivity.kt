@@ -1,9 +1,7 @@
-package com.bogdanmurzin.mypersonalwallet.ui.activity
+package com.bogdanmurzin.mypersonalwallet
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import com.bogdanmurzin.mypersonalwallet.ui.fragment.FragmentMoneyTransactions
-import com.bogdanmurzin.mypersonalwallet.R
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
