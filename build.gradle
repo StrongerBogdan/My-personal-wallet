@@ -33,16 +33,9 @@ ext {
     version_code = 1
     version_name = "1.0.0"
 
-}
-
-def props = new Properties()
-file("../not_for_repo/keystore.properties").withInputStream { props.load(it) }
-
-ext {
-    RELEASE_STORE_FILE = file("../not_for_repo/hm_key.jks")
-    RELEASE_STORE_PASSWORD = props.getProperty("store.password")
-    RELEASE_KEY_ALIAS = props.getProperty("key.alias")
-    RELEASE_KEY_PASSWORD = props.getProperty("key.password")
+    room_version = "2.4.2"
+    coroutines_version = '1.6.1'
+    lifeData_version = "2.5.0"
 }
 
 task clean(type: Delete) {

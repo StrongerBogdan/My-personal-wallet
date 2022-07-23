@@ -5,11 +5,11 @@ import com.bogdanmurzin.domain.entities.MoneyTransactionCategory
 import com.bogdanmurzin.mypersonalwallet.adapter.MyMoneyTransactionRecyclerViewAdapter
 import java.math.BigDecimal
 
-data class TransactionItem(
+data class RecyclerTransactionItem(
     val category: MoneyTransactionCategory,
     val description: String?,
     val accountType: AccountType,
-    override val transactionAmount: BigDecimal
+    override val transactionAmount: Float
 ) : RecyclerMultiTypeItem {
     override val type = MyMoneyTransactionRecyclerViewAdapter.ITEM_TYPE_TRANSACTION
 }

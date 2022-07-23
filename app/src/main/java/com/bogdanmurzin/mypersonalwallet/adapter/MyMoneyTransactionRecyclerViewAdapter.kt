@@ -11,9 +11,9 @@ import com.bogdanmurzin.mypersonalwallet.R
 
 import com.bogdanmurzin.mypersonalwallet.databinding.RvItemHeaderBinding
 import com.bogdanmurzin.mypersonalwallet.databinding.RvItemTransactionBinding
-import com.bogdanmurzin.mypersonalwallet.data.transaction_recycer_items.HeaderItem
+import com.bogdanmurzin.mypersonalwallet.data.transaction_recycer_items.RecyclerHeaderItem
 import com.bogdanmurzin.mypersonalwallet.data.transaction_recycer_items.RecyclerMultiTypeItem
-import com.bogdanmurzin.mypersonalwallet.data.transaction_recycer_items.TransactionItem
+import com.bogdanmurzin.mypersonalwallet.data.transaction_recycer_items.RecyclerTransactionItem
 import java.text.NumberFormat
 import java.text.SimpleDateFormat
 import java.util.*
@@ -47,9 +47,9 @@ class MyMoneyTransactionRecyclerViewAdapter(
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         when (holder.itemViewType) {
             ITEM_TYPE_HEADER ->
-                (holder as HeaderViewHolder).bind(list[position] as HeaderItem)
+                (holder as HeaderViewHolder).bind(list[position] as RecyclerHeaderItem)
             ITEM_TYPE_TRANSACTION ->
-                (holder as MoneyTransactionViewHolder).bind(list[position] as TransactionItem)
+                (holder as MoneyTransactionViewHolder).bind(list[position] as RecyclerTransactionItem)
         }
     }
 
@@ -64,7 +64,7 @@ class MyMoneyTransactionRecyclerViewAdapter(
         private val monthYearTv: TextView = binding.monthYearTv
         private val transactionAmountTv: TextView = binding.transactionAmountTv
 
-        fun bind(item: HeaderItem) {
+        fun bind(item: RecyclerHeaderItem) {
             val locate = Locale.getDefault()
 
             dayTv.text =
@@ -88,7 +88,7 @@ class MyMoneyTransactionRecyclerViewAdapter(
         private val descriptionTv: TextView = binding.descriptionTv
         private val transactionAmountTv: TextView = binding.transactionAmountTv
 
-        fun bind(item: TransactionItem) {
+        fun bind(item: RecyclerTransactionItem) {
             val locate = Locale.getDefault()
             val context = categoryTv.context
 
