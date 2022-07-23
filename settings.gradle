@@ -14,5 +14,3 @@ dependencyResolutionManagement {
 }
 rootProject.name = "My Personal Wallet"
 include ':app'
-include ':Domain'
-include ':Data'
