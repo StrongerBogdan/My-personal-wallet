@@ -19,7 +19,7 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 class MyMoneyTransactionRecyclerViewAdapter(
-
+    private val onItemClicked: (TransactionItemUiModel) -> Unit
 ) : ListAdapter<TransactionItemUiModel, RecyclerView.ViewHolder>(ItemDiffCallback) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder =
@@ -40,7 +40,11 @@ class MyMoneyTransactionRecyclerViewAdapter(
                         parent,
                         false
                     )
-                )
+                ).also { viewHolder ->
+                    viewHolder.itemView.setOnClickListener {
+                        onItemClicked(getItem(viewHolder.absoluteAdapterPosition))
+                    }
+                }
             }
         }
 

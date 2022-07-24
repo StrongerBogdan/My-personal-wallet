@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.coroutineScope
 import androidx.navigation.fragment.findNavController
@@ -66,7 +67,14 @@ class FragmentMoneyTransactions : Fragment() {
 
     private fun setupRecycler() {
         val layoutManager: RecyclerView.LayoutManager = LinearLayoutManager(requireContext())
-        recyclerAdapter = MyMoneyTransactionRecyclerViewAdapter()
+        recyclerAdapter = MyMoneyTransactionRecyclerViewAdapter {
+            // Create dialog with editing Transaction
+            Toast.makeText(
+                thisContext,
+                "You taped on ${it.description} transaction",
+                Toast.LENGTH_SHORT
+            ).show()
+        }
         val recyclerView = binding.transactionRecycler
         recyclerView.adapter = recyclerAdapter
         recyclerView.layoutManager = layoutManager
@@ -78,7 +86,7 @@ class FragmentMoneyTransactions : Fragment() {
         setupRecycler()
 
         lifecycle.coroutineScope.launch {
-            viewModel.updateRateList().collect() {
+            viewModel.updateRateList().collect {
                 recyclerAdapter.submitList(it)
             }
         }
