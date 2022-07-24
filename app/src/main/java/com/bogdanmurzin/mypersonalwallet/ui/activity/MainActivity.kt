@@ -1,8 +1,7 @@
 package com.bogdanmurzin.mypersonalwallet.ui.activity
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import com.bogdanmurzin.mypersonalwallet.ui.fragment.FragmentMoneyTransactions
+import androidx.appcompat.app.AppCompatActivity
 import com.bogdanmurzin.mypersonalwallet.R
 import dagger.hilt.android.AndroidEntryPoint
 
