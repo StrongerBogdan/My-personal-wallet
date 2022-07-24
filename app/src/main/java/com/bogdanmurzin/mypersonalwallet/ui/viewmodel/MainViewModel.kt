@@ -5,9 +5,11 @@ import androidx.lifecycle.ViewModelProvider
 import com.bogdanmurzin.domain.usecases.GetTransactionsUseCase
 import com.bogdanmurzin.mypersonalwallet.data.transaction_recycer_items.TransactionItemUiModel
 import com.bogdanmurzin.mypersonalwallet.mapper.TransactionUiMapper
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
+@HiltViewModel
 class MainViewModel @Inject constructor(
     val getTransactionsUseCase: GetTransactionsUseCase,
     val transactionUiMapper: TransactionUiMapper

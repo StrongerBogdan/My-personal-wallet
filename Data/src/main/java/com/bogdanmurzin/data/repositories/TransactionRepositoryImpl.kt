@@ -4,8 +4,9 @@ import com.bogdanmurzin.domain.entities.Transaction
 import com.bogdanmurzin.domain.repositories.TransactionRepository
 import kotlinx.coroutines.flow.Flow
 import java.util.*
+import javax.inject.Inject
 
-class TransactionRepositoryImpl(
+class TransactionRepositoryImpl @Inject constructor(
     private val localDataSource: TransactionsLocalDataSource
 ) : TransactionRepository {
 

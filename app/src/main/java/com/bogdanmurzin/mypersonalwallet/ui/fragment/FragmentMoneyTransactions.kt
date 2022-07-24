@@ -26,42 +26,43 @@ import com.bogdanmurzin.mypersonalwallet.adapter.MyMoneyTransactionRecyclerViewA
 import com.bogdanmurzin.mypersonalwallet.databinding.FragmentMoneyTransactionsListBinding
 import com.bogdanmurzin.mypersonalwallet.mapper.TransactionUiMapper
 import com.bogdanmurzin.mypersonalwallet.ui.viewmodel.MainViewModel
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class FragmentMoneyTransactions : Fragment() {
 
-    private lateinit var thisContext: Context
     private lateinit var binding: FragmentMoneyTransactionsListBinding
     private lateinit var recyclerAdapter: MyMoneyTransactionRecyclerViewAdapter
-    private val db by lazy { AppDatabase.getDatabase(requireContext()) }
-    private val viewModel by viewModels<MainViewModel> {
-        MainViewModel.Factory(
-            GetTransactionsUseCase(
-                TransactionRepositoryImpl(
-                    TransactionsLocalDataSourceImpl(
-                        db.transactionsDao(),
-                        db.accountTypeDao(),
-                        db.transactionCategoryDao(),
-                        Dispatchers.IO,
-                        TransactionsEntityMapper(
-                            AccountTypeEntityMapper(), TransactionCategoryEntityMapper()
-                        )
-                    )
-                )
-            ),
-            TransactionUiMapper()
-        )
-    }
+//    private val viewModel by viewModels<MainViewModel> {
+//        MainViewModel.Factory(
+//            GetTransactionsUseCase(
+//                TransactionRepositoryImpl(
+//                    TransactionsLocalDataSourceImpl(
+//                        db.transactionsDao(),
+//                        db.accountTypeDao(),
+//                        db.transactionCategoryDao(),
+//                        Dispatchers.IO,
+//                        TransactionsEntityMapper(
+//                            AccountTypeEntityMapper(), TransactionCategoryEntityMapper()
+//                        )
+//                    )
+//                )
+//            ),
+//            TransactionUiMapper()
+//        )
+//    }
+
+
+    private val viewModel: MainViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentMoneyTransactionsListBinding.inflate(layoutInflater)
-        if (container != null) {
-            thisContext = container.context
-        }
         return binding.root
     }
 
@@ -70,7 +71,7 @@ class FragmentMoneyTransactions : Fragment() {
         recyclerAdapter = MyMoneyTransactionRecyclerViewAdapter {
             // Create dialog with editing Transaction
             Toast.makeText(
-                thisContext,
+                requireContext(),
                 "You taped on ${it.description} transaction",
                 Toast.LENGTH_SHORT
             ).show()
