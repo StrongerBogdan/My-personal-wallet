@@ -2,100 +2,86 @@ package com.bogdanmurzin.mypersonalwallet.ui.fragment
 
 import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.bogdanmurzin.domain.entities.AccountType
-import com.bogdanmurzin.domain.entities.MoneyTransactionCategory
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.coroutineScope
+import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.bogdanmurzin.data.db.AppDatabase
+import com.bogdanmurzin.data.mapper.AccountTypeEntityMapper
+import com.bogdanmurzin.data.mapper.TransactionCategoryEntityMapper
+import com.bogdanmurzin.data.mapper.TransactionsEntityMapper
+import com.bogdanmurzin.data.repositories.TransactionRepositoryImpl
+import com.bogdanmurzin.data.repositories.TransactionsLocalDataSource
+import com.bogdanmurzin.data.repositories.TransactionsLocalDataSourceImpl
+import com.bogdanmurzin.domain.usecases.GetTransactionsUseCase
 import com.bogdanmurzin.mypersonalwallet.R
 import com.bogdanmurzin.mypersonalwallet.adapter.MyMoneyTransactionRecyclerViewAdapter
-import com.bogdanmurzin.mypersonalwallet.data.transaction_recycer_items.RecyclerHeaderItem
-import com.bogdanmurzin.mypersonalwallet.data.transaction_recycer_items.RecyclerMultiTypeItem
-import com.bogdanmurzin.mypersonalwallet.data.transaction_recycer_items.RecyclerTransactionItem
-import java.math.BigDecimal
-import java.util.*
+import com.bogdanmurzin.mypersonalwallet.databinding.FragmentMoneyTransactionsListBinding
+import com.bogdanmurzin.mypersonalwallet.mapper.TransactionUiMapper
+import com.bogdanmurzin.mypersonalwallet.ui.viewmodel.MainViewModel
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 class FragmentMoneyTransactions : Fragment() {
 
     private lateinit var thisContext: Context
+    private lateinit var binding: FragmentMoneyTransactionsListBinding
+    private lateinit var recyclerAdapter: MyMoneyTransactionRecyclerViewAdapter
+    private val db by lazy { AppDatabase.getDatabase(requireContext()) }
+    private val viewModel by viewModels<MainViewModel> {
+        MainViewModel.Factory(
+            GetTransactionsUseCase(
+                TransactionRepositoryImpl(
+                    TransactionsLocalDataSourceImpl(
+                        db.transactionsDao(),
+                        db.accountTypeDao(),
+                        db.transactionCategoryDao(),
+                        Dispatchers.IO,
+                        TransactionsEntityMapper(
+                            AccountTypeEntityMapper(), TransactionCategoryEntityMapper()
+                        )
+                    )
+                )
+            ),
+            TransactionUiMapper()
+        )
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        val view = inflater.inflate(R.layout.fragment_money_transactions_list, container, false)
+    ): View {
+        binding = FragmentMoneyTransactionsListBinding.inflate(layoutInflater)
         if (container != null) {
             thisContext = container.context
         }
-
-        // Set the adapter
-        if (view is RecyclerView) {
-            //view.adapter = MyMoneyTransactionRecyclerViewAdapter(setDataSample())
-        }
-        return view
+        return binding.root
     }
 
-    //private fun setDataSample(): List<RecyclerMultiTypeItem> =
-//        listOf(
-//            RecyclerHeaderItem(Date(1651680349000), BigDecimal(123)),
-//            RecyclerTransactionItem(
-//                MoneyTransactionCategory(
-//                    "Fun",
-//                    "Cinema",
-//                    null
-//                    //ContextCompat.getDrawable(thisContext, R.drawable.ic_shopping_cart)
-//                ),
-//                null,
-//                AccountType("card", null), //ContextCompat.getDrawable(thisContext, R.drawable.ic_card)
-//                BigDecimal(1234)
-//            ),
-//            RecyclerTransactionItem(
-//                MoneyTransactionCategory(
-//                    "Grocery",
-//                    null,
-//                    null
-//                    //ContextCompat.getDrawable(thisContext, R.drawable.ic_shopping_cart)
-//                ),
-//                null,
-//                AccountType(
-//                    "credit card",
-//                    null
-//                    //ContextCompat.getDrawable(thisContext, R.drawable.ic_card)
-//                ),
-//                BigDecimal(12442)
-//            ),
-//            RecyclerHeaderItem(Date(1651507549), BigDecimal(20233)),
-//            RecyclerTransactionItem(
-//                MoneyTransactionCategory(
-//                    "Transport",
-//                    "Taxi",
-//                    null
-//                    //ContextCompat.getDrawable(thisContext, R.drawable.ic_card)
-//                ),
-//                null,
-//                AccountType(
-//                    "wallet",
-//                    null
-//                    //ContextCompat.getDrawable(thisContext, R.drawable.ic_shopping_cart)
-//                ),
-//                BigDecimal(111)
-//            ),
-//            RecyclerTransactionItem(
-//                MoneyTransactionCategory(
-//                    "Home",
-//                    null,
-//                    null
-//                    //ContextCompat.getDrawable(thisContext, R.drawable.ic_shopping_cart)
-//                ),
-//                "Huh ^_^",
-//                AccountType(
-//                    "credit card",
-//                    null
-//                    //ContextCompat.getDrawable(thisContext, R.drawable.ic_card)
-//                ),
-//                BigDecimal(12)
-//            )
-//        )
+    private fun setupRecycler() {
+        val layoutManager: RecyclerView.LayoutManager = LinearLayoutManager(requireContext())
+        recyclerAdapter = MyMoneyTransactionRecyclerViewAdapter()
+        val recyclerView = binding.transactionRecycler
+        recyclerView.adapter = recyclerAdapter
+        recyclerView.layoutManager = layoutManager
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        setupRecycler()
+
+        lifecycle.coroutineScope.launch {
+            viewModel.updateRateList().collect() {
+                recyclerAdapter.submitList(it)
+            }
+        }
+    }
+
 }

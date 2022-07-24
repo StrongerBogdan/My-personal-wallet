@@ -1,26 +1,26 @@
 package com.bogdanmurzin.mypersonalwallet.adapter
 
 import android.graphics.drawable.BitmapDrawable
-import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.content.ContextCompat
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
+import androidx.recyclerview.widget.RecyclerView
 import com.bogdanmurzin.mypersonalwallet.R
-
+import com.bogdanmurzin.mypersonalwallet.data.transaction_recycer_items.HeaderItemUiModel
+import com.bogdanmurzin.mypersonalwallet.data.transaction_recycer_items.TransactionItemUiModel
 import com.bogdanmurzin.mypersonalwallet.databinding.RvItemHeaderBinding
 import com.bogdanmurzin.mypersonalwallet.databinding.RvItemTransactionBinding
-import com.bogdanmurzin.mypersonalwallet.data.transaction_recycer_items.RecyclerHeaderItem
-import com.bogdanmurzin.mypersonalwallet.data.transaction_recycer_items.RecyclerMultiTypeItem
-import com.bogdanmurzin.mypersonalwallet.data.transaction_recycer_items.RecyclerTransactionItem
 import java.text.NumberFormat
 import java.text.SimpleDateFormat
 import java.util.*
 
 class MyMoneyTransactionRecyclerViewAdapter(
-    private val list: List<RecyclerMultiTypeItem>
-) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+
+) : ListAdapter<TransactionItemUiModel, RecyclerView.ViewHolder>(ItemDiffCallback) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder =
         when (viewType) {
@@ -47,15 +47,14 @@ class MyMoneyTransactionRecyclerViewAdapter(
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         when (holder.itemViewType) {
             ITEM_TYPE_HEADER ->
-                (holder as HeaderViewHolder).bind(list[position] as RecyclerHeaderItem)
+                (holder as HeaderViewHolder).bind(getItem(position) as HeaderItemUiModel)
             ITEM_TYPE_TRANSACTION ->
-                (holder as MoneyTransactionViewHolder).bind(list[position] as RecyclerTransactionItem)
+                (holder as MoneyTransactionViewHolder).bind(getItem(position) as TransactionItemUiModel)
         }
     }
 
-    override fun getItemViewType(position: Int): Int = list[position].type
+    override fun getItemViewType(position: Int): Int = getItem(position).type
 
-    override fun getItemCount(): Int = list.size
 
     inner class HeaderViewHolder(binding: RvItemHeaderBinding) :
         RecyclerView.ViewHolder(binding.root) {
@@ -64,7 +63,7 @@ class MyMoneyTransactionRecyclerViewAdapter(
         private val monthYearTv: TextView = binding.monthYearTv
         private val transactionAmountTv: TextView = binding.transactionAmountTv
 
-        fun bind(item: RecyclerHeaderItem) {
+        fun bind(item: HeaderItemUiModel) {
             val locate = Locale.getDefault()
 
             dayTv.text =
@@ -88,16 +87,16 @@ class MyMoneyTransactionRecyclerViewAdapter(
         private val descriptionTv: TextView = binding.descriptionTv
         private val transactionAmountTv: TextView = binding.transactionAmountTv
 
-        fun bind(item: RecyclerTransactionItem) {
+        fun bind(item: TransactionItemUiModel) {
             val locate = Locale.getDefault()
             val context = categoryTv.context
 
             // get picture TODO refactor
-            val transactionPic = if (item.category.transactionPicUri != null) {
-                BitmapDrawable(context.resources, item.category.transactionPicUri)
-            } else {
+            val transactionPic = if (item.category.transactionPicUri.isNullOrBlank()) {
                 // Default resource icon
                 ContextCompat.getDrawable(context, R.drawable.ic_card)
+            } else {
+                BitmapDrawable(context.resources, item.category.transactionPicUri)
             }
             imageView.setImageDrawable(transactionPic)
             //imageView.setImageDrawable()
@@ -114,12 +113,13 @@ class MyMoneyTransactionRecyclerViewAdapter(
             accountTypeTv.text = item.accountType.title
 
             // get picture
-            val accountPic = if (item.accountType.accountPicUri != null) {
-                BitmapDrawable(context.resources, item.accountType.accountPicUri)
-            } else {
-                // Default resource icon
-                ContextCompat.getDrawable(context, R.drawable.ic_shopping_cart)
-            }
+            val accountPic =
+                if (item.accountType.accountPicUri.isNullOrBlank()) {
+                    // Default resource icon
+                    ContextCompat.getDrawable(context, R.drawable.ic_shopping_cart)
+                } else {
+                    BitmapDrawable(context.resources, item.accountType.accountPicUri)
+                }
             accountTypeTv.setCompoundDrawablesWithIntrinsicBounds(
                 accountPic,
                 null,
@@ -129,6 +129,24 @@ class MyMoneyTransactionRecyclerViewAdapter(
             descriptionTv.text = item.description
             transactionAmountTv.text =
                 NumberFormat.getCurrencyInstance(locate).format(item.transactionAmount)
+        }
+    }
+
+    object ItemDiffCallback : DiffUtil.ItemCallback<TransactionItemUiModel>() {
+        override fun areItemsTheSame(
+            oldItem: TransactionItemUiModel,
+            newItem: TransactionItemUiModel
+        ): Boolean {
+            return oldItem == newItem
+        }
+
+        override fun areContentsTheSame(
+            oldItem: TransactionItemUiModel,
+            newItem: TransactionItemUiModel
+        ): Boolean {
+            return oldItem.accountType == newItem.accountType &&
+                    oldItem.category == newItem.category &&
+                    oldItem.description == newItem.description
         }
     }
 

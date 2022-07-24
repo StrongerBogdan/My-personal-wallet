@@ -72,6 +72,9 @@ dependencies {
     kapt "androidx.room:room-compiler:$room_version"
     // Coroutines
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutines_version"
-    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifeData_version"
     implementation 'androidx.fragment:fragment-ktx:1.5.0'
+    // ViewModel
+    implementation 'androidx.fragment:fragment-ktx:1.5.0'
+    // LiveData
+    implementation "androidx.lifecycle:lifecycle-livedata-ktx:$lifeData_version"
 }

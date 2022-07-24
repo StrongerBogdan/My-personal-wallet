@@ -4,7 +4,7 @@ import com.bogdanmurzin.mypersonalwallet.adapter.MyMoneyTransactionRecyclerViewA
 import java.math.BigDecimal
 import java.util.*
 
-data class RecyclerHeaderItem(
+data class HeaderItemUiModel(
     val date: Date,
     override val transactionAmount: Float,
 ) : RecyclerMultiTypeItem {
