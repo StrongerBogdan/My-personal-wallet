@@ -29,6 +29,12 @@ class FragmentMoneyTransactions : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentMoneyTransactionsListBinding.inflate(layoutInflater)
+
+        binding.fab.setOnClickListener {
+            val bottom = BottomSheetAddEditTransaction.newInstance()
+            bottom.show(parentFragmentManager, "BottomSheetAddTransaction")
+        }
+
         return binding.root
     }
 

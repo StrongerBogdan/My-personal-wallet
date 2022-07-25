@@ -2,4 +2,5 @@
     <string name="app_name">My Personal Wallet</string>
     <string name="category_icon_desc">Category icon</string>
     <string name="category_with_subcategory">%s (%s)</string>
+    <string name="add_transaction">Add Transaction</string>
 </resources>

@@ -3,8 +3,12 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Studies/PetProjects/my_personal_wallet/MyPersonalWallet/app/src/debug/res/drawable/ic_baseline_add.xml" value="0.1" />
+        <entry key="..\:/Studies/PetProjects/my_personal_wallet/MyPersonalWallet/app/src/debug/res/drawable/ic_shopping_cart.xml" value="0.1" />
+        <entry key="..\:/Studies/PetProjects/my_personal_wallet/MyPersonalWallet/app/src/main/res/drawable-v24/round_rect_shape.xml" value="0.117" />
         <entry key="..\:/Studies/PetProjects/my_personal_wallet/MyPersonalWallet/app/src/main/res/layout/activity_main.xml" value="0.17552083333333332" />
         <entry key="..\:/Studies/PetProjects/my_personal_wallet/MyPersonalWallet/app/src/main/res/layout/fragment_blank.xml" value="0.13085690164626423" />
+        <entry key="..\:/Studies/PetProjects/my_personal_wallet/MyPersonalWallet/app/src/main/res/layout/fragment_bottomsheet_add_transaction.xml" value="0.1422541156606163" />
         <entry key="..\:/Studies/PetProjects/my_personal_wallet/MyPersonalWallet/app/src/main/res/layout/fragment_money_transactions.xml" value="0.14351851851851852" />
         <entry key="..\:/Studies/PetProjects/my_personal_wallet/MyPersonalWallet/app/src/main/res/layout/fragment_money_transactions_list.xml" value="0.14351851851851852" />
         <entry key="..\:/Studies/PetProjects/my_personal_wallet/MyPersonalWallet/app/src/main/res/layout/rv_item_header.xml" value="0.22" />
