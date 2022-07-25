@@ -31,7 +31,7 @@ class FragmentMoneyTransactions : Fragment() {
         binding = FragmentMoneyTransactionsListBinding.inflate(layoutInflater)
 
         binding.fab.setOnClickListener {
-            val bottom = BottomSheetAddEditTransaction.newInstance()
+            val bottom = BottomSheetAddTransaction.newInstance()
             bottom.show(parentFragmentManager, "BottomSheetAddTransaction")
         }
 

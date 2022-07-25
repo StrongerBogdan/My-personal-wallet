@@ -8,7 +8,7 @@ import com.bogdanmurzin.mypersonalwallet.databinding.FragmentBottomsheetAddTrans
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 
 
-class BottomSheetAddEditTransaction : BottomSheetDialogFragment() {
+class BottomSheetAddTransaction : BottomSheetDialogFragment() {
 
     private lateinit var binding: FragmentBottomsheetAddTransactionBinding
 
@@ -22,13 +22,6 @@ class BottomSheetAddEditTransaction : BottomSheetDialogFragment() {
     }
 
     companion object {
-        // if add new transaction - id equals 0, if edit transaction - legit id
-        fun newInstance(id: Int = 0) = BottomSheetAddEditTransaction().apply {
-            arguments = Bundle().apply {
-                putInt(TRANSACTION_ID_KEY, id)
-            }
-        }
-
-        private const val TRANSACTION_ID_KEY = "id_key"
+        fun newInstance() = BottomSheetAddTransaction()
     }
 }
