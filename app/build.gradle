@@ -77,4 +77,7 @@ dependencies {
     implementation 'androidx.fragment:fragment-ktx:1.5.0'
     // LiveData
     implementation "androidx.lifecycle:lifecycle-livedata-ktx:$lifeData_version"
+    // Glide
+    implementation "com.github.bumptech.glide:glide:$glide_version"
+    annotationProcessor "com.github.bumptech.glide:compiler:$glide_version"
 }

@@ -32,7 +32,7 @@ class FragmentMoneyTransactions : Fragment() {
 
         binding.fab.setOnClickListener {
             val bottom = BottomSheetAddTransaction.newInstance()
-            bottom.show(parentFragmentManager, "BottomSheetAddTransaction")
+            bottom.show(childFragmentManager, "BottomSheetAddTransaction")
         }
 
         return binding.root

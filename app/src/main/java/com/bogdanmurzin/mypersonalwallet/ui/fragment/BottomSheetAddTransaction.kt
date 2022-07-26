@@ -7,7 +7,6 @@ import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.widget.addTextChangedListener
 import com.bogdanmurzin.mypersonalwallet.databinding.FragmentBottomsheetAddTransactionBinding
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import java.text.NumberFormat
@@ -24,7 +23,16 @@ class BottomSheetAddTransaction : BottomSheetDialogFragment() {
     ): View {
         binding = FragmentBottomsheetAddTransactionBinding.inflate(layoutInflater)
         setupEditText()
+        setupCardViews()
         return binding.root
+    }
+
+    private fun setupCardViews() {
+        binding.accountCv.setOnClickListener {
+            AccountChooseDialogFragment().show(
+                childFragmentManager, AccountChooseDialogFragment.TAG
+            )
+        }
     }
 
     private fun setupEditText() {

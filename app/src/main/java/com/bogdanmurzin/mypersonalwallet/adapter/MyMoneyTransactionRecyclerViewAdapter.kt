@@ -96,11 +96,11 @@ class MyMoneyTransactionRecyclerViewAdapter(
             val context = categoryTv.context
 
             // get picture TODO refactor
-            val transactionPic = if (item.category.transactionPicUri.isNullOrBlank()) {
+            val transactionPic = if (item.category.imageUri.isNullOrBlank()) {
                 // Default resource icon
                 ContextCompat.getDrawable(context, R.drawable.ic_card)
             } else {
-                BitmapDrawable(context.resources, item.category.transactionPicUri)
+                BitmapDrawable(context.resources, item.category.imageUri)
             }
             imageView.setImageDrawable(transactionPic)
             //imageView.setImageDrawable()
@@ -118,11 +118,11 @@ class MyMoneyTransactionRecyclerViewAdapter(
 
             // get picture
             val accountPic =
-                if (item.accountType.accountPicUri.isNullOrBlank()) {
+                if (item.accountType.imageUri.isNullOrBlank()) {
                     // Default resource icon
                     ContextCompat.getDrawable(context, R.drawable.ic_shopping_cart)
                 } else {
-                    BitmapDrawable(context.resources, item.accountType.accountPicUri)
+                    BitmapDrawable(context.resources, item.accountType.imageUri)
                 }
             accountTypeTv.setCompoundDrawablesWithIntrinsicBounds(
                 accountPic,
