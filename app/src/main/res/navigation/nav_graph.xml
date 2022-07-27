@@ -19,7 +19,11 @@
         <dialog
             android:id="@+id/accountChooseDialogFragment"
             android:name="com.bogdanmurzin.mypersonalwallet.ui.fragment.AccountChooseDialogFragment"
-            android:label="AccountChooseDialogFragment"/>
+            android:label="AccountChooseDialogFragment">
+            <argument
+                android:name="category"
+                app:argType="com.bogdanmurzin.mypersonalwallet.util.CategoryArg" />
+        </dialog>
         <dialog
             android:id="@+id/bottomSheetAddTransaction"
             android:name="com.bogdanmurzin.mypersonalwallet.ui.fragment.BottomSheetAddTransaction"

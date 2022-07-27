@@ -12,5 +12,11 @@ import kotlinx.coroutines.flow.Flow
 interface TransactionCategoryDao {
 
     @Query("SELECT * FROM `transaction_category` WHERE id = :id")
-    fun getTransactionCategory(id: Int): TransactionCategoryEntity
+    fun getTrxCategoryById(id: Int): TransactionCategoryEntity
+
+    @Query("SELECT * FROM `transaction_category`")
+    fun getAllTrxCategories(): Flow<List<TransactionCategoryEntity>>
+
+    @Query("SELECT * FROM `transaction_category` WHERE title = :title AND transaction_pic_uri = :imageUri")
+    fun getTrxCategoryId(title: String, imageUri: String): Int
 }

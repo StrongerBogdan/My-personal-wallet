@@ -26,7 +26,7 @@ class TransactionsLocalDataSourceImpl @Inject constructor(
             return@withContext savedTransactionsFlow.map { list ->
                 list.map { element ->
                     val transactionCategory =
-                        transactionCategoryDao.getTransactionCategory(element.transactionCategoryId)
+                        transactionCategoryDao.getTrxCategoryById(element.transactionCategoryId)
                     val accountType = accountTypeDao.getAccountTypeById(element.accountTypeId)
                     transactionsEntityMapper.toTransaction(
                         element,

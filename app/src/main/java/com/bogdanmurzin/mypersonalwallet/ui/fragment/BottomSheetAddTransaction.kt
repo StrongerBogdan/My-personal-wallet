@@ -4,7 +4,6 @@ import android.net.Uri
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,9 +12,9 @@ import androidx.navigation.fragment.navArgs
 import androidx.navigation.navGraphViewModels
 import com.bogdanmurzin.mypersonalwallet.R
 import com.bogdanmurzin.mypersonalwallet.common.Constants
-import com.bogdanmurzin.mypersonalwallet.common.Constants.TAG
 import com.bogdanmurzin.mypersonalwallet.databinding.FragmentBottomsheetAddTransactionBinding
 import com.bogdanmurzin.mypersonalwallet.ui.viewmodel.AddTransactionViewModel
+import com.bogdanmurzin.mypersonalwallet.util.CategoryArg
 import com.bumptech.glide.Glide
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import dagger.hilt.android.AndroidEntryPoint
@@ -55,32 +54,57 @@ class BottomSheetAddTransaction : BottomSheetDialogFragment() {
         // When the user clicks the Done button, use the data here to either update
         // an existing item or create a new one
         binding.doneBtn.setOnClickListener {
-            val navController = findNavController()
             // TODO: not yet implemented
         }
 
+        setupViewModel()
+    }
+
+    private fun setupViewModel() {
         // Account type
         viewModel.selectedAccountType.observe(viewLifecycleOwner) { account ->
-            Log.i(TAG, "onViewCreated: ${account.title}")
             binding.accountTypeTv.text = account.title
             Glide.with(requireContext())
                 .load(Uri.parse(account.imageUri))
                 .override(Constants.ICON_SCALE, Constants.ICON_SCALE)
                 .into(binding.accountTypeIv)
         }
+        // Transaction category
+        viewModel.selectedTrxCategory.observe(viewLifecycleOwner) { trxCategory ->
+            binding.transactionCategoryTv.text = trxCategory.title
+            binding.transactionSubcategoryTv.text =
+                resources.getString(R.string.category_subtitle_template, trxCategory.subcategory)
+            Glide.with(requireContext())
+                .load(Uri.parse(trxCategory.imageUri))
+                .override(Constants.ICON_SCALE, Constants.ICON_SCALE)
+                .into(binding.transactionCategoryIv)
+        }
     }
 
     private fun setupCardViews() {
         binding.accountCv.setOnClickListener {
-            findNavController().navigate(R.id.action_bottomSheetAddTransaction_to_accountChooseDialogFragment)
+            findNavController().navigate(
+                BottomSheetAddTransactionDirections
+                    .actionBottomSheetAddTransactionToAccountChooseDialogFragment(
+                        CategoryArg.ACCOUNT_TYPE
+                    )
+            )
+        }
+
+        binding.transactionCv.setOnClickListener {
+            findNavController().navigate(
+                BottomSheetAddTransactionDirections
+                    .actionBottomSheetAddTransactionToAccountChooseDialogFragment(
+                        CategoryArg.TRANSACTION_CATEGORY
+                    )
+            )
         }
     }
 
     private fun setupEditText() {
         val textview = binding.transactionAmountTv
         textview.addTextChangedListener(object : TextWatcher {
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) =
-                Unit
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) = Unit
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) = Unit
 
