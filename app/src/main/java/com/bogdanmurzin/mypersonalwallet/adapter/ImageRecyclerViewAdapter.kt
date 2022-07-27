@@ -10,7 +10,9 @@ import com.bogdanmurzin.domain.entities.EntityWithImageAndTitle
 import com.bogdanmurzin.mypersonalwallet.databinding.RvAccountTypeItemBinding
 import com.bumptech.glide.Glide
 
-class ImageRecyclerViewAdapter :
+class ImageRecyclerViewAdapter(
+    private val onItemClicked: (EntityWithImageAndTitle) -> Unit
+) :
     ListAdapter<EntityWithImageAndTitle, ImageRecyclerViewAdapter.ViewHolder>(ItemDiffCallback) {
 
     lateinit var context: Context
@@ -22,7 +24,8 @@ class ImageRecyclerViewAdapter :
         context = parent.context
         return ViewHolder(
             RvAccountTypeItemBinding
-                .inflate(LayoutInflater.from(parent.context), parent, false)
+                .inflate(LayoutInflater.from(parent.context), parent, false),
+            onItemClicked
         )
     }
 
@@ -31,7 +34,10 @@ class ImageRecyclerViewAdapter :
         holder.bind(item)
     }
 
-    inner class ViewHolder(private val binding: RvAccountTypeItemBinding) :
+    inner class ViewHolder(
+        private val binding: RvAccountTypeItemBinding,
+        private var onEdit: (EntityWithImageAndTitle) -> Unit
+    ) :
         RecyclerView.ViewHolder(binding.root) {
 
         fun bind(entity: EntityWithImageAndTitle) {
@@ -40,6 +46,10 @@ class ImageRecyclerViewAdapter :
                 .load(entity.imageUri)
                 .override(ICON_SCALE, ICON_SCALE)
                 .into(binding.ivIcon)
+
+            binding.root.setOnClickListener {
+                onEdit(entity)
+            }
         }
     }
 

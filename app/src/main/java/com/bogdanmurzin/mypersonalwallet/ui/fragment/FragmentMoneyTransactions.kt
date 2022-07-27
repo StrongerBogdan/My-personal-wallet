@@ -8,8 +8,10 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.coroutineScope
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.bogdanmurzin.mypersonalwallet.R
 import com.bogdanmurzin.mypersonalwallet.adapter.MyMoneyTransactionRecyclerViewAdapter
 import com.bogdanmurzin.mypersonalwallet.databinding.FragmentMoneyTransactionsListBinding
 import com.bogdanmurzin.mypersonalwallet.ui.viewmodel.MainViewModel
@@ -31,8 +33,7 @@ class FragmentMoneyTransactions : Fragment() {
         binding = FragmentMoneyTransactionsListBinding.inflate(layoutInflater)
 
         binding.fab.setOnClickListener {
-            val bottom = BottomSheetAddTransaction.newInstance()
-            bottom.show(childFragmentManager, "BottomSheetAddTransaction")
+            findNavController().navigate(R.id.action_fragmentMoneyTransactions_to_bottomSheetAddTransaction)
         }
 
         return binding.root

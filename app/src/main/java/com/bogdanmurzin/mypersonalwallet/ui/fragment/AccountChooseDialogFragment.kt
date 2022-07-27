@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.DialogFragment
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -36,7 +37,14 @@ class AccountChooseDialogFragment : DialogFragment() {
     private fun setupRecycler() {
         val layoutManager: RecyclerView.LayoutManager =
             GridLayoutManager(requireContext(), SPAN_COUNT)
-        recyclerAdapter = ImageRecyclerViewAdapter()
+        recyclerAdapter = ImageRecyclerViewAdapter {
+            // implement return Account type
+            Toast.makeText(
+                requireContext(),
+                "You taped on ${it.title} account",
+                Toast.LENGTH_SHORT
+            ).show()
+        }
         val recyclerView = binding.accountRecycler
         recyclerView.adapter = recyclerAdapter
         recyclerView.layoutManager = layoutManager
@@ -77,7 +85,6 @@ class AccountChooseDialogFragment : DialogFragment() {
         )
 
     companion object {
-        const val TAG = "AccountChooseDialog"
         const val SPAN_COUNT = 4
     }
 }

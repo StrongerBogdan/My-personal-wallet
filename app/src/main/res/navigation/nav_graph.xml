@@ -9,5 +9,21 @@
         android:id="@+id/fragmentMoneyTransactions"
         android:name="com.bogdanmurzin.mypersonalwallet.ui.fragment.FragmentMoneyTransactions"
         android:label="fragment_money_transactions_list"
-        tools:layout="@layout/fragment_money_transactions_list" />
+        tools:layout="@layout/fragment_money_transactions_list" >
+        <action
+            android:id="@+id/action_fragmentMoneyTransactions_to_bottomSheetAddTransaction"
+            app:destination="@id/bottomSheetAddTransaction" />
+    </fragment>
+    <dialog
+        android:id="@+id/bottomSheetAddTransaction"
+        android:name="com.bogdanmurzin.mypersonalwallet.ui.fragment.BottomSheetAddTransaction"
+        android:label="BottomSheetAddTransaction" >
+        <action
+            android:id="@+id/action_bottomSheetAddTransaction_to_accountChooseDialogFragment"
+            app:destination="@id/accountChooseDialogFragment" />
+    </dialog>
+    <dialog
+        android:id="@+id/accountChooseDialogFragment"
+        android:name="com.bogdanmurzin.mypersonalwallet.ui.fragment.AccountChooseDialogFragment"
+        android:label="AccountChooseDialogFragment" />
 </navigation>

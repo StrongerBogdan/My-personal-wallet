@@ -1,12 +1,13 @@
 package com.bogdanmurzin.mypersonalwallet.ui.fragment
 
-import android.content.res.Configuration
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.navigation.fragment.findNavController
+import com.bogdanmurzin.mypersonalwallet.R
 import com.bogdanmurzin.mypersonalwallet.databinding.FragmentBottomsheetAddTransactionBinding
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import java.text.NumberFormat
@@ -21,7 +22,7 @@ class BottomSheetAddTransaction : BottomSheetDialogFragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = FragmentBottomsheetAddTransactionBinding.inflate(layoutInflater)
+        binding = FragmentBottomsheetAddTransactionBinding.inflate(inflater)
         setupEditText()
         setupCardViews()
         return binding.root
@@ -29,9 +30,7 @@ class BottomSheetAddTransaction : BottomSheetDialogFragment() {
 
     private fun setupCardViews() {
         binding.accountCv.setOnClickListener {
-            AccountChooseDialogFragment().show(
-                childFragmentManager, AccountChooseDialogFragment.TAG
-            )
+            findNavController().navigate(R.id.action_bottomSheetAddTransaction_to_accountChooseDialogFragment)
         }
     }
 
