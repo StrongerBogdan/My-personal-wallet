@@ -1,6 +1,5 @@
 package com.bogdanmurzin.mypersonalwallet.ui.viewmodel
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -8,13 +7,12 @@ import androidx.lifecycle.ViewModelProvider
 import com.bogdanmurzin.domain.entities.AccountType
 import com.bogdanmurzin.domain.entities.Transaction
 import com.bogdanmurzin.domain.entities.TransactionCategory
-import com.bogdanmurzin.domain.usecases.GetAccountIdUseCase
-import com.bogdanmurzin.domain.usecases.GetAccountTypeUseCase
-import com.bogdanmurzin.domain.usecases.GetAllAccountTypesUseCase
+import com.bogdanmurzin.domain.usecases.account_type.GetAccountIdUseCase
+import com.bogdanmurzin.domain.usecases.account_type.GetAccountTypeUseCase
+import com.bogdanmurzin.domain.usecases.account_type.GetAllAccountTypesUseCase
 import com.bogdanmurzin.domain.usecases.transaction_category.GetAllTrxCategoryUseCase
 import com.bogdanmurzin.domain.usecases.transaction_category.GetTrxCategoryIdUseCase
 import com.bogdanmurzin.domain.usecases.transaction_category.GetTrxCategoryUseCase
-import com.bogdanmurzin.mypersonalwallet.common.Constants.TAG
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject

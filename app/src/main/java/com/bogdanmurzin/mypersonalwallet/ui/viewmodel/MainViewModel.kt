@@ -2,7 +2,7 @@ package com.bogdanmurzin.mypersonalwallet.ui.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.bogdanmurzin.domain.usecases.GetTransactionsUseCase
+import com.bogdanmurzin.domain.usecases.transaction.GetTransactionsUseCase
 import com.bogdanmurzin.mypersonalwallet.data.transaction_recycer_items.TransactionItemUiModel
 import com.bogdanmurzin.mypersonalwallet.mapper.TransactionUiMapper
 import dagger.hilt.android.lifecycle.HiltViewModel
