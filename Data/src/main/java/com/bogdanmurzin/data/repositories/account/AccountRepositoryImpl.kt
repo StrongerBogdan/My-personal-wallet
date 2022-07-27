@@ -15,4 +15,10 @@ class AccountRepositoryImpl @Inject constructor(
     override suspend fun getAccountTypeById(id: Int): AccountType =
         localDataSource.getAccountTypeById(id)
 
+    override suspend fun getAllAccountTypes(): Flow<List<AccountType>> =
+        localDataSource.getAllAccountTypes()
+
+    override suspend fun getAccountId(account: AccountType): Int =
+        localDataSource.getAccountId(account)
+
 }

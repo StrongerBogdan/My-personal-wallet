@@ -4,6 +4,7 @@ import android.net.Uri
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,6 +13,7 @@ import androidx.navigation.fragment.navArgs
 import androidx.navigation.navGraphViewModels
 import com.bogdanmurzin.mypersonalwallet.R
 import com.bogdanmurzin.mypersonalwallet.common.Constants
+import com.bogdanmurzin.mypersonalwallet.common.Constants.TAG
 import com.bogdanmurzin.mypersonalwallet.databinding.FragmentBottomsheetAddTransactionBinding
 import com.bogdanmurzin.mypersonalwallet.ui.viewmodel.AddTransactionViewModel
 import com.bumptech.glide.Glide
@@ -58,10 +60,11 @@ class BottomSheetAddTransaction : BottomSheetDialogFragment() {
         }
 
         // Account type
-        viewModel.accountType.observe(viewLifecycleOwner) { selectedAccountType ->
-            binding.accountTypeTv.text = selectedAccountType.title
+        viewModel.selectedAccountType.observe(viewLifecycleOwner) { account ->
+            Log.i(TAG, "onViewCreated: ${account.title}")
+            binding.accountTypeTv.text = account.title
             Glide.with(requireContext())
-                .load(Uri.parse(selectedAccountType.imageUri))
+                .load(Uri.parse(account.imageUri))
                 .override(Constants.ICON_SCALE, Constants.ICON_SCALE)
                 .into(binding.accountTypeIv)
         }

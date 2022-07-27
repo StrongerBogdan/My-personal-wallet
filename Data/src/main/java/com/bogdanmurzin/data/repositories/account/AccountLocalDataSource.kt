@@ -9,4 +9,8 @@ interface AccountLocalDataSource {
 
     suspend fun getAccountTypeById(id: Int): AccountType
 
+    suspend fun getAllAccountTypes(): Flow<List<AccountType>>
+
+    suspend fun getAccountId(account: AccountType): Int
+
 }

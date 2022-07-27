@@ -6,7 +6,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.bogdanmurzin.data.entity.CategoryEntity
+import com.bogdanmurzin.domain.entities.CategoryEntity
 import com.bogdanmurzin.mypersonalwallet.common.Constants.ICON_SCALE
 import com.bogdanmurzin.mypersonalwallet.databinding.RvAccountTypeItemBinding
 import com.bumptech.glide.Glide
@@ -66,7 +66,8 @@ class ImageRecyclerViewAdapter(
             oldItem: CategoryEntity,
             newItem: CategoryEntity
         ): Boolean {
-            return oldItem.id == newItem.id
+            return oldItem.title == newItem.title &&
+                    oldItem.imageUri == newItem.imageUri
         }
     }
 }

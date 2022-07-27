@@ -1,6 +1,6 @@
 package com.bogdanmurzin.domain.entities
 
 data class AccountType(
-    val title: String,
-    val imageUri: String
-)
+    override val title: String,
+    override val imageUri: String
+) : CategoryEntity

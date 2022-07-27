@@ -15,4 +15,7 @@ interface AccountTypeDao {
 
     @Query("SELECT * FROM `account_type`")
     fun getAllAccountTypes(): Flow<List<AccountTypeEntity>>
+
+    @Query("SELECT * FROM `account_type` WHERE title = :title AND account_pic_uri = :imageUri")
+    fun getAccountId(title: String, imageUri: String): Int
 }
