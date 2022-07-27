@@ -30,7 +30,6 @@ class AddTransactionViewModel @Inject constructor(
     suspend fun getAccount(id: Int) {
         val selectedAccountType =
             getAccountTypeUseCase.invoke(id)
-        Log.i(TAG, "getAccount: ${selectedAccountType.title} id = $id")
         _selectedAccountType.postValue(selectedAccountType)
     }
 

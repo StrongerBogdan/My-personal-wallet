@@ -55,14 +55,10 @@ class AccountChooseDialogFragment : DialogFragment() {
         recyclerAdapter = ImageRecyclerViewAdapter {
             lifecycle.coroutineScope.launch {
                 val accountId = viewModel.getAccountId(it as AccountType)
-                Log.i(TAG, "getAccount invoke: $accountId")
                 viewModel.getAccount(accountId)
-                Log.i(TAG, "getAccount invoke: $accountId")
 
-                Log.i(TAG, "setupRecycler: ")
                 findNavController().navigateUp()
             }
-
         }
         val recyclerView = binding.accountRecycler
         recyclerView.adapter = recyclerAdapter
