@@ -7,5 +7,5 @@ import javax.inject.Inject
 class TransactionCategoryEntityMapper @Inject constructor() {
 
     fun toTransactionCategory(item: TransactionCategoryEntity): MoneyTransactionCategory =
-        MoneyTransactionCategory(item.title, item.subcategory, item.transactionPicUri)
+        MoneyTransactionCategory(item.title, item.subcategory, item.imageUri)
 }

@@ -12,18 +12,25 @@
         tools:layout="@layout/fragment_money_transactions_list" >
         <action
             android:id="@+id/action_fragmentMoneyTransactions_to_bottomSheetAddTransaction"
-            app:destination="@id/bottomSheetAddTransaction" />
+            app:destination="@id/add_transaction_flow_graph" />
     </fragment>
-    <dialog
-        android:id="@+id/bottomSheetAddTransaction"
-        android:name="com.bogdanmurzin.mypersonalwallet.ui.fragment.BottomSheetAddTransaction"
-        android:label="BottomSheetAddTransaction" >
-        <action
-            android:id="@+id/action_bottomSheetAddTransaction_to_accountChooseDialogFragment"
-            app:destination="@id/accountChooseDialogFragment" />
-    </dialog>
-    <dialog
-        android:id="@+id/accountChooseDialogFragment"
-        android:name="com.bogdanmurzin.mypersonalwallet.ui.fragment.AccountChooseDialogFragment"
-        android:label="AccountChooseDialogFragment" />
+    <navigation android:id="@+id/add_transaction_flow_graph"
+        app:startDestination="@id/bottomSheetAddTransaction">
+        <dialog
+            android:id="@+id/accountChooseDialogFragment"
+            android:name="com.bogdanmurzin.mypersonalwallet.ui.fragment.AccountChooseDialogFragment"
+            android:label="AccountChooseDialogFragment"/>
+        <dialog
+            android:id="@+id/bottomSheetAddTransaction"
+            android:name="com.bogdanmurzin.mypersonalwallet.ui.fragment.BottomSheetAddTransaction"
+            android:label="BottomSheetAddTransaction">
+            <action
+                android:id="@+id/action_bottomSheetAddTransaction_to_accountChooseDialogFragment"
+                app:destination="@id/accountChooseDialogFragment" />
+            <argument
+                android:name="tranasctionId"
+                android:defaultValue="0"
+                app:argType="integer" />
+        </dialog>
+    </navigation>
 </navigation>

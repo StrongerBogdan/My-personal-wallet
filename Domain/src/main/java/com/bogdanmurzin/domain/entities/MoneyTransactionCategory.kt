@@ -1,7 +1,7 @@
 package com.bogdanmurzin.domain.entities
 
 data class MoneyTransactionCategory(
-    override val title: String,
+    val title: String,
     val subcategory: String?,
-    override val imageUri: String?
-) : EntityWithImageAndTitle
+    val imageUri: String
+)

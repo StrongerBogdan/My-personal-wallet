@@ -161,13 +161,13 @@
         android:hint="@string/note"
         android:textAlignment="center"
         android:textSize="@dimen/headline6_text_size"
-        app:layout_constraintBottom_toTopOf="@+id/button"
+        app:layout_constraintBottom_toTopOf="@+id/done_btn"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/transaction_amount_tv" />
 
     <com.google.android.material.button.MaterialButton
-        android:id="@+id/button"
+        android:id="@+id/done_btn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/medium_margin"
@@ -178,7 +178,7 @@
         android:gravity="center"
         android:paddingTop="@dimen/view_side_margin"
         android:paddingBottom="@dimen/view_side_margin"
-        android:text="@string/create"
+        android:text="@string/done"
         android:textSize="@dimen/button_text_size"
         android:textColor="@color/white"
         app:layout_constraintBottom_toBottomOf="parent"

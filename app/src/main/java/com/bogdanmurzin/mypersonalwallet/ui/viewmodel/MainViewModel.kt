@@ -11,8 +11,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class MainViewModel @Inject constructor(
-    val getTransactionsUseCase: GetTransactionsUseCase,
-    val transactionUiMapper: TransactionUiMapper
+    private val getTransactionsUseCase: GetTransactionsUseCase,
+    private val transactionUiMapper: TransactionUiMapper
 ) : ViewModel() {
 
     suspend fun updateRateList(): Flow<List<TransactionItemUiModel>> =

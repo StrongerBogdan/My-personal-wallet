@@ -1,4 +1,4 @@
-package com.bogdanmurzin.data.repositories
+package com.bogdanmurzin.data.repositories.transaction
 
 import com.bogdanmurzin.data.db.AccountTypeDao
 import com.bogdanmurzin.data.db.TransactionCategoryDao
@@ -6,7 +6,6 @@ import com.bogdanmurzin.data.db.TransactionsDao
 import com.bogdanmurzin.data.mapper.TransactionsEntityMapper
 import com.bogdanmurzin.domain.entities.Transaction
 import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
@@ -28,7 +27,7 @@ class TransactionsLocalDataSourceImpl @Inject constructor(
                 list.map { element ->
                     val transactionCategory =
                         transactionCategoryDao.getTransactionCategory(element.transactionCategoryId)
-                    val accountType = accountTypeDao.getAccountType(element.accountTypeId)
+                    val accountType = accountTypeDao.getAccountTypeById(element.accountTypeId)
                     transactionsEntityMapper.toTransaction(
                         element,
                         transactionCategory,

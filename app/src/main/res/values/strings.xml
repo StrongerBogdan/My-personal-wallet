@@ -6,7 +6,7 @@
     <string name="expense">Expense</string>
     <string name="zero_balance">$0.00</string>
     <string name="note">Note…</string>
-    <string name="create">Create</string>
+    <string name="done">Done</string>
     <string name="ok">OK</string>
     <string name="choose_account">Choose Account</string>
 </resources>

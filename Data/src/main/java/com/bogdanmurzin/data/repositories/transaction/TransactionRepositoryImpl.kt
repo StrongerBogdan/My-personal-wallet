@@ -1,4 +1,4 @@
-package com.bogdanmurzin.data.repositories
+package com.bogdanmurzin.data.repositories.transaction
 
 import com.bogdanmurzin.domain.entities.Transaction
 import com.bogdanmurzin.domain.repositories.TransactionRepository

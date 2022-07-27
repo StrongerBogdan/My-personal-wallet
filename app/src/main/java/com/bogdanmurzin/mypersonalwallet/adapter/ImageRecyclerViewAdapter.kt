@@ -6,14 +6,15 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.bogdanmurzin.domain.entities.EntityWithImageAndTitle
+import com.bogdanmurzin.data.entity.CategoryEntity
+import com.bogdanmurzin.mypersonalwallet.common.Constants.ICON_SCALE
 import com.bogdanmurzin.mypersonalwallet.databinding.RvAccountTypeItemBinding
 import com.bumptech.glide.Glide
 
 class ImageRecyclerViewAdapter(
-    private val onItemClicked: (EntityWithImageAndTitle) -> Unit
+    private val onItemClicked: (CategoryEntity) -> Unit
 ) :
-    ListAdapter<EntityWithImageAndTitle, ImageRecyclerViewAdapter.ViewHolder>(ItemDiffCallback) {
+    ListAdapter<CategoryEntity, ImageRecyclerViewAdapter.ViewHolder>(ItemDiffCallback) {
 
     lateinit var context: Context
 
@@ -36,11 +37,11 @@ class ImageRecyclerViewAdapter(
 
     inner class ViewHolder(
         private val binding: RvAccountTypeItemBinding,
-        private var onEdit: (EntityWithImageAndTitle) -> Unit
+        private var onEdit: (CategoryEntity) -> Unit
     ) :
         RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(entity: EntityWithImageAndTitle) {
+        fun bind(entity: CategoryEntity) {
             binding.titleAccountType.text = entity.title
             Glide.with(context)
                 .load(entity.imageUri)
@@ -53,24 +54,19 @@ class ImageRecyclerViewAdapter(
         }
     }
 
-    object ItemDiffCallback : DiffUtil.ItemCallback<EntityWithImageAndTitle>() {
+    object ItemDiffCallback : DiffUtil.ItemCallback<CategoryEntity>() {
         override fun areItemsTheSame(
-            oldItem: EntityWithImageAndTitle,
-            newItem: EntityWithImageAndTitle
+            oldItem: CategoryEntity,
+            newItem: CategoryEntity
         ): Boolean {
             return oldItem == newItem
         }
 
         override fun areContentsTheSame(
-            oldItem: EntityWithImageAndTitle,
-            newItem: EntityWithImageAndTitle
+            oldItem: CategoryEntity,
+            newItem: CategoryEntity
         ): Boolean {
-            return oldItem.title == newItem.title &&
-                    oldItem.imageUri == newItem.imageUri
+            return oldItem.id == newItem.id
         }
-    }
-
-    companion object {
-        const val ICON_SCALE = 90
     }
 }

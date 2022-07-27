@@ -6,8 +6,8 @@ import androidx.room.PrimaryKey
 
 @Entity(tableName = "transaction_category")
 data class TransactionCategoryEntity(
-    @PrimaryKey val id: Int,
-    @ColumnInfo(name = "title") val title: String,
+    @PrimaryKey override val id: Int,
+    @ColumnInfo(name = "title") override val title: String,
     @ColumnInfo(name = "subcategory") val subcategory: String?,
-    @ColumnInfo(name = "transaction_pic_uri") val transactionPicUri: String?
-)
+    @ColumnInfo(name = "transaction_pic_uri") override val imageUri: String
+) : CategoryEntity
