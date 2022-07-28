@@ -1,6 +1,7 @@
 package com.bogdanmurzin.mypersonalwallet.adapter
 
 import android.graphics.drawable.BitmapDrawable
+import android.net.Uri
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.ImageView
@@ -10,10 +11,12 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bogdanmurzin.mypersonalwallet.R
+import com.bogdanmurzin.mypersonalwallet.common.Constants
 import com.bogdanmurzin.mypersonalwallet.data.transaction_recycer_items.HeaderItemUiModel
 import com.bogdanmurzin.mypersonalwallet.data.transaction_recycer_items.TransactionItemUiModel
 import com.bogdanmurzin.mypersonalwallet.databinding.RvItemHeaderBinding
 import com.bogdanmurzin.mypersonalwallet.databinding.RvItemTransactionBinding
+import com.bumptech.glide.Glide
 import java.text.NumberFormat
 import java.text.SimpleDateFormat
 import java.util.*
@@ -85,7 +88,8 @@ class MyMoneyTransactionRecyclerViewAdapter(
 
     inner class MoneyTransactionViewHolder(binding: RvItemTransactionBinding) :
         RecyclerView.ViewHolder(binding.root) {
-        private val imageView: ImageView = binding.categoryIv
+        private val imageCategory: ImageView = binding.categoryIv
+        private val imageAccountType: ImageView = binding.accountIv
         private val categoryTv: TextView = binding.categoryTv
         private val accountTypeTv: TextView = binding.accountTypeTv
         private val descriptionTv: TextView = binding.descriptionTv
@@ -95,15 +99,18 @@ class MyMoneyTransactionRecyclerViewAdapter(
             val locate = Locale.getDefault()
             val context = categoryTv.context
 
-            // get picture TODO refactor
-            val transactionPic = if (item.category.imageUri.isNullOrBlank()) {
-                // Default resource icon
-                ContextCompat.getDrawable(context, R.drawable.ic_card)
-            } else {
-                BitmapDrawable(context.resources, item.category.imageUri)
-            }
-            imageView.setImageDrawable(transactionPic)
-            //imageView.setImageDrawable()
+            // set picture to Category
+            Glide.with(context)
+                .load(Uri.parse(item.category.imageUri))
+                .override(Constants.ICON_SCALE, Constants.ICON_SCALE)
+                .into(imageCategory)
+
+            // set picture to Account type
+            Glide.with(context)
+                .load(Uri.parse(item.accountType.imageUri))
+                .override(Constants.ICON_SCALE, Constants.ICON_SCALE)
+                .into(imageAccountType)
+
             categoryTv.text =
                 if (item.category.subcategory != null) {
                     context.getString(
@@ -115,21 +122,6 @@ class MyMoneyTransactionRecyclerViewAdapter(
                     item.category.title
                 }
             accountTypeTv.text = item.accountType.title
-
-            // get picture
-            val accountPic =
-                if (item.accountType.imageUri.isNullOrBlank()) {
-                    // Default resource icon
-                    ContextCompat.getDrawable(context, R.drawable.ic_shopping_cart)
-                } else {
-                    BitmapDrawable(context.resources, item.accountType.imageUri)
-                }
-            accountTypeTv.setCompoundDrawablesWithIntrinsicBounds(
-                accountPic,
-                null,
-                null,
-                null
-            )
             descriptionTv.text = item.description
             transactionAmountTv.text =
                 NumberFormat.getCurrencyInstance(locate).format(item.transactionAmount)
