@@ -23,4 +23,18 @@ class TransactionsEntityMapper @Inject constructor(
             accountTypeEntityMapper.toAccountType(accountTypeEntity),
             item.transactionAmount
         )
+
+    fun toTransactionEntity(
+        transaction: Transaction,
+        trxCategoryId: Int,
+        accountTypeId: Int
+    ): TransactionEntity =
+        TransactionEntity(
+            0,
+            trxCategoryId,
+            transaction.date,
+            transaction.description,
+            accountTypeId,
+            transaction.transactionAmount
+        )
 }

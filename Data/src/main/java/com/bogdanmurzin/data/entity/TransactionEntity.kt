@@ -22,7 +22,7 @@ import java.util.*
     )]
 )
 data class TransactionEntity(
-    @PrimaryKey val id: Int,
+    @PrimaryKey(autoGenerate = true) val id: Int,
     @ColumnInfo(name = "transaction_category_id") val transactionCategoryId: Int,
     @ColumnInfo(name = "date") val date: Date,
     @ColumnInfo(name = "description") val description: String?,

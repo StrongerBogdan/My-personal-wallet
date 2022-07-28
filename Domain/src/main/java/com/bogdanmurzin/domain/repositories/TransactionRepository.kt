@@ -10,9 +10,9 @@ interface TransactionRepository {
 
     suspend fun getLocalDateTransaction(date: Date? = null): Transaction
 
-    suspend fun insertTransactions(
-        transactions: List<Transaction>
-    ): List<Transaction>
+    suspend fun insertTransactions(transactions: List<Transaction>): List<Transaction>
+
+    suspend fun insertTransaction(transaction: Transaction)
 
     suspend fun deleteTransactions()
 }

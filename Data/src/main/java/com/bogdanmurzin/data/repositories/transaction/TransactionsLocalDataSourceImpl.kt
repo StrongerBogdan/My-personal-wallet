@@ -45,6 +45,26 @@ class TransactionsLocalDataSourceImpl @Inject constructor(
         TODO("Not yet implemented")
     }
 
+    override suspend fun insertTransaction(transaction: Transaction) =
+        withContext(dispatcher) {
+            val transactionCategoryId = transactionCategoryDao.getTrxCategoryId(
+                transaction.category.title,
+                transaction.category.imageUri
+            )
+            val accountTypeId = accountTypeDao.getAccountId(
+                transaction.accountType.title,
+                transaction.accountType.imageUri
+            )
+
+            transactionsDao.insert(
+                transactionsEntityMapper.toTransactionEntity(
+                    transaction,
+                    transactionCategoryId,
+                    accountTypeId
+                )
+            )
+        }
+
     override suspend fun deleteTransactions() {
         TODO("Not yet implemented")
     }

@@ -10,6 +10,7 @@ import com.bogdanmurzin.domain.entities.TransactionCategory
 import com.bogdanmurzin.domain.usecases.account_type.GetAccountIdUseCase
 import com.bogdanmurzin.domain.usecases.account_type.GetAccountTypeUseCase
 import com.bogdanmurzin.domain.usecases.account_type.GetAllAccountTypesUseCase
+import com.bogdanmurzin.domain.usecases.transaction.InsertTransactionUseCase
 import com.bogdanmurzin.domain.usecases.transaction_category.GetAllTrxCategoryUseCase
 import com.bogdanmurzin.domain.usecases.transaction_category.GetTrxCategoryIdUseCase
 import com.bogdanmurzin.domain.usecases.transaction_category.GetTrxCategoryUseCase
@@ -25,11 +26,11 @@ class AddTransactionViewModel @Inject constructor(
 
     private val getTrxCategoryUseCase: GetTrxCategoryUseCase,
     private val getAllTrxCategoryUseCase: GetAllTrxCategoryUseCase,
-    private val getTrxCategoryIdUseCase: GetTrxCategoryIdUseCase
+    private val getTrxCategoryIdUseCase: GetTrxCategoryIdUseCase,
+
+    private val insertTransactionUseCase: InsertTransactionUseCase
 ) : ViewModel() {
 
-    private val _transactionLiveData: MutableLiveData<Transaction>? = null
-    val transactionLiveData: LiveData<Transaction>? = _transactionLiveData
     private val _selectedAccountType: MutableLiveData<AccountType> = MutableLiveData()
     val selectedAccountType: LiveData<AccountType> = _selectedAccountType
     private val _selectedTrxCategory: MutableLiveData<TransactionCategory> = MutableLiveData()
@@ -59,6 +60,10 @@ class AddTransactionViewModel @Inject constructor(
     suspend fun getTrxCategoryId(trxCategory: TransactionCategory): Int =
         getTrxCategoryIdUseCase.invoke(trxCategory)
 
+    suspend fun addTransaction(transaction: Transaction) {
+        insertTransactionUseCase.invoke(transaction)
+    }
+
     @Suppress("UNCHECKED_CAST")
     class Factory(
         private val getAccountTypeUseCase: GetAccountTypeUseCase,
@@ -67,7 +72,9 @@ class AddTransactionViewModel @Inject constructor(
 
         private val getTrxCategoryUseCase: GetTrxCategoryUseCase,
         private val getAllTrxCategoryUseCase: GetAllTrxCategoryUseCase,
-        private val getTrxCategoryIdUseCase: GetTrxCategoryIdUseCase
+        private val getTrxCategoryIdUseCase: GetTrxCategoryIdUseCase,
+
+        private val insertTransactionUseCase: InsertTransactionUseCase
     ) : ViewModelProvider.NewInstanceFactory() {
 
         override fun <T : ViewModel> create(modelClass: Class<T>): T =
@@ -77,7 +84,8 @@ class AddTransactionViewModel @Inject constructor(
                 getAccountIdUseCase,
                 getTrxCategoryUseCase,
                 getAllTrxCategoryUseCase,
-                getTrxCategoryIdUseCase
+                getTrxCategoryIdUseCase,
+                insertTransactionUseCase
             ) as T
     }
 }
