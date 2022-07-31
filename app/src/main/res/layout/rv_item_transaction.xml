@@ -30,6 +30,7 @@
         android:id="@+id/account_type_tv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/small_margin"
         android:textSize="@dimen/headline6_text_size"
         app:layout_constraintStart_toEndOf="@id/account_iv"
         app:layout_constraintTop_toBottomOf="@id/category_tv"
@@ -53,6 +54,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="@dimen/subtitle_text_size"
+        android:layout_marginTop="@dimen/small_margin"
         app:layout_constraintStart_toStartOf="@id/category_tv"
         app:layout_constraintTop_toBottomOf="@id/account_type_tv"
         tools:text="Blah-blah-blah" />

@@ -37,7 +37,7 @@ class AddTransactionViewModel @Inject constructor(
     val selectedTrxCategory: LiveData<TransactionCategory> = _selectedTrxCategory
 
     // external read-only variable
-    lateinit var selectedCategoryTitle: String
+    var selectedCategoryTitle: String? = null
         private set
     var selectedSubcategoryTitle: String? = null
 

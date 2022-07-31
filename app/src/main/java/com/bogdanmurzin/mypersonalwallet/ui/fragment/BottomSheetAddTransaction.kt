@@ -7,8 +7,6 @@ import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.view.isGone
-import androidx.core.view.isVisible
 import androidx.lifecycle.coroutineScope
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
@@ -63,7 +61,8 @@ class BottomSheetAddTransaction : BottomSheetDialogFragment() {
             lifecycle.coroutineScope.launch {
                 val trxCategory = viewModel.selectedTrxCategory.value
                 val accountType = viewModel.selectedAccountType.value
-                val transactionAmount = binding.transactionAmountTv.text.toString().replace("$","")
+                val transactionAmount = binding.transactionAmountTv.text.toString()
+                    .replace(DOLLAR_OR_COMA_REGEX, EMPTY_STRING)
                 val description = binding.transactionDescription.text.toString().ifEmpty { null }
 
                 if (trxCategory != null && accountType != null &&
@@ -142,7 +141,7 @@ class BottomSheetAddTransaction : BottomSheetDialogFragment() {
             override fun afterTextChanged(s: Editable?) {
                 if (s != null) {
                     textview.removeTextChangedListener(this)
-                    val cleanString: String = s.replace("""[$,.]""".toRegex(), "")
+                    val cleanString: String = s.replace(DOLLAR_OR_COMA_OR_DOT_REGEX, EMPTY_STRING)
                     val parsed = cleanString.toDouble()
                     val formatted = NumberFormat.getCurrencyInstance().format((parsed / 100))
                     textview.setText(formatted)
@@ -156,5 +155,11 @@ class BottomSheetAddTransaction : BottomSheetDialogFragment() {
     private enum class EditingState {
         NEW_TRANSACTION,
         EXISTING_TRANSACTION
+    }
+
+    companion object {
+        const val EMPTY_STRING = ""
+        val DOLLAR_OR_COMA_REGEX = Regex("[$,]")
+        val DOLLAR_OR_COMA_OR_DOT_REGEX = Regex("[$,.]")
     }
 }

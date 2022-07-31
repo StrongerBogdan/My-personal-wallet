@@ -1,15 +1,18 @@
 package com.bogdanmurzin.mypersonalwallet.adapter
 
 import android.content.Context
+import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bogdanmurzin.domain.entities.CategoryEntity
+import com.bogdanmurzin.mypersonalwallet.R
 import com.bogdanmurzin.mypersonalwallet.common.Constants.ICON_SCALE
 import com.bogdanmurzin.mypersonalwallet.databinding.RvCategoryItemBinding
 import com.bumptech.glide.Glide
+
 
 class ImageRecyclerViewAdapter(
     private val onItemClicked: (CategoryEntity) -> Unit
@@ -17,6 +20,7 @@ class ImageRecyclerViewAdapter(
     ListAdapter<CategoryEntity, ImageRecyclerViewAdapter.ViewHolder>(ItemDiffCallback) {
 
     lateinit var context: Context
+    var selectedPosition = RecyclerView.NO_POSITION
 
     override fun onCreateViewHolder(
         parent: ViewGroup,
@@ -33,6 +37,7 @@ class ImageRecyclerViewAdapter(
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val item = getItem(position)
         holder.bind(item)
+        holder.itemView.setBackgroundResource(if (selectedPosition == position) R.drawable.round_rect_shape_recycler else Color.TRANSPARENT)
     }
 
     inner class ViewHolder(
@@ -49,6 +54,9 @@ class ImageRecyclerViewAdapter(
                 .into(binding.ivIcon)
 
             binding.root.setOnClickListener {
+                notifyItemChanged(selectedPosition)
+                selectedPosition = absoluteAdapterPosition
+                notifyItemChanged(selectedPosition)
                 onEdit(entity)
             }
         }

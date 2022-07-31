@@ -1,30 +1,21 @@
 package com.bogdanmurzin.mypersonalwallet.ui.fragment
 
-import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.LinearLayout
-import android.widget.Toast
-import androidx.core.content.ContextCompat
-import androidx.core.view.marginBottom
-import androidx.core.view.marginEnd
-import androidx.core.view.setMargins
 import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.coroutineScope
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.navigation.navGraphViewModels
 import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bogdanmurzin.domain.entities.AccountType
 import com.bogdanmurzin.domain.entities.CategoryEntity
 import com.bogdanmurzin.domain.entities.TransactionCategory
 import com.bogdanmurzin.mypersonalwallet.R
 import com.bogdanmurzin.mypersonalwallet.adapter.ImageRecyclerViewAdapter
-import com.bogdanmurzin.mypersonalwallet.adapter.TrxSubcategoryAdapter
 import com.bogdanmurzin.mypersonalwallet.databinding.DialogCategoryChooseBinding
 import com.bogdanmurzin.mypersonalwallet.ui.viewmodel.AddTransactionViewModel
 import com.bogdanmurzin.mypersonalwallet.util.CategoryArg
@@ -56,11 +47,23 @@ class AccountChooseDialogFragment : DialogFragment() {
                 resources.getString(R.string.choose_category)
 
         binding.doneBtn.setOnClickListener {
+            val selectedCategoryTitle = viewModel.selectedCategoryTitle
+            val selectedSubcategoryTitle = viewModel.selectedSubcategoryTitle
+
+            if (selectedCategoryTitle == null) {
+                findNavController().navigateUp()
+                return@setOnClickListener
+            }
+
             lifecycle.coroutineScope.launch {
-                val trxId = viewModel.getTrxCategoryIdBySubcategory(viewModel.selectedCategoryTitle, viewModel.selectedSubcategoryTitle)
+                val trxId = viewModel.getTrxCategoryIdBySubcategory(
+                    selectedCategoryTitle,
+                    selectedSubcategoryTitle
+                )
                 viewModel.getTrxCategory(trxId)
                 findNavController().navigateUp()
             }
+
         }
 
         return binding.root
@@ -70,6 +73,7 @@ class AccountChooseDialogFragment : DialogFragment() {
         // On which cardView user clicked
         // Account type cardView
         if (args.category == CategoryArg.ACCOUNT_TYPE) {
+            binding.doneBtn.visibility = View.GONE
             setupRecycler {
                 lifecycle.coroutineScope.launch {
                     val accountId = viewModel.getAccountId(it as AccountType)

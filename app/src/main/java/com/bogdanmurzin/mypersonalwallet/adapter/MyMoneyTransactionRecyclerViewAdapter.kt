@@ -1,12 +1,10 @@
 package com.bogdanmurzin.mypersonalwallet.adapter
 
-import android.graphics.drawable.BitmapDrawable
 import android.net.Uri
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -123,6 +121,7 @@ class MyMoneyTransactionRecyclerViewAdapter(
                 }
             accountTypeTv.text = item.accountType.title
             descriptionTv.text = item.description
+            if (item.description.isNullOrEmpty()) descriptionTv.visibility = ViewGroup.GONE
             transactionAmountTv.text =
                 NumberFormat.getCurrencyInstance(locate).format(item.transactionAmount)
         }
