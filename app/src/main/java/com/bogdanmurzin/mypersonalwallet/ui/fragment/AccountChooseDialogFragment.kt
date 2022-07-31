@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
+import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.core.view.marginBottom
 import androidx.core.view.marginEnd
@@ -54,6 +55,14 @@ class AccountChooseDialogFragment : DialogFragment() {
             else
                 resources.getString(R.string.choose_category)
 
+        binding.doneBtn.setOnClickListener {
+            lifecycle.coroutineScope.launch {
+                val trxId = viewModel.getTrxCategoryIdBySubcategory(viewModel.selectedCategoryTitle, viewModel.selectedSubcategoryTitle)
+                viewModel.getTrxCategory(trxId)
+                findNavController().navigateUp()
+            }
+        }
+
         return binding.root
     }
 
@@ -79,6 +88,8 @@ class AccountChooseDialogFragment : DialogFragment() {
             // setup main recycler
             setupRecycler {
                 lifecycle.coroutineScope.launch {
+                    // Remove selected subcategory
+                    viewModel.selectedSubcategoryTitle = null
                     // "trx" it's short form of "transaction"
                     val trxCategoryId = viewModel.getTrxCategoryId(it as TransactionCategory)
                     viewModel.getAllTrxSubCategories(trxCategoryId).collect { list ->
@@ -90,6 +101,12 @@ class AccountChooseDialogFragment : DialogFragment() {
                                     addChip(category.subcategory)
                                 }
                                 isSingleSelection = true
+
+                                setOnCheckedStateChangeListener { group, checkedList ->
+                                    // There is always one element
+                                    val chip: Chip = group.findViewById(checkedList[0])
+                                    viewModel.selectedSubcategoryTitle = chip.text.toString()
+                                }
                             }
                         } else {
                             // If transaction category has no subcategories

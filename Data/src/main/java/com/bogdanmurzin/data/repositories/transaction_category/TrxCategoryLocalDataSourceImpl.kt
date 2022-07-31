@@ -38,4 +38,10 @@ class TrxCategoryLocalDataSourceImpl @Inject constructor(
                 transactionCategoryDao.getAllTrxSubCategories(title)
             )
         }
+
+    override suspend fun getTrxCategoryIdBySubcategory(title: String, subcategory: String?): Int =
+        withContext(dispatcher) {
+            transactionCategoryDao
+                .getTrxCategoryIdBySubcategory(title, subcategory)
+        }
 }

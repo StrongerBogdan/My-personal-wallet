@@ -13,4 +13,6 @@ interface TrxCategoryRepository {
 
     suspend fun getAllTrxSubCategories(title: String): Flow<List<TransactionCategory>>
 
+    suspend fun getTrxCategoryIdBySubcategory(title: String, subcategory: String?): Int
+
 }

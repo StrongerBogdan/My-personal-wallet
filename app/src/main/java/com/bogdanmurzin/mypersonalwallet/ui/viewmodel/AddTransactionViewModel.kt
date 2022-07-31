@@ -11,10 +11,7 @@ import com.bogdanmurzin.domain.usecases.account_type.GetAccountIdUseCase
 import com.bogdanmurzin.domain.usecases.account_type.GetAccountTypeUseCase
 import com.bogdanmurzin.domain.usecases.account_type.GetAllAccountTypesUseCase
 import com.bogdanmurzin.domain.usecases.transaction.InsertTransactionUseCase
-import com.bogdanmurzin.domain.usecases.transaction_category.GetAllTrxCategoryUseCase
-import com.bogdanmurzin.domain.usecases.transaction_category.GetAllTrxSubCategoriesUseCase
-import com.bogdanmurzin.domain.usecases.transaction_category.GetTrxCategoryIdUseCase
-import com.bogdanmurzin.domain.usecases.transaction_category.GetTrxCategoryUseCase
+import com.bogdanmurzin.domain.usecases.transaction_category.*
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
@@ -29,6 +26,7 @@ class AddTransactionViewModel @Inject constructor(
     private val getAllTrxCategoryUseCase: GetAllTrxCategoryUseCase,
     private val getTrxCategoryIdUseCase: GetTrxCategoryIdUseCase,
     private val getAllTrxSubCategoriesUseCase: GetAllTrxSubCategoriesUseCase,
+    private val getTrxCategoryIdBySubcategoryUseCase: GetTrxCategoryIdBySubcategoryUseCase,
 
     private val insertTransactionUseCase: InsertTransactionUseCase
 ) : ViewModel() {
@@ -37,6 +35,11 @@ class AddTransactionViewModel @Inject constructor(
     val selectedAccountType: LiveData<AccountType> = _selectedAccountType
     private val _selectedTrxCategory: MutableLiveData<TransactionCategory> = MutableLiveData()
     val selectedTrxCategory: LiveData<TransactionCategory> = _selectedTrxCategory
+
+    // external read-only variable
+    lateinit var selectedCategoryTitle: String
+        private set
+    var selectedSubcategoryTitle: String? = null
 
     suspend fun getAccount(id: Int) {
         val selectedAccountType =
@@ -59,6 +62,8 @@ class AddTransactionViewModel @Inject constructor(
     suspend fun getAllTrxSubCategories(id: Int): Flow<List<TransactionCategory>> {
         val selectedTrxCategory =
             getTrxCategoryUseCase.invoke(id)
+        // Save title
+        selectedCategoryTitle = selectedTrxCategory.title
         return getAllTrxSubCategoriesUseCase.invoke(selectedTrxCategory.title)
     }
 
@@ -67,6 +72,9 @@ class AddTransactionViewModel @Inject constructor(
 
     suspend fun getTrxCategoryId(trxCategory: TransactionCategory): Int =
         getTrxCategoryIdUseCase.invoke(trxCategory)
+
+    suspend fun getTrxCategoryIdBySubcategory(title: String, subcategory: String?): Int =
+        getTrxCategoryIdBySubcategoryUseCase.invoke(title, subcategory)
 
     suspend fun addTransaction(transaction: Transaction) {
         insertTransactionUseCase.invoke(transaction)
@@ -82,6 +90,7 @@ class AddTransactionViewModel @Inject constructor(
         private val getAllTrxCategoryUseCase: GetAllTrxCategoryUseCase,
         private val getTrxCategoryIdUseCase: GetTrxCategoryIdUseCase,
         private val getAllTrxSubCategoriesUseCase: GetAllTrxSubCategoriesUseCase,
+        private val getTrxCategoryIdBySubcategoryUseCase: GetTrxCategoryIdBySubcategoryUseCase,
 
         private val insertTransactionUseCase: InsertTransactionUseCase
     ) : ViewModelProvider.NewInstanceFactory() {
@@ -95,6 +104,7 @@ class AddTransactionViewModel @Inject constructor(
                 getAllTrxCategoryUseCase,
                 getTrxCategoryIdUseCase,
                 getAllTrxSubCategoriesUseCase,
+                getTrxCategoryIdBySubcategoryUseCase,
                 insertTransactionUseCase
             ) as T
     }
