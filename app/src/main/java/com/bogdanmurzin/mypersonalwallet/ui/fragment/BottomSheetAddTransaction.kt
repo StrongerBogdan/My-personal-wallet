@@ -7,6 +7,8 @@ import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isGone
+import androidx.core.view.isVisible
 import androidx.lifecycle.coroutineScope
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
@@ -62,10 +64,7 @@ class BottomSheetAddTransaction : BottomSheetDialogFragment() {
                 val trxCategory = viewModel.selectedTrxCategory.value
                 val accountType = viewModel.selectedAccountType.value
                 val transactionAmount = binding.transactionAmountTv.text.toString().replace("$","")
-                val description = if (binding.transactionDescription.text.toString().isNotEmpty())
-                    binding.transactionDescription.text.toString()
-                else
-                    null
+                val description = binding.transactionDescription.text.toString().ifEmpty { null }
 
                 if (trxCategory != null && accountType != null &&
                     transactionAmount.isNotEmpty() && transactionAmount.toFloat() != 0f
@@ -102,6 +101,9 @@ class BottomSheetAddTransaction : BottomSheetDialogFragment() {
             binding.transactionCategoryTv.text = trxCategory.title
             binding.transactionSubcategoryTv.text =
                 resources.getString(R.string.category_subtitle_template, trxCategory.subcategory)
+            binding.transactionSubcategoryTv.visibility = View.VISIBLE
+            if (trxCategory.subcategory.isNullOrEmpty()) binding.transactionSubcategoryTv.visibility =
+                View.GONE
             Glide.with(requireContext())
                 .load(Uri.parse(trxCategory.imageUri))
                 .override(Constants.ICON_SCALE, Constants.ICON_SCALE)

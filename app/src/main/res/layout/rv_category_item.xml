@@ -9,7 +9,7 @@
         android:id="@+id/icon_cv"
         android:layout_width="@dimen/icon_size"
         android:layout_height="@dimen/icon_size"
-        android:layout_margin="@dimen/view_side_margin"
+        android:layout_margin="@dimen/small_margin"
         app:cardCornerRadius="@dimen/icon_size"
         app:layout_constraintBottom_toTopOf="@id/title_account_type"
         app:layout_constraintEnd_toEndOf="parent"

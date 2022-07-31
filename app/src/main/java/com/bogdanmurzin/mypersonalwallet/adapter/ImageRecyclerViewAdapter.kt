@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bogdanmurzin.domain.entities.CategoryEntity
 import com.bogdanmurzin.mypersonalwallet.common.Constants.ICON_SCALE
-import com.bogdanmurzin.mypersonalwallet.databinding.RvAccountTypeItemBinding
+import com.bogdanmurzin.mypersonalwallet.databinding.RvCategoryItemBinding
 import com.bumptech.glide.Glide
 
 class ImageRecyclerViewAdapter(
@@ -24,7 +24,7 @@ class ImageRecyclerViewAdapter(
     ): ImageRecyclerViewAdapter.ViewHolder {
         context = parent.context
         return ViewHolder(
-            RvAccountTypeItemBinding
+            RvCategoryItemBinding
                 .inflate(LayoutInflater.from(parent.context), parent, false),
             onItemClicked
         )
@@ -36,7 +36,7 @@ class ImageRecyclerViewAdapter(
     }
 
     inner class ViewHolder(
-        private val binding: RvAccountTypeItemBinding,
+        private val binding: RvCategoryItemBinding,
         private var onEdit: (CategoryEntity) -> Unit
     ) :
         RecyclerView.ViewHolder(binding.root) {

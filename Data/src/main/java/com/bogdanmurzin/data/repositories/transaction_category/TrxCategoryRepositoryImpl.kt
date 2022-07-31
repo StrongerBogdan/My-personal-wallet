@@ -23,4 +23,7 @@ class TrxCategoryRepositoryImpl @Inject constructor(
     override suspend fun getTrxCategoryId(trxCategory: TransactionCategory): Int =
         localDataSource.getTrxCategoryId(trxCategory)
 
+    override suspend fun getAllTrxSubCategories(title: String): Flow<List<TransactionCategory>> =
+        localDataSource.getAllTrxSubCategories(title)
+
 }

@@ -12,6 +12,7 @@ import com.bogdanmurzin.domain.usecases.account_type.GetAccountTypeUseCase
 import com.bogdanmurzin.domain.usecases.account_type.GetAllAccountTypesUseCase
 import com.bogdanmurzin.domain.usecases.transaction.InsertTransactionUseCase
 import com.bogdanmurzin.domain.usecases.transaction_category.GetAllTrxCategoryUseCase
+import com.bogdanmurzin.domain.usecases.transaction_category.GetAllTrxSubCategoriesUseCase
 import com.bogdanmurzin.domain.usecases.transaction_category.GetTrxCategoryIdUseCase
 import com.bogdanmurzin.domain.usecases.transaction_category.GetTrxCategoryUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -27,6 +28,7 @@ class AddTransactionViewModel @Inject constructor(
     private val getTrxCategoryUseCase: GetTrxCategoryUseCase,
     private val getAllTrxCategoryUseCase: GetAllTrxCategoryUseCase,
     private val getTrxCategoryIdUseCase: GetTrxCategoryIdUseCase,
+    private val getAllTrxSubCategoriesUseCase: GetAllTrxSubCategoriesUseCase,
 
     private val insertTransactionUseCase: InsertTransactionUseCase
 ) : ViewModel() {
@@ -54,6 +56,12 @@ class AddTransactionViewModel @Inject constructor(
         _selectedTrxCategory.postValue(selectedTrxCategory)
     }
 
+    suspend fun getAllTrxSubCategories(id: Int): Flow<List<TransactionCategory>> {
+        val selectedTrxCategory =
+            getTrxCategoryUseCase.invoke(id)
+        return getAllTrxSubCategoriesUseCase.invoke(selectedTrxCategory.title)
+    }
+
     suspend fun getAllTrxCategories(): Flow<List<TransactionCategory>> =
         getAllTrxCategoryUseCase.invoke()
 
@@ -73,6 +81,7 @@ class AddTransactionViewModel @Inject constructor(
         private val getTrxCategoryUseCase: GetTrxCategoryUseCase,
         private val getAllTrxCategoryUseCase: GetAllTrxCategoryUseCase,
         private val getTrxCategoryIdUseCase: GetTrxCategoryIdUseCase,
+        private val getAllTrxSubCategoriesUseCase: GetAllTrxSubCategoriesUseCase,
 
         private val insertTransactionUseCase: InsertTransactionUseCase
     ) : ViewModelProvider.NewInstanceFactory() {
@@ -85,6 +94,7 @@ class AddTransactionViewModel @Inject constructor(
                 getTrxCategoryUseCase,
                 getAllTrxCategoryUseCase,
                 getTrxCategoryIdUseCase,
+                getAllTrxSubCategoriesUseCase,
                 insertTransactionUseCase
             ) as T
     }

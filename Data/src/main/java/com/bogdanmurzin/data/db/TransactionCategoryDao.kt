@@ -14,9 +14,12 @@ interface TransactionCategoryDao {
     @Query("SELECT * FROM `transaction_category` WHERE id = :id")
     fun getTrxCategoryById(id: Int): TransactionCategoryEntity
 
-    @Query("SELECT * FROM `transaction_category`")
+    @Query("SELECT * FROM `transaction_category` GROUP BY title")
     fun getAllTrxCategories(): Flow<List<TransactionCategoryEntity>>
 
     @Query("SELECT * FROM `transaction_category` WHERE title = :title AND transaction_pic_uri = :imageUri")
     fun getTrxCategoryId(title: String, imageUri: String): Int
+
+    @Query("SELECT * FROM `transaction_category` WHERE title = :title AND subcategory IS NOT NULL")
+    fun getAllTrxSubCategories(title: String): Flow<List<TransactionCategoryEntity>>
 }
