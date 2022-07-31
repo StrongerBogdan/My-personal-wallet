@@ -173,6 +173,7 @@
         android:layout_marginEnd="@dimen/medium_margin"
         android:backgroundTint="@color/gray"
         android:textSize="@dimen/caption_text_size"
+        android:textColor="@color/white"
         tools:text="123213123"
         app:layout_constraintBottom_toBottomOf="@+id/transaction_description"
         app:layout_constraintEnd_toEndOf="parent"
