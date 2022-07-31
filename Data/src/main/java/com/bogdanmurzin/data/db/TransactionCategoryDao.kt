@@ -23,6 +23,6 @@ interface TransactionCategoryDao {
     @Query("SELECT * FROM `transaction_category` WHERE title = :title AND subcategory IS NOT NULL")
     fun getAllTrxSubCategories(title: String): Flow<List<TransactionCategoryEntity>>
 
-    @Query("SELECT * FROM `transaction_category` WHERE title = :title AND subcategory = :subcategory")
+    @Query("SELECT * FROM `transaction_category` WHERE title = :title AND (subcategory = :subcategory OR subcategory is NULL)")
     fun getTrxCategoryIdBySubcategory(title: String, subcategory: String?): Int
 }
