@@ -14,6 +14,7 @@ import com.bogdanmurzin.domain.usecases.transaction.InsertTransactionUseCase
 import com.bogdanmurzin.domain.usecases.transaction_category.*
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
+import java.util.*
 import javax.inject.Inject
 
 @HiltViewModel
@@ -35,6 +36,8 @@ class AddTransactionViewModel @Inject constructor(
     val selectedAccountType: LiveData<AccountType> = _selectedAccountType
     private val _selectedTrxCategory: MutableLiveData<TransactionCategory> = MutableLiveData()
     val selectedTrxCategory: LiveData<TransactionCategory> = _selectedTrxCategory
+    private val _selectedDate: MutableLiveData<Date> = MutableLiveData(Calendar.getInstance().time)
+    val selectedDate: LiveData<Date> = _selectedDate
 
     // external read-only variable
     var selectedCategoryTitle: String? = null
@@ -78,6 +81,10 @@ class AddTransactionViewModel @Inject constructor(
 
     suspend fun addTransaction(transaction: Transaction) {
         insertTransactionUseCase.invoke(transaction)
+    }
+
+    fun selectDate(date: Date) {
+        _selectedDate.postValue(date)
     }
 
     @Suppress("UNCHECKED_CAST")

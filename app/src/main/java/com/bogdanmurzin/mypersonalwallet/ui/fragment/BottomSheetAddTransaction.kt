@@ -1,9 +1,11 @@
 package com.bogdanmurzin.mypersonalwallet.ui.fragment
 
+import android.content.Context
 import android.net.Uri
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.text.format.DateFormat
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -24,6 +26,7 @@ import kotlinx.coroutines.launch
 import java.text.NumberFormat
 import java.util.*
 
+
 @AndroidEntryPoint
 class BottomSheetAddTransaction : BottomSheetDialogFragment() {
 
@@ -40,6 +43,14 @@ class BottomSheetAddTransaction : BottomSheetDialogFragment() {
         binding = FragmentBottomsheetAddTransactionBinding.inflate(inflater)
         setupEditText()
         setupCardViews()
+
+        binding.datePicker.setOnClickListener {
+            findNavController().navigate(
+                BottomSheetAddTransactionDirections
+                    .actionBottomSheetAddTransactionToDatePickerFragment()
+            )
+        }
+
         return binding.root
     }
 
@@ -64,14 +75,14 @@ class BottomSheetAddTransaction : BottomSheetDialogFragment() {
                 val transactionAmount = binding.transactionAmountTv.text.toString()
                     .replace(DOLLAR_OR_COMA_REGEX, EMPTY_STRING)
                 val description = binding.transactionDescription.text.toString().ifEmpty { null }
+                val date = viewModel.selectedDate.value ?: Calendar.getInstance().time
 
                 if (trxCategory != null && accountType != null &&
                     transactionAmount.isNotEmpty() && transactionAmount.toFloat() != 0f
                 ) {
                     val transaction = Transaction(
                         trxCategory,
-                        // TODO Create date change
-                        Calendar.getInstance().time,
+                        date,
                         description,
                         accountType,
                         transactionAmount.toFloat()
@@ -107,6 +118,12 @@ class BottomSheetAddTransaction : BottomSheetDialogFragment() {
                 .load(Uri.parse(trxCategory.imageUri))
                 .override(Constants.ICON_SCALE, Constants.ICON_SCALE)
                 .into(binding.transactionCategoryIv)
+        }
+        // Date Picker
+        viewModel.selectedDate.observe(viewLifecycleOwner) {
+            val dateFormat =
+                DateFormat.getDateFormat(requireContext().applicationContext)
+            binding.datePicker.text = dateFormat.format(it)
         }
     }
 

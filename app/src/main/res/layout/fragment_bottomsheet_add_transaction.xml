@@ -10,9 +10,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/medium_margin"
-        android:layout_marginTop="@dimen/medium_margin"
+        android:layout_marginTop="@dimen/small_margin"
         android:layout_marginEnd="@dimen/medium_margin"
-        android:layout_marginBottom="@dimen/medium_margin"
+        android:layout_marginBottom="@dimen/small_margin"
         android:text="@string/expense"
         android:textAlignment="center"
         android:textSize="@dimen/headline5_text_size"
@@ -29,11 +29,11 @@
         android:layout_marginTop="@dimen/small_half_margin"
         android:layout_marginEnd="@dimen/small_margin"
         android:layout_marginBottom="@dimen/small_half_margin"
-        tools:backgroundTint="@color/material_dynamic_primary50"
         app:layout_constraintBottom_toTopOf="@+id/transaction_amount_tv"
         app:layout_constraintEnd_toStartOf="@+id/guideline"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/materialTextView">
+        app:layout_constraintTop_toBottomOf="@+id/materialTextView"
+        tools:backgroundTint="@color/material_dynamic_primary50">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -57,13 +57,13 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/medium_margin"
-                tools:text="Card"
                 android:textSize="@dimen/subtitle_text_size"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toEndOf="@+id/account_type_iv"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="Card" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </com.google.android.material.card.MaterialCardView>
 
@@ -82,11 +82,11 @@
         android:layout_height="100dp"
         android:layout_marginStart="@dimen/small_margin"
         android:layout_marginEnd="@dimen/small_margin"
-        tools:backgroundTint="@color/material_dynamic_primary70"
         app:layout_constraintBottom_toBottomOf="@+id/account_cv"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/guideline"
-        app:layout_constraintTop_toTopOf="@+id/account_cv">
+        app:layout_constraintTop_toTopOf="@+id/account_cv"
+        tools:backgroundTint="@color/material_dynamic_primary70">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -110,32 +110,32 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/medium_margin"
                 android:layout_marginEnd="@dimen/medium_margin"
-                tools:text="Transport"
                 android:textSize="@dimen/subtitle_text_size"
                 app:layout_constraintBottom_toTopOf="@id/transaction_subcategory_tv"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toEndOf="@+id/transaction_category_iv"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_chainStyle="packed" />
+                app:layout_constraintVertical_chainStyle="packed"
+                tools:text="Transport" />
 
             <TextView
                 android:id="@+id/transaction_subcategory_tv"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="@dimen/medium_margin"
-                tools:text="Taxi"
                 android:textSize="@dimen/caption_text_size"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="@+id/transaction_category_tv"
-                app:layout_constraintTop_toBottomOf="@id/transaction_category_tv" />
+                app:layout_constraintTop_toBottomOf="@id/transaction_category_tv"
+                tools:text="Taxi" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </com.google.android.material.card.MaterialCardView>
 
     <com.google.android.material.textfield.MaterialAutoCompleteTextView
         android:id="@+id/transaction_amount_tv"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/medium_margin"
         android:layout_marginTop="@dimen/small_half_margin"
@@ -146,25 +146,48 @@
         android:textAlignment="center"
         android:textSize="@dimen/headline5_text_size"
         app:layout_constraintBottom_toTopOf="@+id/transaction_description"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/date_picker"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/account_cv" />
 
     <com.google.android.material.textfield.TextInputEditText
         android:id="@+id/transaction_description"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/medium_margin"
         android:layout_marginTop="@dimen/small_half_margin"
-        android:layout_marginEnd="@dimen/medium_margin"
         android:layout_marginBottom="@dimen/small_half_margin"
         android:hint="@string/note"
         android:textAlignment="center"
         android:textSize="@dimen/headline6_text_size"
         app:layout_constraintBottom_toTopOf="@+id/done_btn"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/guideline2"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/transaction_amount_tv" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/date_picker"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="@dimen/medium_margin"
+        android:layout_marginEnd="@dimen/medium_margin"
+        android:backgroundTint="@color/gray"
+        android:textSize="@dimen/caption_text_size"
+        tools:text="123213123"
+        app:layout_constraintBottom_toBottomOf="@+id/transaction_description"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/guideline2"
+        app:layout_constraintTop_toTopOf="@+id/transaction_amount_tv" >
+    </com.google.android.material.button.MaterialButton>
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintGuide_percent="0.7"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/done_btn"
@@ -179,8 +202,8 @@
         android:paddingTop="@dimen/small_margin"
         android:paddingBottom="@dimen/small_margin"
         android:text="@string/done"
-        android:textSize="@dimen/button_text_size"
         android:textColor="@color/white"
+        android:textSize="@dimen/button_text_size"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

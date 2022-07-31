@@ -35,6 +35,13 @@
                 android:name="tranasctionId"
                 android:defaultValue="0"
                 app:argType="integer" />
+            <action
+                android:id="@+id/action_bottomSheetAddTransaction_to_datePickerFragment"
+                app:destination="@id/datePickerFragment" />
         </dialog>
+        <dialog
+            android:id="@+id/datePickerFragment"
+            android:name="com.bogdanmurzin.mypersonalwallet.ui.fragment.DatePickerFragment"
+            android:label="DatePickerFragment" />
     </navigation>
 </navigation>
