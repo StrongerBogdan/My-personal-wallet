@@ -13,6 +13,9 @@ class TransactionRepositoryImpl @Inject constructor(
     override suspend fun getLocalTransactions(): Flow<List<Transaction>> =
         localDataSource.getLocalTransactions()
 
+    override suspend fun getLocalTransactionById(id: Int): Transaction =
+        localDataSource.getLocalTransactionById(id)
+
     override suspend fun getLocalDateTransaction(date: Date?): Transaction =
         localDataSource.getLocalDateTransaction(date)
 
@@ -21,6 +24,9 @@ class TransactionRepositoryImpl @Inject constructor(
 
     override suspend fun insertTransaction(transaction: Transaction) =
         localDataSource.insertTransaction(transaction)
+
+    override suspend fun updateTransaction(transaction: Transaction) =
+        localDataSource.updateTransaction(transaction)
 
     override suspend fun deleteTransactions() {
         localDataSource.deleteTransactions()

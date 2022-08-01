@@ -16,7 +16,7 @@ class MainViewModel @Inject constructor(
 ) : ViewModel() {
 
     suspend fun updateRateList(): Flow<List<TransactionItemUiModel>> =
-        transactionUiMapper.toTransactionUiModel(
+        transactionUiMapper.toFlowOfTransactionUiModel(
             getTransactionsUseCase.invoke()
         )
 

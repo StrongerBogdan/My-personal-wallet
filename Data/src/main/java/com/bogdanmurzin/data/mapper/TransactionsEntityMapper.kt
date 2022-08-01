@@ -17,6 +17,7 @@ class TransactionsEntityMapper @Inject constructor(
         accountTypeEntity: AccountTypeEntity
     ): Transaction =
         Transaction(
+            item.id,
             transactionCategoryEntityMapper.toTransactionCategory(transactionCategoryEntity),
             item.date,
             item.description,
@@ -30,7 +31,7 @@ class TransactionsEntityMapper @Inject constructor(
         accountTypeId: Int
     ): TransactionEntity =
         TransactionEntity(
-            0,
+            transaction.id,
             trxCategoryId,
             transaction.date,
             transaction.description,

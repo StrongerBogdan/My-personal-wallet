@@ -9,20 +9,30 @@ import javax.inject.Inject
 
 class TransactionUiMapper @Inject constructor() {
 
-    fun toTransactionUiModel(item: Flow<List<Transaction>>): Flow<List<TransactionItemUiModel>> =
+    fun toFlowOfTransactionUiModel(item: Flow<List<Transaction>>): Flow<List<TransactionItemUiModel>> =
         item.map {
             it.map { element ->
                 TransactionItemUiModel(
+                    element.id,
                     element.category,
+                    element.date,
                     element.description,
                     element.accountType,
                     element.transactionAmount
-                ).also {
-                    Log.i("TAGG", "toTransactionUiModel: ${it}")
-                }
-
+                )
             }
         }
+
+    fun toTransactionUiModel(item: Transaction): TransactionItemUiModel =
+        TransactionItemUiModel(
+            item.id,
+            item.category,
+            item.date,
+            item.description,
+            item.accountType,
+            item.transactionAmount
+        )
+
 }
 
 

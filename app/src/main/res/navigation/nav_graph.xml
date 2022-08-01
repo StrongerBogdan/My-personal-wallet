@@ -32,7 +32,7 @@
                 android:id="@+id/action_bottomSheetAddTransaction_to_accountChooseDialogFragment"
                 app:destination="@id/accountChooseDialogFragment" />
             <argument
-                android:name="tranasctionId"
+                android:name="transactionId"
                 android:defaultValue="0"
                 app:argType="integer" />
             <action
@@ -43,5 +43,9 @@
             android:id="@+id/datePickerFragment"
             android:name="com.bogdanmurzin.mypersonalwallet.ui.fragment.DatePickerFragment"
             android:label="DatePickerFragment" />
+        <argument
+            android:name="transactionId"
+            android:defaultValue="0"
+            app:argType="integer" />
     </navigation>
 </navigation>

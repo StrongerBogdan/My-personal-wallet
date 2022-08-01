@@ -9,6 +9,7 @@ import android.text.format.DateFormat
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.text.set
 import androidx.lifecycle.coroutineScope
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
@@ -58,12 +59,17 @@ class BottomSheetAddTransaction : BottomSheetDialogFragment() {
         val args: BottomSheetAddTransactionArgs by navArgs()
 
         val editingState =
-            if (args.tranasctionId > 0) EditingState.EXISTING_TRANSACTION
+            if (args.transactionId > 0) EditingState.EXISTING_TRANSACTION
             else EditingState.NEW_TRANSACTION
 
         // If we arrived here with an itemId of >= 0, then we are editing an existing item
         if (editingState == EditingState.EXISTING_TRANSACTION) {
-            TODO("not yet implemented editing")
+            lifecycle.coroutineScope.launch {
+                val transaction = viewModel.getTransactionById(args.transactionId)
+                viewModel.setUpData(transaction)
+                binding.transactionAmountTv.setText(transaction.transactionAmount.toString())
+                binding.transactionDescription.setText(transaction.description)
+            }
         }
 
         // When the user clicks the Done button, use the data here to either update
@@ -81,13 +87,18 @@ class BottomSheetAddTransaction : BottomSheetDialogFragment() {
                     transactionAmount.isNotEmpty() && transactionAmount.toFloat() != 0f
                 ) {
                     val transaction = Transaction(
+                        args.transactionId,
                         trxCategory,
                         date,
                         description,
                         accountType,
                         transactionAmount.toFloat()
                     )
-                    viewModel.addTransaction(transaction)
+                    if (editingState == EditingState.NEW_TRANSACTION) {
+                        viewModel.addTransaction(transaction)
+                    } else {
+                        viewModel.updateTransaction(transaction)
+                    }
                     findNavController().navigateUp()
                 }
                 // TODO show dialog

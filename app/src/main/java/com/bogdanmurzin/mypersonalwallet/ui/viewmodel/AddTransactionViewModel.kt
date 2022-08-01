@@ -10,8 +10,12 @@ import com.bogdanmurzin.domain.entities.TransactionCategory
 import com.bogdanmurzin.domain.usecases.account_type.GetAccountIdUseCase
 import com.bogdanmurzin.domain.usecases.account_type.GetAccountTypeUseCase
 import com.bogdanmurzin.domain.usecases.account_type.GetAllAccountTypesUseCase
+import com.bogdanmurzin.domain.usecases.transaction.GetTransactionByIdUseCase
 import com.bogdanmurzin.domain.usecases.transaction.InsertTransactionUseCase
+import com.bogdanmurzin.domain.usecases.transaction.UpdateTransactionUseCase
 import com.bogdanmurzin.domain.usecases.transaction_category.*
+import com.bogdanmurzin.mypersonalwallet.data.transaction_recycer_items.TransactionItemUiModel
+import com.bogdanmurzin.mypersonalwallet.mapper.TransactionUiMapper
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
 import java.util.*
@@ -29,7 +33,11 @@ class AddTransactionViewModel @Inject constructor(
     private val getAllTrxSubCategoriesUseCase: GetAllTrxSubCategoriesUseCase,
     private val getTrxCategoryIdBySubcategoryUseCase: GetTrxCategoryIdBySubcategoryUseCase,
 
-    private val insertTransactionUseCase: InsertTransactionUseCase
+    private val insertTransactionUseCase: InsertTransactionUseCase,
+    private val getTransactionByIdUseCase: GetTransactionByIdUseCase,
+    private val updateTransactionUseCase: UpdateTransactionUseCase,
+
+    private val transactionUiMapper: TransactionUiMapper
 ) : ViewModel() {
 
     private val _selectedAccountType: MutableLiveData<AccountType> = MutableLiveData()
@@ -83,8 +91,24 @@ class AddTransactionViewModel @Inject constructor(
         insertTransactionUseCase.invoke(transaction)
     }
 
+    suspend fun updateTransaction(transaction: Transaction) {
+        updateTransactionUseCase.invoke(transaction)
+    }
+
+    suspend fun getTransactionById(id: Int): TransactionItemUiModel =
+        transactionUiMapper.toTransactionUiModel(
+            getTransactionByIdUseCase.invoke(id)
+        )
+
     fun selectDate(date: Date) {
         _selectedDate.postValue(date)
+
+    }
+
+    fun setUpData(transaction: TransactionItemUiModel) {
+        _selectedAccountType.postValue(transaction.accountType)
+        _selectedTrxCategory.postValue(transaction.category)
+        _selectedDate.postValue(transaction.date)
     }
 
     @Suppress("UNCHECKED_CAST")
@@ -99,7 +123,11 @@ class AddTransactionViewModel @Inject constructor(
         private val getAllTrxSubCategoriesUseCase: GetAllTrxSubCategoriesUseCase,
         private val getTrxCategoryIdBySubcategoryUseCase: GetTrxCategoryIdBySubcategoryUseCase,
 
-        private val insertTransactionUseCase: InsertTransactionUseCase
+        private val insertTransactionUseCase: InsertTransactionUseCase,
+        private val getTransactionByIdUseCase: GetTransactionByIdUseCase,
+        private val updateTransactionUseCase: UpdateTransactionUseCase,
+
+        private val transactionUiMapper: TransactionUiMapper
     ) : ViewModelProvider.NewInstanceFactory() {
 
         override fun <T : ViewModel> create(modelClass: Class<T>): T =
@@ -112,7 +140,10 @@ class AddTransactionViewModel @Inject constructor(
                 getTrxCategoryIdUseCase,
                 getAllTrxSubCategoriesUseCase,
                 getTrxCategoryIdBySubcategoryUseCase,
-                insertTransactionUseCase
+                insertTransactionUseCase,
+                getTransactionByIdUseCase,
+                updateTransactionUseCase,
+                transactionUiMapper
             ) as T
     }
 }
