@@ -10,7 +10,7 @@ import java.util.*
 @Entity(
     tableName = "transaction",
     foreignKeys = [ForeignKey(
-        entity = TransactionEntity::class,
+        entity = TransactionCategoryEntity::class,
         parentColumns = arrayOf("id"),
         childColumns = arrayOf("transaction_category_id"),
         onDelete = CASCADE
