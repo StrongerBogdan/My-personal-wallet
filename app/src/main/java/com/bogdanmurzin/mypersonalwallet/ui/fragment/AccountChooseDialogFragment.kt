@@ -48,21 +48,15 @@ class AccountChooseDialogFragment : DialogFragment() {
 
         binding.doneBtn.setOnClickListener {
             val selectedCategoryTitle = viewModel.selectedCategoryTitle
-            val selectedSubcategoryTitle = viewModel.selectedSubcategoryTitle
 
             if (selectedCategoryTitle == null) {
                 findNavController().navigateUp()
                 return@setOnClickListener
             }
 
-            lifecycle.coroutineScope.launch {
-                val trxId = viewModel.getTrxCategoryIdBySubcategory(
-                    selectedCategoryTitle,
-                    selectedSubcategoryTitle
-                )
-                viewModel.getTrxCategory(trxId)
-                findNavController().navigateUp()
-            }
+            // (+) Do it in viewmodel
+            viewModel.selectTransactionCategory(selectedCategoryTitle)
+            findNavController().navigateUp()
 
         }
 
@@ -75,11 +69,9 @@ class AccountChooseDialogFragment : DialogFragment() {
         if (args.category == CategoryArg.ACCOUNT_TYPE) {
             binding.doneBtn.visibility = View.GONE
             setupRecycler {
-                lifecycle.coroutineScope.launch {
-                    val accountId = viewModel.getAccountId(it as AccountType)
-                    viewModel.getAccount(accountId)
-                    findNavController().navigateUp()
-                }
+                // (+) Do it in viewmodel
+                viewModel.selectAccountType(it as AccountType)
+                findNavController().navigateUp()
             }
             // Get All user accounts and show them
             lifecycle.coroutineScope.launch {

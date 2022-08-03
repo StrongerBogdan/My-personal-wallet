@@ -1,12 +1,18 @@
 package com.bogdanmurzin.mypersonalwallet.ui.viewmodel
 
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.*
+import androidx.navigation.NavDirections
+import androidx.navigation.fragment.findNavController
 import com.bogdanmurzin.domain.usecases.transaction.GetTransactionsUseCase
+import com.bogdanmurzin.mypersonalwallet.R
 import com.bogdanmurzin.mypersonalwallet.data.transaction_recycer_items.TransactionItemUiModel
 import com.bogdanmurzin.mypersonalwallet.mapper.TransactionUiMapper
+import com.bogdanmurzin.mypersonalwallet.ui.fragment.FragmentMoneyTransactionsDirections
+import com.bogdanmurzin.mypersonalwallet.util.Event
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.launch
+import java.util.*
 import javax.inject.Inject
 
 @HiltViewModel
@@ -15,10 +21,33 @@ class MainViewModel @Inject constructor(
     private val transactionUiMapper: TransactionUiMapper
 ) : ViewModel() {
 
-    suspend fun updateRateList(): Flow<List<TransactionItemUiModel>> =
-        transactionUiMapper.toFlowOfTransactionUiModel(
-            getTransactionsUseCase.invoke()
-        )
+    private val _transactionList: MutableLiveData<List<TransactionItemUiModel>> = MutableLiveData()
+    var transactionsList: LiveData<List<TransactionItemUiModel>> = _transactionList
+    private val _action: SingleLiveEvent<NavDirections> = SingleLiveEvent()
+    val action: SingleLiveEvent<NavDirections> = _action
+
+
+    init {
+        viewModelScope.launch {
+            getTransactionList()
+        }
+    }
+
+    // (+) TODO Mapping flow, well, better do not put such stuff in mapper
+    private suspend fun getTransactionList() {
+        return getTransactionsUseCase.invoke()
+            .map { list -> transactionUiMapper.toListOfTransactionUiModel(list) }
+            .collect { _transactionList.postValue(it) }
+    }
+
+    fun openBottomSheet(event: Event) {
+        if (event is Event.OpenPreviewScreen) {
+            action.postValue(
+                FragmentMoneyTransactionsDirections
+                    .actionFragmentMoneyTransactionsToBottomSheetAddTransaction(event.id)
+            )
+        }
+    }
 
     @Suppress("UNCHECKED_CAST")
     class Factory(

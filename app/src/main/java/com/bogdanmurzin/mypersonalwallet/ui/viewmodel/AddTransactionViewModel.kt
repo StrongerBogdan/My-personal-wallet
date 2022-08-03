@@ -1,9 +1,8 @@
 package com.bogdanmurzin.mypersonalwallet.ui.viewmodel
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.*
+import androidx.navigation.Navigation.findNavController
+import androidx.navigation.fragment.findNavController
 import com.bogdanmurzin.domain.entities.AccountType
 import com.bogdanmurzin.domain.entities.Transaction
 import com.bogdanmurzin.domain.entities.TransactionCategory
@@ -19,6 +18,7 @@ import com.bogdanmurzin.mypersonalwallet.mapper.TransactionUiMapper
 import com.bogdanmurzin.mypersonalwallet.mapper.TrxCategoryUiMapper
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.launch
 import java.util.*
 import javax.inject.Inject
 
@@ -111,6 +111,23 @@ class AddTransactionViewModel @Inject constructor(
         _selectedAccountType.postValue(transaction.accountType)
         _selectedTrxCategory.postValue(trxCategoryUiMapper.toTrxCategory(transaction.category))
         _selectedDate.postValue(transaction.date)
+    }
+
+    fun selectTransactionCategory(selectedCategoryTitle: String) {
+        viewModelScope.launch {
+            val trxId = getTrxCategoryIdBySubcategory(
+                selectedCategoryTitle,
+                selectedSubcategoryTitle
+            )
+            getTrxCategory(trxId)
+        }
+    }
+
+    fun selectAccountType(accountType: AccountType) {
+        viewModelScope.launch {
+            val accountId = getAccountId(accountType)
+            getAccount(accountId)
+        }
     }
 
     @Suppress("UNCHECKED_CAST")

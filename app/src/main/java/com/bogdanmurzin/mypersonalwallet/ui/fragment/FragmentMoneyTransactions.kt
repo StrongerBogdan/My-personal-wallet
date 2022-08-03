@@ -4,20 +4,16 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
-import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.coroutineScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.bogdanmurzin.mypersonalwallet.R
 import com.bogdanmurzin.mypersonalwallet.adapter.MyMoneyTransactionRecyclerViewAdapter
 import com.bogdanmurzin.mypersonalwallet.databinding.FragmentMoneyTransactionsListBinding
 import com.bogdanmurzin.mypersonalwallet.ui.viewmodel.MainViewModel
+import com.bogdanmurzin.mypersonalwallet.util.Event
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class FragmentMoneyTransactions : Fragment() {
@@ -34,7 +30,8 @@ class FragmentMoneyTransactions : Fragment() {
         binding = FragmentMoneyTransactionsListBinding.inflate(layoutInflater)
 
         binding.fab.setOnClickListener {
-            findNavController().navigate(R.id.action_fragmentMoneyTransactions_to_bottomSheetAddTransaction)
+            // (+) TODO Create Event single event livedata/sharedflow for such events
+            viewModel.openBottomSheet(Event.OpenPreviewScreen(0))
         }
 
         return binding.root
@@ -44,10 +41,8 @@ class FragmentMoneyTransactions : Fragment() {
         val layoutManager: RecyclerView.LayoutManager = LinearLayoutManager(requireContext())
         recyclerAdapter = MyMoneyTransactionRecyclerViewAdapter {
             // Create dialog with editing Transaction
-            findNavController().navigate(
-                FragmentMoneyTransactionsDirections
-                    .actionFragmentMoneyTransactionsToBottomSheetAddTransaction(it.id)
-            )
+            // (+) TODO Create Event single event livedata/sharedflow for such events
+            viewModel.openBottomSheet(Event.OpenPreviewScreen(it.id))
         }
         val recyclerView = binding.transactionRecycler
         recyclerView.adapter = recyclerAdapter
@@ -59,10 +54,13 @@ class FragmentMoneyTransactions : Fragment() {
 
         setupRecycler()
 
-        lifecycle.coroutineScope.launch {
-            viewModel.updateRateList().collect {
-                recyclerAdapter.submitList(it)
-            }
+        // (+) TODO You need to make it in viewmodel, in UI layer observe and set to adapter
+        viewModel.transactionsList.observe(viewLifecycleOwner) {
+            recyclerAdapter.submitList(it)
+        }
+
+        viewModel.action.observe(viewLifecycleOwner) {
+            findNavController().navigate(it)
         }
     }
 
