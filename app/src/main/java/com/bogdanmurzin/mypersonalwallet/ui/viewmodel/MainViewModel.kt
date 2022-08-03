@@ -33,7 +33,6 @@ class MainViewModel @Inject constructor(
         }
     }
 
-    // (+) TODO Mapping flow, well, better do not put such stuff in mapper
     private suspend fun getTransactionList() {
         return getTransactionsUseCase.invoke()
             .map { list -> transactionUiMapper.toListOfTransactionUiModel(list) }

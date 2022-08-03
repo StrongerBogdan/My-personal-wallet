@@ -30,7 +30,6 @@ class FragmentMoneyTransactions : Fragment() {
         binding = FragmentMoneyTransactionsListBinding.inflate(layoutInflater)
 
         binding.fab.setOnClickListener {
-            // (+) TODO Create Event single event livedata/sharedflow for such events
             viewModel.openBottomSheet(Event.OpenPreviewScreen(0))
         }
 
@@ -41,7 +40,6 @@ class FragmentMoneyTransactions : Fragment() {
         val layoutManager: RecyclerView.LayoutManager = LinearLayoutManager(requireContext())
         recyclerAdapter = MyMoneyTransactionRecyclerViewAdapter {
             // Create dialog with editing Transaction
-            // (+) TODO Create Event single event livedata/sharedflow for such events
             viewModel.openBottomSheet(Event.OpenPreviewScreen(it.id))
         }
         val recyclerView = binding.transactionRecycler
@@ -54,7 +52,6 @@ class FragmentMoneyTransactions : Fragment() {
 
         setupRecycler()
 
-        // (+) TODO You need to make it in viewmodel, in UI layer observe and set to adapter
         viewModel.transactionsList.observe(viewLifecycleOwner) {
             recyclerAdapter.submitList(it)
         }
