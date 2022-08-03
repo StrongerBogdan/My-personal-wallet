@@ -3,7 +3,6 @@ package com.bogdanmurzin.mypersonalwallet.adapter
 import android.net.Uri
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
@@ -16,7 +15,6 @@ import com.bogdanmurzin.mypersonalwallet.databinding.RvItemHeaderBinding
 import com.bogdanmurzin.mypersonalwallet.databinding.RvItemTransactionBinding
 import com.bumptech.glide.Glide
 import java.text.NumberFormat
-import java.text.SimpleDateFormat
 import java.util.*
 
 class MyMoneyTransactionRecyclerViewAdapter(
@@ -25,6 +23,7 @@ class MyMoneyTransactionRecyclerViewAdapter(
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder =
         when (viewType) {
+            // TODO in future it is a good idea to make it through the delegates or factories
             ITEM_TYPE_HEADER -> {
                 HeaderViewHolder(
                     RvItemHeaderBinding.inflate(
@@ -69,79 +68,61 @@ class MyMoneyTransactionRecyclerViewAdapter(
         private val transactionAmountTv: TextView = binding.transactionAmountTv
 
         fun bind(item: HeaderItemUiModel) {
-            val locate = Locale.getDefault()
-
-            dayTv.text =
-                SimpleDateFormat("dd", locate).format(item.date)
-            dayOfTheWeekTv.text =
-                SimpleDateFormat("EEE", locate).format(item.date)
-                    .uppercase()
-            monthYearTv.text =
-                SimpleDateFormat("MMMM yyyy", locate).format(item.date)
-                    .uppercase()
-            transactionAmountTv.text =
-                NumberFormat.getCurrencyInstance(locate).format(item.transactionAmount)
+            // (+) these formatting needs to do in mapper in viewmodel layer
+            // bind method should be used only for setting value to fields of the holder or make UI specific actions
+            dayTv.text = item.day
+            dayOfTheWeekTv.text = item.dayOfTheWeek
+            monthYearTv.text = item.monthYear
+            transactionAmountTv.text = item.sumOfTransactions
         }
     }
 
-    inner class MoneyTransactionViewHolder(binding: RvItemTransactionBinding) :
+    inner class MoneyTransactionViewHolder(private val binding: RvItemTransactionBinding) :
         RecyclerView.ViewHolder(binding.root) {
-        private val imageCategory: ImageView = binding.categoryIv
-        private val imageAccountType: ImageView = binding.accountIv
-        private val categoryTv: TextView = binding.categoryTv
-        private val accountTypeTv: TextView = binding.accountTypeTv
-        private val descriptionTv: TextView = binding.descriptionTv
-        private val transactionAmountTv: TextView = binding.transactionAmountTv
+        // (+) you can simply use binding, local properties is not necessary
 
         fun bind(item: TransactionItemUiModel) {
-            val locate = Locale.getDefault()
-            val context = categoryTv.context
+            with(binding) {
+                val context = categoryTv.context
 
-            // set picture to Category
-            Glide.with(context)
-                .load(Uri.parse(item.category.imageUri))
-                .override(Constants.ICON_SCALE, Constants.ICON_SCALE)
-                .into(imageCategory)
+                // set picture to Category
+                Glide.with(context)
+                    .load(Uri.parse(item.category.imageUri))
+                    .override(Constants.ICON_SCALE, Constants.ICON_SCALE)
+                    .into(categoryIv)
 
-            // set picture to Account type
-            Glide.with(context)
-                .load(Uri.parse(item.accountType.imageUri))
-                .override(Constants.ICON_SCALE, Constants.ICON_SCALE)
-                .into(imageAccountType)
+                // set picture to Account type
+                Glide.with(context)
+                    .load(Uri.parse(item.accountType.imageUri))
+                    .override(Constants.ICON_SCALE, Constants.ICON_SCALE)
+                    .into(accountIv)
 
-            categoryTv.text =
-                if (item.category.subcategory != null) {
-                    context.getString(
-                        R.string.category_with_subcategory,
-                        item.category.title,
-                        item.category.subcategory
-                    )
-                } else {
-                    item.category.title
-                }
-            accountTypeTv.text = item.accountType.title
-            descriptionTv.text = item.description
-            if (item.description.isNullOrEmpty()) descriptionTv.visibility = ViewGroup.GONE
-            transactionAmountTv.text =
-                NumberFormat.getCurrencyInstance(locate).format(item.transactionAmount)
+                // (+) the same as for HeaderViewHolder
+                categoryTv.text = item.category.title
+                transactionAmountTv.text = item.transactionAmount
+
+                accountTypeTv.text = item.accountType.title
+                descriptionTv.text = item.description
+                if (item.description.isNullOrEmpty()) descriptionTv.visibility = ViewGroup.GONE
+            }
+
         }
     }
 
+    // (+) the same as for ImageRecyclerViewAdapter
     object ItemDiffCallback : DiffUtil.ItemCallback<TransactionItemUiModel>() {
         override fun areItemsTheSame(
             oldItem: TransactionItemUiModel,
             newItem: TransactionItemUiModel
         ): Boolean {
-            return oldItem == newItem
+            return oldItem.id == newItem.id
         }
 
         override fun areContentsTheSame(
             oldItem: TransactionItemUiModel,
             newItem: TransactionItemUiModel
         ): Boolean {
-            return oldItem.accountType == newItem.accountType &&
-                    oldItem.category == newItem.category &&
-                    oldItem.description == newItem.description
+            return oldItem == newItem
         }
     }
 

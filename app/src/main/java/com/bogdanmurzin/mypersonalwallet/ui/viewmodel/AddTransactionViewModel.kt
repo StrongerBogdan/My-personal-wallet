@@ -16,6 +16,7 @@ import com.bogdanmurzin.domain.usecases.transaction.UpdateTransactionUseCase
 import com.bogdanmurzin.domain.usecases.transaction_category.*
 import com.bogdanmurzin.mypersonalwallet.data.transaction_recycer_items.TransactionItemUiModel
 import com.bogdanmurzin.mypersonalwallet.mapper.TransactionUiMapper
+import com.bogdanmurzin.mypersonalwallet.mapper.TrxCategoryUiMapper
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
 import java.util.*
@@ -37,7 +38,8 @@ class AddTransactionViewModel @Inject constructor(
     private val getTransactionByIdUseCase: GetTransactionByIdUseCase,
     private val updateTransactionUseCase: UpdateTransactionUseCase,
 
-    private val transactionUiMapper: TransactionUiMapper
+    private val transactionUiMapper: TransactionUiMapper,
+    private val trxCategoryUiMapper: TrxCategoryUiMapper
 ) : ViewModel() {
 
     private val _selectedAccountType: MutableLiveData<AccountType> = MutableLiveData()
@@ -107,7 +109,7 @@ class AddTransactionViewModel @Inject constructor(
 
     fun setUpData(transaction: TransactionItemUiModel) {
         _selectedAccountType.postValue(transaction.accountType)
-        _selectedTrxCategory.postValue(transaction.category)
+        _selectedTrxCategory.postValue(trxCategoryUiMapper.toTrxCategory(transaction.category))
         _selectedDate.postValue(transaction.date)
     }
 
@@ -127,7 +129,8 @@ class AddTransactionViewModel @Inject constructor(
         private val getTransactionByIdUseCase: GetTransactionByIdUseCase,
         private val updateTransactionUseCase: UpdateTransactionUseCase,
 
-        private val transactionUiMapper: TransactionUiMapper
+        private val transactionUiMapper: TransactionUiMapper,
+        private val trxCategoryUiMapper: TrxCategoryUiMapper
     ) : ViewModelProvider.NewInstanceFactory() {
 
         override fun <T : ViewModel> create(modelClass: Class<T>): T =
@@ -143,7 +146,8 @@ class AddTransactionViewModel @Inject constructor(
                 insertTransactionUseCase,
                 getTransactionByIdUseCase,
                 updateTransactionUseCase,
-                transactionUiMapper
+                transactionUiMapper,
+                trxCategoryUiMapper
             ) as T
     }
 }

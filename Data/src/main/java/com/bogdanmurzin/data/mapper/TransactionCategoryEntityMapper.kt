@@ -10,7 +10,7 @@ import javax.inject.Inject
 class TransactionCategoryEntityMapper @Inject constructor() {
 
     fun toTransactionCategory(item: TransactionCategoryEntity): TransactionCategory =
-        TransactionCategory(item.title, item.subcategory, item.imageUri)
+        TransactionCategory(item.id, item.title, item.subcategory, item.imageUri)
 
     fun toFlowOfTransactionCategory(flow: Flow<List<TransactionCategoryEntity>>): Flow<List<TransactionCategory>> =
         flow.map { list ->

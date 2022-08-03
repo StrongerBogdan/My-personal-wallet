@@ -29,8 +29,7 @@ class ImageRecyclerViewAdapter(
         context = parent.context
         return ViewHolder(
             RvCategoryItemBinding
-                .inflate(LayoutInflater.from(parent.context), parent, false),
-            onItemClicked
+                .inflate(LayoutInflater.from(parent.context), parent, false)
         )
     }
 
@@ -38,11 +37,20 @@ class ImageRecyclerViewAdapter(
         val item = getItem(position)
         holder.bind(item)
         holder.itemView.setBackgroundResource(if (selectedPosition == position) R.drawable.round_rect_shape_recycler else Color.TRANSPARENT)
+        // (+) set clickListener while create holder
+        holder.itemView.setOnClickListener {
+            // (+) Do you really need two calls of "notifyItemChanged"?
+            // First notifyItemChanged for unhighlighting item
+            // Second for highlighting selected item
+            notifyItemChanged(selectedPosition)
+            selectedPosition = position
+            notifyItemChanged(selectedPosition)
+            onItemClicked(item)
+        }
     }
 
     inner class ViewHolder(
-        private val binding: RvCategoryItemBinding,
-        private var onEdit: (CategoryEntity) -> Unit
+        private val binding: RvCategoryItemBinding
     ) :
         RecyclerView.ViewHolder(binding.root) {
 
@@ -52,13 +60,6 @@ class ImageRecyclerViewAdapter(
                 .load(entity.imageUri)
                 .override(ICON_SCALE, ICON_SCALE)
                 .into(binding.ivIcon)
-
-            binding.root.setOnClickListener {
-                notifyItemChanged(selectedPosition)
-                selectedPosition = absoluteAdapterPosition
-                notifyItemChanged(selectedPosition)
-                onEdit(entity)
-            }
         }
     }
 
@@ -67,13 +68,15 @@ class ImageRecyclerViewAdapter(
             oldItem: CategoryEntity,
             newItem: CategoryEntity
         ): Boolean {
-            return oldItem == newItem
+            // (+) here better to compare using type of class and some id
+            return oldItem::class == newItem::class && oldItem.id == newItem.id
         }
 
         override fun areContentsTheSame(
             oldItem: CategoryEntity,
             newItem: CategoryEntity
         ): Boolean {
+            // (+- cannot equals interfaces) here in most of cases used equals
             return oldItem.title == newItem.title &&
                     oldItem.imageUri == newItem.imageUri
         }

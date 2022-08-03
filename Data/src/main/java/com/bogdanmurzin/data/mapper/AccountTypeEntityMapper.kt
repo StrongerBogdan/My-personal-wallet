@@ -7,5 +7,5 @@ import javax.inject.Inject
 class AccountTypeEntityMapper @Inject constructor() {
 
     fun toAccountType(item: AccountTypeEntity): AccountType =
-        AccountType(item.title, item.imageUri)
+        AccountType(item.id, item.title, item.imageUri)
 }
