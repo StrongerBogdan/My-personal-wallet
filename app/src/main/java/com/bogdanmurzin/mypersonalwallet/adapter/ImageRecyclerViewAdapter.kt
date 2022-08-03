@@ -37,9 +37,7 @@ class ImageRecyclerViewAdapter(
         val item = getItem(position)
         holder.bind(item)
         holder.itemView.setBackgroundResource(if (selectedPosition == position) R.drawable.round_rect_shape_recycler else Color.TRANSPARENT)
-        // (+) set clickListener while create holder
         holder.itemView.setOnClickListener {
-            // (+) Do you really need two calls of "notifyItemChanged"?
             // First notifyItemChanged for unhighlighting item
             // Second for highlighting selected item
             notifyItemChanged(selectedPosition)
@@ -68,7 +66,6 @@ class ImageRecyclerViewAdapter(
             oldItem: CategoryEntity,
             newItem: CategoryEntity
         ): Boolean {
-            // (+) here better to compare using type of class and some id
             return oldItem::class == newItem::class && oldItem.id == newItem.id
         }
 
@@ -76,7 +73,6 @@ class ImageRecyclerViewAdapter(
             oldItem: CategoryEntity,
             newItem: CategoryEntity
         ): Boolean {
-            // (+- cannot equals interfaces) here in most of cases used equals
             return oldItem.title == newItem.title &&
                     oldItem.imageUri == newItem.imageUri
         }

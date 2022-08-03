@@ -68,8 +68,6 @@ class MyMoneyTransactionRecyclerViewAdapter(
         private val transactionAmountTv: TextView = binding.transactionAmountTv
 
         fun bind(item: HeaderItemUiModel) {
-            // (+) these formatting needs to do in mapper in viewmodel layer
-            // bind method should be used only for setting value to fields of the holder or make UI specific actions
             dayTv.text = item.day
             dayOfTheWeekTv.text = item.dayOfTheWeek
             monthYearTv.text = item.monthYear
@@ -79,7 +77,6 @@ class MyMoneyTransactionRecyclerViewAdapter(
 
     inner class MoneyTransactionViewHolder(private val binding: RvItemTransactionBinding) :
         RecyclerView.ViewHolder(binding.root) {
-        // (+) you can simply use binding, local properties is not necessary
 
         fun bind(item: TransactionItemUiModel) {
             with(binding) {
@@ -97,7 +94,6 @@ class MyMoneyTransactionRecyclerViewAdapter(
                     .override(Constants.ICON_SCALE, Constants.ICON_SCALE)
                     .into(accountIv)
 
-                // (+) the same as for HeaderViewHolder
                 categoryTv.text = item.category.title
                 transactionAmountTv.text = item.transactionAmount
 
@@ -109,7 +105,6 @@ class MyMoneyTransactionRecyclerViewAdapter(
         }
     }
 
-    // (+) the same as for ImageRecyclerViewAdapter
     object ItemDiffCallback : DiffUtil.ItemCallback<TransactionItemUiModel>() {
         override fun areItemsTheSame(
             oldItem: TransactionItemUiModel,
