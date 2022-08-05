@@ -12,19 +12,21 @@ class TrxCategoryUiMapper @Inject constructor(@ApplicationContext val context: C
     fun toTrxCategoryUiModel(trxCategory: TransactionCategory): TrxCategoryUiModel =
         TrxCategoryUiModel(
             trxCategory.id,
-            setCategoryTitle(trxCategory.title, trxCategory.subcategory),
+            trxCategory.title,
+            trxCategory.subcategory,
+            setCompositeTitle(trxCategory.title, trxCategory.subcategory),
             trxCategory.imageUri
         )
 
     fun toTrxCategory(trxCategoryUi: TrxCategoryUiModel): TransactionCategory =
         TransactionCategory(
             trxCategoryUi.id,
-            separateTitle(trxCategoryUi.title),
-            separateSubcategory(trxCategoryUi.title),
+            trxCategoryUi.title,
+            trxCategoryUi.subcategory,
             trxCategoryUi.imageUri
         )
 
-    private fun setCategoryTitle(title: String, subcategory: String?): String =
+    private fun setCompositeTitle(title: String, subcategory: String?): String =
         if (subcategory != null) {
             context.getString(
                 R.string.category_with_subcategory,
@@ -34,20 +36,4 @@ class TrxCategoryUiMapper @Inject constructor(@ApplicationContext val context: C
         } else {
             title
         }
-
-    private fun separateTitle(titleAndSubtitle: String): String {
-        return getTitleRegex.find(titleAndSubtitle)?.value ?: EMPTY_STRING
-    }
-
-    private fun separateSubcategory(titleAndSubtitle: String): String? {
-        return getTitleRegex.find(titleAndSubtitle)?.next()?.value
-    }
-
-    // Get first word (Category title)
-    // second match
-    private val getTitleRegex = """\w+""".toRegex()
-
-    companion object {
-        const val EMPTY_STRING = ""
-    }
 }

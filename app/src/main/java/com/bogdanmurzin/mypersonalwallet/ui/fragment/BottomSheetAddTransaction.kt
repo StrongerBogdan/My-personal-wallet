@@ -8,22 +8,20 @@ import android.text.format.DateFormat
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.lifecycle.coroutineScope
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.navigation.navGraphViewModels
-import com.bogdanmurzin.domain.entities.Transaction
 import com.bogdanmurzin.mypersonalwallet.R
 import com.bogdanmurzin.mypersonalwallet.common.Constants
+import com.bogdanmurzin.mypersonalwallet.common.Constants.DOLLAR_OR_COMA_OR_DOT_REGEX
+import com.bogdanmurzin.mypersonalwallet.common.Constants.EMPTY_STRING
 import com.bogdanmurzin.mypersonalwallet.databinding.FragmentBottomsheetAddTransactionBinding
 import com.bogdanmurzin.mypersonalwallet.ui.viewmodel.AddTransactionViewModel
 import com.bogdanmurzin.mypersonalwallet.util.CategoryArg
 import com.bumptech.glide.Glide
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.launch
 import java.text.NumberFormat
-import java.util.*
 
 
 @AndroidEntryPoint
@@ -42,14 +40,12 @@ class BottomSheetAddTransaction : BottomSheetDialogFragment() {
         binding = FragmentBottomsheetAddTransactionBinding.inflate(inflater)
         setupEditText()
         setupCardViews()
-
         binding.datePicker.setOnClickListener {
             findNavController().navigate(
                 BottomSheetAddTransactionDirections
                     .actionBottomSheetAddTransactionToDatePickerFragment()
             )
         }
-
         return binding.root
     }
 
@@ -62,54 +58,37 @@ class BottomSheetAddTransaction : BottomSheetDialogFragment() {
 
         // If we arrived here with an itemId of >= 0, then we are editing an existing item
         if (editingState == EditingState.EXISTING_TRANSACTION) {
-            lifecycle.coroutineScope.launch {
-                val transaction = viewModel.getTransactionById(args.transactionId)
-                viewModel.setUpData(transaction)
-                binding.transactionAmountTv.setText(transaction.transactionAmount)
-                binding.transactionDescription.setText(transaction.description)
-            }
+            viewModel.setUpData(args.transactionId)
         }
 
         // When the user clicks the Done button, use the data here to either update
         // an existing item or create a new one
         binding.doneBtn.setOnClickListener {
-            lifecycle.coroutineScope.launch {
-                val trxCategory = viewModel.selectedTrxCategory.value
-                val accountType = viewModel.selectedAccountType.value
-                val transactionAmount = binding.transactionAmountTv.text.toString()
-                    .replace(DOLLAR_OR_COMA_REGEX, EMPTY_STRING)
-                val description = binding.transactionDescription.text.toString().ifEmpty { null }
-                val date = viewModel.selectedDate.value ?: Calendar.getInstance().time
-
-                if (trxCategory != null && accountType != null &&
-                    transactionAmount.isNotEmpty() && transactionAmount.toFloat() != 0f
-                ) {
-                    val transaction = Transaction(
-                        args.transactionId,
-                        trxCategory,
-                        date,
-                        description,
-                        accountType,
-                        transactionAmount.toFloat()
-                    )
-                    if (editingState == EditingState.NEW_TRANSACTION) {
-                        viewModel.addTransaction(transaction)
-                    } else {
-                        viewModel.updateTransaction(transaction)
-                    }
-                    findNavController().navigateUp()
-                }
-                // TODO show dialog
+            if (viewModel.onBottomSheetDoneBtnClicked(
+                    args.transactionId,
+                    binding.transactionAmountTv.text.toString(),
+                    binding.transactionDescription.text.toString(),
+                    editingState
+                )
+            ) {
+                // if validated and added/edited successfully
+                findNavController().navigateUp()
             }
+
+            // TODO add canceling dialog
         }
 
         setupViewModel()
     }
 
     private fun setupViewModel() {
-        // Account type
+        // Loaded Transaction for editing
+        viewModel.loadedTransaction.observe(viewLifecycleOwner) { transactionUiModel ->
+            binding.transactionAmountTv.setText(transactionUiModel.transactionAmount)
+            binding.transactionDescription.setText(transactionUiModel.description)
+        }
+        // When changed account type (user chose one)
         viewModel.selectedAccountType.observe(viewLifecycleOwner) { account ->
-            // account type has no subcategory
             binding.accountType.categoryEntitySubcategoryTv.visibility = View.GONE
             binding.accountType.categoryEntityTitleTv.text = account.title
             Glide.with(requireContext())
@@ -117,7 +96,7 @@ class BottomSheetAddTransaction : BottomSheetDialogFragment() {
                 .override(Constants.ICON_SCALE, Constants.ICON_SCALE)
                 .into(binding.accountType.categoryEntityIv)
         }
-        // Transaction category
+        // When changed transaction category (user chose one)
         viewModel.selectedTrxCategory.observe(viewLifecycleOwner) { trxCategory ->
             binding.transactionCategoryType.categoryEntityTitleTv.text = trxCategory.title
             binding.transactionCategoryType.categoryEntitySubcategoryTv.text =
@@ -130,11 +109,11 @@ class BottomSheetAddTransaction : BottomSheetDialogFragment() {
                 .override(Constants.ICON_SCALE, Constants.ICON_SCALE)
                 .into(binding.transactionCategoryType.categoryEntityIv)
         }
-        // Date Picker
-        viewModel.selectedDate.observe(viewLifecycleOwner) {
+        // When changed date
+        viewModel.selectedDate.observe(viewLifecycleOwner) { date ->
             val dateFormat =
                 DateFormat.getDateFormat(requireContext().applicationContext)
-            binding.datePicker.text = dateFormat.format(it)
+            binding.datePicker.text = dateFormat.format(date)
         }
     }
 
@@ -180,14 +159,8 @@ class BottomSheetAddTransaction : BottomSheetDialogFragment() {
         })
     }
 
-    private enum class EditingState {
+    enum class EditingState {
         NEW_TRANSACTION,
         EXISTING_TRANSACTION
-    }
-
-    companion object {
-        const val EMPTY_STRING = ""
-        val DOLLAR_OR_COMA_REGEX = Regex("[$,]")
-        val DOLLAR_OR_COMA_OR_DOT_REGEX = Regex("[$,.]")
     }
 }

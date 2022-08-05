@@ -11,9 +11,12 @@ import com.bogdanmurzin.domain.usecases.transaction.GetTransactionByIdUseCase
 import com.bogdanmurzin.domain.usecases.transaction.InsertTransactionUseCase
 import com.bogdanmurzin.domain.usecases.transaction.UpdateTransactionUseCase
 import com.bogdanmurzin.domain.usecases.transaction_category.*
+import com.bogdanmurzin.mypersonalwallet.data.TrxCategoryUiModel
 import com.bogdanmurzin.mypersonalwallet.data.transaction_recycer_items.TransactionItemUiModel
 import com.bogdanmurzin.mypersonalwallet.mapper.TransactionUiMapper
 import com.bogdanmurzin.mypersonalwallet.mapper.TrxCategoryUiMapper
+import com.bogdanmurzin.mypersonalwallet.ui.fragment.BottomSheetAddTransaction
+import com.bogdanmurzin.mypersonalwallet.util.TransactionComponentsFormatter
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -37,13 +40,14 @@ class AddTransactionViewModel @Inject constructor(
     private val updateTransactionUseCase: UpdateTransactionUseCase,
 
     private val transactionUiMapper: TransactionUiMapper,
-    private val trxCategoryUiMapper: TrxCategoryUiMapper
+    private val trxCategoryUiMapper: TrxCategoryUiMapper,
+    private val transactionComponentsFormatter: TransactionComponentsFormatter
 ) : ViewModel() {
 
     private val _selectedAccountType: MutableLiveData<AccountType> = MutableLiveData()
     val selectedAccountType: LiveData<AccountType> = _selectedAccountType
-    private val _selectedTrxCategory: MutableLiveData<TransactionCategory> = MutableLiveData()
-    val selectedTrxCategory: LiveData<TransactionCategory> = _selectedTrxCategory
+    private val _selectedTrxCategory: MutableLiveData<TrxCategoryUiModel> = MutableLiveData()
+    val selectedTrxCategory: LiveData<TrxCategoryUiModel> = _selectedTrxCategory
     private val _selectedDate: MutableLiveData<Date> = MutableLiveData(Calendar.getInstance().time)
     val selectedDate: LiveData<Date> = _selectedDate
     private val _trxCategories: MutableLiveData<List<TransactionCategory>> = MutableLiveData()
@@ -52,25 +56,21 @@ class AddTransactionViewModel @Inject constructor(
     var accountTypes: LiveData<List<AccountType>> = _accountTypes
     private val _trxSubCategories: MutableLiveData<List<TransactionCategory>> = MutableLiveData()
     var trxSubCategories: LiveData<List<TransactionCategory>> = _trxSubCategories
-    private val _selectedSubcategoryTitle: MutableLiveData<String?> = MutableLiveData(null)
-    var selectedSubcategoryTitle: LiveData<String?> = _selectedSubcategoryTitle
-    private val _selectedCategoryTitle: MutableLiveData<String?> = MutableLiveData(null)
-    var selectedCategoryTitle: LiveData<String?> = _selectedCategoryTitle
+    private val _loadedTransaction: MutableLiveData<TransactionItemUiModel> = MutableLiveData()
+    var loadedTransaction: LiveData<TransactionItemUiModel> = _loadedTransaction
 
-    // external read-only variable
-    //var selectedCategoryTitle: String? = null
-    //private set
-    //var selectedSubcategoryTitle: String? = null
+    private var selectedCategoryTitle: String? = null
+    private var selectedSubcategoryTitle: String? = null
 
-    suspend fun getTrxCategory(id: Int) {
+    private suspend fun getTrxCategory(id: Int) {
         val selectedTrxCategory = getTrxCategoryUseCase.invoke(id)
-        _selectedTrxCategory.postValue(selectedTrxCategory)
+        _selectedTrxCategory.postValue(trxCategoryUiMapper.toTrxCategoryUiModel(selectedTrxCategory))
     }
 
     fun loadAllTrxSubCategories(trxCategory: TransactionCategory) {
         viewModelScope.launch(Dispatchers.IO) {
             // Save title
-            _selectedCategoryTitle.postValue(trxCategory.title)
+            selectedCategoryTitle = trxCategory.title
             // Load all subcategories selected category (by title)
             getAllTrxSubCategoriesUseCase.invoke(trxCategory.title).collect {
                 _trxSubCategories.postValue(it)
@@ -81,35 +81,40 @@ class AddTransactionViewModel @Inject constructor(
     private suspend fun getTrxCategoryIdBySubcategory(title: String, subcategory: String?): Int =
         getTrxCategoryIdBySubcategoryUseCase.invoke(title, subcategory)
 
-    suspend fun addTransaction(transaction: Transaction) {
-        insertTransactionUseCase.invoke(transaction)
+    private fun addTransaction(transaction: Transaction) {
+        viewModelScope.launch(Dispatchers.IO) {
+            insertTransactionUseCase.invoke(transaction)
+        }
     }
 
-    suspend fun updateTransaction(transaction: Transaction) {
-        updateTransactionUseCase.invoke(transaction)
+    private fun updateTransaction(transaction: Transaction) {
+        viewModelScope.launch(Dispatchers.IO) {
+            updateTransactionUseCase.invoke(transaction)
+        }
     }
-
-    suspend fun getTransactionById(id: Int): TransactionItemUiModel =
-        transactionUiMapper.toTransactionUiModel(
-            getTransactionByIdUseCase.invoke(id)
-        )
 
     fun selectDate(date: Date) {
         _selectedDate.postValue(date)
 
     }
 
-    fun setUpData(transaction: TransactionItemUiModel) {
-        _selectedAccountType.postValue(transaction.accountType)
-        _selectedTrxCategory.postValue(trxCategoryUiMapper.toTrxCategory(transaction.category))
-        _selectedDate.postValue(transaction.date)
+    fun setUpData(id: Int) {
+        viewModelScope.launch(Dispatchers.IO) {
+            val transaction = transactionUiMapper.toTransactionUiModel(
+                getTransactionByIdUseCase.invoke(id)
+            )
+            _loadedTransaction.postValue(transaction)
+            _selectedAccountType.postValue(transaction.accountType)
+            _selectedTrxCategory.postValue(transaction.category)
+            _selectedDate.postValue(transaction.date)
+        }
     }
 
     private fun selectTransactionCategory(selectedCategoryTitle: String) {
         viewModelScope.launch(Dispatchers.IO) {
             val trxId = getTrxCategoryIdBySubcategory(
                 selectedCategoryTitle,
-                selectedSubcategoryTitle.value
+                selectedSubcategoryTitle
             )
             getTrxCategory(trxId)
         }
@@ -140,15 +145,51 @@ class AddTransactionViewModel @Inject constructor(
     }
 
     fun selectSubcategory(chipSubcategory: String?) {
-        _selectedSubcategoryTitle.postValue(chipSubcategory)
+        selectedSubcategoryTitle = chipSubcategory
     }
 
     fun onDoneBtnClicked() {
-        val selectedCategoryTitle = selectedCategoryTitle.value
+        val selectedCategoryTitle = selectedCategoryTitle
 
         if (selectedCategoryTitle != null) {
             selectTransactionCategory(selectedCategoryTitle)
         }
+    }
+
+    fun onBottomSheetDoneBtnClicked(
+        id: Int,
+        rawTransactionAmount: String,
+        rawDescription: String,
+        editingState: BottomSheetAddTransaction.EditingState
+    ): Boolean {
+        val transactionAmount =
+            transactionComponentsFormatter.formatTransactionAmount(rawTransactionAmount)
+        val description = transactionComponentsFormatter.formatDescription(rawDescription)
+        val trxCategory = selectedTrxCategory.value?.let {
+            trxCategoryUiMapper.toTrxCategory(it)
+        }
+        val accountType = selectedAccountType.value
+        val date = selectedDate.value ?: Calendar.getInstance().time
+
+        if (trxCategory != null && accountType != null &&
+            transactionAmount.isNotEmpty() && transactionAmount.toFloat() != 0f
+        ) {
+            val transaction = Transaction(
+                id,
+                trxCategory,
+                date,
+                description,
+                accountType,
+                transactionAmount.toFloat()
+            )
+            if (editingState == BottomSheetAddTransaction.EditingState.NEW_TRANSACTION) {
+                addTransaction(transaction)
+            } else {
+                updateTransaction(transaction)
+            }
+            return true
+        }
+        return false
     }
 
     @Suppress("UNCHECKED_CAST")
@@ -168,7 +209,8 @@ class AddTransactionViewModel @Inject constructor(
         private val updateTransactionUseCase: UpdateTransactionUseCase,
 
         private val transactionUiMapper: TransactionUiMapper,
-        private val trxCategoryUiMapper: TrxCategoryUiMapper
+        private val trxCategoryUiMapper: TrxCategoryUiMapper,
+        private val transactionComponentsFormatter: TransactionComponentsFormatter
     ) : ViewModelProvider.NewInstanceFactory() {
 
         override fun <T : ViewModel> create(modelClass: Class<T>): T =
@@ -185,7 +227,8 @@ class AddTransactionViewModel @Inject constructor(
                 getTransactionByIdUseCase,
                 updateTransactionUseCase,
                 transactionUiMapper,
-                trxCategoryUiMapper
+                trxCategoryUiMapper,
+                transactionComponentsFormatter
             ) as T
     }
 }
