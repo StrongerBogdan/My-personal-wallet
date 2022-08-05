@@ -5,7 +5,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.DialogFragment
-import androidx.lifecycle.coroutineScope
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.navigation.navGraphViewModels
@@ -22,7 +21,6 @@ import com.bogdanmurzin.mypersonalwallet.util.CategoryArg
 import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipGroup
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class AccountChooseDialogFragment : DialogFragment() {
@@ -47,22 +45,15 @@ class AccountChooseDialogFragment : DialogFragment() {
                 resources.getString(R.string.choose_category)
 
         binding.doneBtn.setOnClickListener {
-            val selectedCategoryTitle = viewModel.selectedCategoryTitle
-
-            if (selectedCategoryTitle == null) {
-                findNavController().navigateUp()
-                return@setOnClickListener
-            }
-
-            viewModel.selectTransactionCategory(selectedCategoryTitle)
+            viewModel.onDoneBtnClicked()
             findNavController().navigateUp()
-
         }
 
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        observeViewModel()
         // On which cardView user clicked
         // Account type cardView
         if (args.category == CategoryArg.ACCOUNT_TYPE) {
@@ -72,48 +63,53 @@ class AccountChooseDialogFragment : DialogFragment() {
                 findNavController().navigateUp()
             }
             // Get All user accounts and show them
-            lifecycle.coroutineScope.launch {
-                viewModel.getAllAccounts().collect {
-                    imageRecyclerAdapter.submitList(it)
-                }
-            }
+            viewModel.showAllAccounts()
             // Transaction Category cardView
         } else {
             // setup main recycler
             setupRecycler {
-                lifecycle.coroutineScope.launch {
-                    // Remove selected subcategory
-                    viewModel.selectedSubcategoryTitle = null
-                    // "trx" it's short form of "transaction"
-                    val trxCategoryId = viewModel.getTrxCategoryId(it as TransactionCategory)
-                    viewModel.getAllTrxSubCategories(trxCategoryId).collect { list ->
-                        if (list.isNotEmpty()) {
-                            binding.subcategoriesScroll.visibility = View.VISIBLE
-                            with(binding.subcategoryChipGroup) {
-                                removeAllViews()
-                                list.forEach { category ->
-                                    addChip(category.subcategory)
-                                }
-                                isSingleSelection = true
-
-                                setOnCheckedStateChangeListener { group, checkedList ->
-                                    // There is always one element
-                                    val chip: Chip = group.findViewById(checkedList[0])
-                                    viewModel.selectedSubcategoryTitle = chip.text.toString()
-                                }
-                            }
-                        } else {
-                            // If transaction category has no subcategories
-                            binding.subcategoriesScroll.visibility = View.GONE
-                        }
-                    }
-                }
+                // Remove selected subcategory
+                viewModel.selectSubcategory(null)
+                // "trx" it's short form of "transaction"
+                viewModel.loadAllTrxSubCategories(it as TransactionCategory)
             }
             // Get All user transaction categories and show them
-            lifecycle.coroutineScope.launch {
-                viewModel.getAllTrxCategories().collect {
-                    imageRecyclerAdapter.submitList(it)
+            viewModel.showAllTrxCategories()
+        }
+    }
+
+    private fun observeViewModel() {
+        if (args.category == CategoryArg.TRANSACTION_CATEGORY) {
+            // show all user transaction categories
+            viewModel.trxCategories.observe(viewLifecycleOwner) {
+                imageRecyclerAdapter.submitList(it)
+            }
+            // Load all subCategories selected category
+            viewModel.trxSubCategories.observe(viewLifecycleOwner) { list ->
+                if (list.isNotEmpty()) {
+                    binding.subcategoriesScroll.visibility = View.VISIBLE
+                    with(binding.subcategoryChipGroup) {
+                        removeAllViews()
+                        list.forEach { category ->
+                            addChip(category.subcategory)
+                        }
+                        isSingleSelection = true
+
+                        setOnCheckedStateChangeListener { group, checkedList ->
+                            // There is always one element
+                            val chip: Chip = group.findViewById(checkedList[0])
+                            viewModel.selectSubcategory(chip.text.toString())
+                        }
+                    }
+                } else {
+                    // If transaction category has no subcategories
+                    binding.subcategoriesScroll.visibility = View.GONE
                 }
+            }
+        } else {
+            // show all user account types
+            viewModel.accountTypes.observe(viewLifecycleOwner) {
+                imageRecyclerAdapter.submitList(it)
             }
         }
     }

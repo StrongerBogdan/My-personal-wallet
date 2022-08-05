@@ -1,8 +1,6 @@
 package com.bogdanmurzin.mypersonalwallet.ui.viewmodel
 
 import androidx.lifecycle.*
-import androidx.navigation.Navigation.findNavController
-import androidx.navigation.fragment.findNavController
 import com.bogdanmurzin.domain.entities.AccountType
 import com.bogdanmurzin.domain.entities.Transaction
 import com.bogdanmurzin.domain.entities.TransactionCategory
@@ -18,9 +16,7 @@ import com.bogdanmurzin.mypersonalwallet.mapper.TransactionUiMapper
 import com.bogdanmurzin.mypersonalwallet.mapper.TrxCategoryUiMapper
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import java.util.*
 import javax.inject.Inject
 
@@ -50,45 +46,39 @@ class AddTransactionViewModel @Inject constructor(
     val selectedTrxCategory: LiveData<TransactionCategory> = _selectedTrxCategory
     private val _selectedDate: MutableLiveData<Date> = MutableLiveData(Calendar.getInstance().time)
     val selectedDate: LiveData<Date> = _selectedDate
+    private val _trxCategories: MutableLiveData<List<TransactionCategory>> = MutableLiveData()
+    var trxCategories: LiveData<List<TransactionCategory>> = _trxCategories
+    private val _accountTypes: MutableLiveData<List<AccountType>> = MutableLiveData()
+    var accountTypes: LiveData<List<AccountType>> = _accountTypes
+    private val _trxSubCategories: MutableLiveData<List<TransactionCategory>> = MutableLiveData()
+    var trxSubCategories: LiveData<List<TransactionCategory>> = _trxSubCategories
+    private val _selectedSubcategoryTitle: MutableLiveData<String?> = MutableLiveData(null)
+    var selectedSubcategoryTitle: LiveData<String?> = _selectedSubcategoryTitle
+    private val _selectedCategoryTitle: MutableLiveData<String?> = MutableLiveData(null)
+    var selectedCategoryTitle: LiveData<String?> = _selectedCategoryTitle
 
     // external read-only variable
-    var selectedCategoryTitle: String? = null
-        private set
-    var selectedSubcategoryTitle: String? = null
-
-    suspend fun getAccount(id: Int) {
-        val selectedAccountType =
-            getAccountTypeUseCase.invoke(id)
-        _selectedAccountType.postValue(selectedAccountType)
-    }
-
-    suspend fun getAllAccounts(): Flow<List<AccountType>> =
-        getAllAccountTypesUseCase.invoke()
-
-    suspend fun getAccountId(account: AccountType): Int =
-        getAccountIdUseCase.invoke(account)
+    //var selectedCategoryTitle: String? = null
+    //private set
+    //var selectedSubcategoryTitle: String? = null
 
     suspend fun getTrxCategory(id: Int) {
-        val selectedTrxCategory =
-            getTrxCategoryUseCase.invoke(id)
+        val selectedTrxCategory = getTrxCategoryUseCase.invoke(id)
         _selectedTrxCategory.postValue(selectedTrxCategory)
     }
 
-    suspend fun getAllTrxSubCategories(id: Int): Flow<List<TransactionCategory>> {
-        val selectedTrxCategory =
-            getTrxCategoryUseCase.invoke(id)
-        // Save title
-        selectedCategoryTitle = selectedTrxCategory.title
-        return getAllTrxSubCategoriesUseCase.invoke(selectedTrxCategory.title)
+    fun loadAllTrxSubCategories(trxCategory: TransactionCategory) {
+        viewModelScope.launch(Dispatchers.IO) {
+            // Save title
+            _selectedCategoryTitle.postValue(trxCategory.title)
+            // Load all subcategories selected category (by title)
+            getAllTrxSubCategoriesUseCase.invoke(trxCategory.title).collect {
+                _trxSubCategories.postValue(it)
+            }
+        }
     }
 
-    suspend fun getAllTrxCategories(): Flow<List<TransactionCategory>> =
-        getAllTrxCategoryUseCase.invoke()
-
-    suspend fun getTrxCategoryId(trxCategory: TransactionCategory): Int =
-        getTrxCategoryIdUseCase.invoke(trxCategory)
-
-    suspend fun getTrxCategoryIdBySubcategory(title: String, subcategory: String?): Int =
+    private suspend fun getTrxCategoryIdBySubcategory(title: String, subcategory: String?): Int =
         getTrxCategoryIdBySubcategoryUseCase.invoke(title, subcategory)
 
     suspend fun addTransaction(transaction: Transaction) {
@@ -115,22 +105,49 @@ class AddTransactionViewModel @Inject constructor(
         _selectedDate.postValue(transaction.date)
     }
 
-    fun selectTransactionCategory(selectedCategoryTitle: String) {
-        viewModelScope.launch {
+    private fun selectTransactionCategory(selectedCategoryTitle: String) {
+        viewModelScope.launch(Dispatchers.IO) {
             val trxId = getTrxCategoryIdBySubcategory(
                 selectedCategoryTitle,
-                selectedSubcategoryTitle
+                selectedSubcategoryTitle.value
             )
             getTrxCategory(trxId)
         }
     }
 
     fun selectAccountType(accountType: AccountType) {
-        viewModelScope.launch {
-            withContext(Dispatchers.IO) {
-                val accountId = getAccountId(accountType)
-                getAccount(accountId)
+        viewModelScope.launch(Dispatchers.IO) {
+            _selectedAccountType.postValue(
+                getAccountTypeUseCase.invoke(accountType.id)
+            )
+        }
+    }
+
+    fun showAllTrxCategories() {
+        viewModelScope.launch(Dispatchers.IO) {
+            getAllTrxCategoryUseCase.invoke().collect {
+                _trxCategories.postValue(it)
             }
+        }
+    }
+
+    fun showAllAccounts() {
+        viewModelScope.launch(Dispatchers.IO) {
+            getAllAccountTypesUseCase.invoke().collect {
+                _accountTypes.postValue(it)
+            }
+        }
+    }
+
+    fun selectSubcategory(chipSubcategory: String?) {
+        _selectedSubcategoryTitle.postValue(chipSubcategory)
+    }
+
+    fun onDoneBtnClicked() {
+        val selectedCategoryTitle = selectedCategoryTitle.value
+
+        if (selectedCategoryTitle != null) {
+            selectTransactionCategory(selectedCategoryTitle)
         }
     }
 
