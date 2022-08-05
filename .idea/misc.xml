@@ -3,8 +3,11 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Android/PetProjects/my-personal-wallet/app/src/main/res/layout/category_cardview.xml" value="0.25" />
         <entry key="..\:/Android/PetProjects/my-personal-wallet/app/src/main/res/layout/dialog_category_choose.xml" value="0.14542415378186377" />
+        <entry key="..\:/Android/PetProjects/my-personal-wallet/app/src/main/res/layout/fragment_bottomsheet_add_transaction.xml" value="0.33" />
         <entry key="..\:/Android/PetProjects/my-personal-wallet/app/src/main/res/layout/layout_chip_choice.xml" value="0.14542415378186377" />
+        <entry key="..\:/Android/PetProjects/my-personal-wallet/app/src/main/res/layout/rv_item_transaction.xml" value="0.15220179563916203" />
       </map>
     </option>
   </component>

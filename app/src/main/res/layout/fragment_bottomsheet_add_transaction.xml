@@ -35,35 +35,16 @@
         app:layout_constraintTop_toBottomOf="@+id/materialTextView"
         tools:backgroundTint="@color/material_dynamic_primary50">
 
+        // looks like these two views have the same design and functionality, create compound view
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-            <com.google.android.material.imageview.ShapeableImageView
-                android:id="@+id/account_type_iv"
-                android:layout_width="@dimen/icon_size"
-                android:layout_height="@dimen/icon_size"
-                android:layout_margin="@dimen/medium_margin"
-                android:src="@drawable/ic_example"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/account_type_tv"
-                app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintHorizontal_chainStyle="packed"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+            <include android:id="@+id/account_type"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                layout="@layout/category_cardview"/>
 
-            <TextView
-                android:id="@+id/account_type_tv"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_margin="@dimen/medium_margin"
-                android:textSize="@dimen/subtitle_text_size"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintStart_toEndOf="@+id/account_type_iv"
-                app:layout_constraintTop_toTopOf="parent"
-                tools:text="Card" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </com.google.android.material.card.MaterialCardView>
 
@@ -88,49 +69,11 @@
         app:layout_constraintTop_toTopOf="@+id/account_cv"
         tools:backgroundTint="@color/material_dynamic_primary70">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
+        <include android:id="@+id/transaction_category_type"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            layout="@layout/category_cardview"/>
 
-            <com.google.android.material.imageview.ShapeableImageView
-                android:id="@+id/transaction_category_iv"
-                android:layout_width="@dimen/icon_size"
-                android:layout_height="@dimen/icon_size"
-                android:layout_margin="@dimen/medium_margin"
-                android:src="@drawable/ic_example"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/transaction_category_tv"
-                app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <TextView
-                android:id="@+id/transaction_category_tv"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/medium_margin"
-                android:layout_marginEnd="@dimen/medium_margin"
-                android:textSize="@dimen/subtitle_text_size"
-                app:layout_constraintBottom_toTopOf="@id/transaction_subcategory_tv"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintStart_toEndOf="@+id/transaction_category_iv"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_chainStyle="packed"
-                tools:text="Transport" />
-
-            <TextView
-                android:id="@+id/transaction_subcategory_tv"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="@dimen/medium_margin"
-                android:textSize="@dimen/caption_text_size"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="@+id/transaction_category_tv"
-                app:layout_constraintTop_toBottomOf="@id/transaction_category_tv"
-                tools:text="Taxi" />
-        </androidx.constraintlayout.widget.ConstraintLayout>
     </com.google.android.material.card.MaterialCardView>
 
     <com.google.android.material.textfield.MaterialAutoCompleteTextView

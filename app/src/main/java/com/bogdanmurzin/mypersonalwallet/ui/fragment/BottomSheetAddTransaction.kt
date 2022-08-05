@@ -1,6 +1,5 @@
 package com.bogdanmurzin.mypersonalwallet.ui.fragment
 
-import android.content.Context
 import android.net.Uri
 import android.os.Bundle
 import android.text.Editable
@@ -9,7 +8,6 @@ import android.text.format.DateFormat
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.text.set
 import androidx.lifecycle.coroutineScope
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
@@ -67,7 +65,7 @@ class BottomSheetAddTransaction : BottomSheetDialogFragment() {
             lifecycle.coroutineScope.launch {
                 val transaction = viewModel.getTransactionById(args.transactionId)
                 viewModel.setUpData(transaction)
-                binding.transactionAmountTv.setText(transaction.transactionAmount.toString())
+                binding.transactionAmountTv.setText(transaction.transactionAmount)
                 binding.transactionDescription.setText(transaction.description)
             }
         }
@@ -111,24 +109,26 @@ class BottomSheetAddTransaction : BottomSheetDialogFragment() {
     private fun setupViewModel() {
         // Account type
         viewModel.selectedAccountType.observe(viewLifecycleOwner) { account ->
-            binding.accountTypeTv.text = account.title
+            // account type has no subcategory
+            binding.accountType.categoryEntitySubcategoryTv.visibility = View.GONE
+            binding.accountType.categoryEntityTitleTv.text = account.title
             Glide.with(requireContext())
                 .load(Uri.parse(account.imageUri))
                 .override(Constants.ICON_SCALE, Constants.ICON_SCALE)
-                .into(binding.accountTypeIv)
+                .into(binding.accountType.categoryEntityIv)
         }
         // Transaction category
         viewModel.selectedTrxCategory.observe(viewLifecycleOwner) { trxCategory ->
-            binding.transactionCategoryTv.text = trxCategory.title
-            binding.transactionSubcategoryTv.text =
+            binding.transactionCategoryType.categoryEntityTitleTv.text = trxCategory.title
+            binding.transactionCategoryType.categoryEntitySubcategoryTv.text =
                 resources.getString(R.string.category_subtitle_template, trxCategory.subcategory)
-            binding.transactionSubcategoryTv.visibility = View.VISIBLE
-            if (trxCategory.subcategory.isNullOrEmpty()) binding.transactionSubcategoryTv.visibility =
+            binding.transactionCategoryType.categoryEntitySubcategoryTv.visibility = View.VISIBLE
+            if (trxCategory.subcategory.isNullOrEmpty()) binding.transactionCategoryType.categoryEntitySubcategoryTv.visibility =
                 View.GONE
             Glide.with(requireContext())
                 .load(Uri.parse(trxCategory.imageUri))
                 .override(Constants.ICON_SCALE, Constants.ICON_SCALE)
-                .into(binding.transactionCategoryIv)
+                .into(binding.transactionCategoryType.categoryEntityIv)
         }
         // Date Picker
         viewModel.selectedDate.observe(viewLifecycleOwner) {
