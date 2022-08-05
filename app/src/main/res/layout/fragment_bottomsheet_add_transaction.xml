@@ -35,7 +35,6 @@
         app:layout_constraintTop_toBottomOf="@+id/materialTextView"
         tools:backgroundTint="@color/material_dynamic_primary50">
 
-        // looks like these two views have the same design and functionality, create compound view
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
