@@ -54,7 +54,6 @@ class AccountChooseDialogFragment : DialogFragment() {
                 return@setOnClickListener
             }
 
-            // (+) Do it in viewmodel
             viewModel.selectTransactionCategory(selectedCategoryTitle)
             findNavController().navigateUp()
 

@@ -11,7 +11,7 @@ import kotlinx.coroutines.flow.Flow
 interface AccountTypeDao {
 
     @Query("SELECT * FROM `account_type` WHERE id = :id")
-    fun getAccountTypeById(id: Int): AccountTypeEntity
+    suspend fun getAccountTypeById(id: Int): AccountTypeEntity
 
     @Query("SELECT * FROM `account_type`")
     fun getAllAccountTypes(): Flow<List<AccountTypeEntity>>

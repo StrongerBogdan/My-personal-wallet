@@ -30,7 +30,8 @@ abstract class AppDatabase : RoomDatabase() {
                     context.applicationContext,
                     AppDatabase::class.java,
                     AppDatabase::class.simpleName!!
-                ).allowMainThreadQueries()
+                // TODO: try do not use it, all API and DB calls should be in background thread to prevent UI layer from dropping frames
+                )
                     .build()
                 INSTANCE = instance
                 // return instance

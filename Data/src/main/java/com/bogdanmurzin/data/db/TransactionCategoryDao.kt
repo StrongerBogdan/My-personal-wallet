@@ -12,7 +12,7 @@ import kotlinx.coroutines.flow.Flow
 interface TransactionCategoryDao {
 
     @Query("SELECT * FROM `transaction_category` WHERE id = :id")
-    fun getTrxCategoryById(id: Int): TransactionCategoryEntity
+    suspend fun getTrxCategoryById(id: Int): TransactionCategoryEntity
 
     @Query("SELECT * FROM `transaction_category` GROUP BY title")
     fun getAllTrxCategories(): Flow<List<TransactionCategoryEntity>>

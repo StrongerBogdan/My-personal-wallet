@@ -17,8 +17,10 @@ import com.bogdanmurzin.mypersonalwallet.data.transaction_recycer_items.Transact
 import com.bogdanmurzin.mypersonalwallet.mapper.TransactionUiMapper
 import com.bogdanmurzin.mypersonalwallet.mapper.TrxCategoryUiMapper
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.util.*
 import javax.inject.Inject
 
@@ -125,8 +127,10 @@ class AddTransactionViewModel @Inject constructor(
 
     fun selectAccountType(accountType: AccountType) {
         viewModelScope.launch {
-            val accountId = getAccountId(accountType)
-            getAccount(accountId)
+            withContext(Dispatchers.IO) {
+                val accountId = getAccountId(accountType)
+                getAccount(accountId)
+            }
         }
     }
 
