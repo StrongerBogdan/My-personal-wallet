@@ -68,7 +68,6 @@ class AccountChooseDialogFragment : DialogFragment() {
         if (args.category == CategoryArg.ACCOUNT_TYPE) {
             binding.doneBtn.visibility = View.GONE
             setupRecycler {
-                // (+) Do it in viewmodel
                 viewModel.selectAccountType(it as AccountType)
                 findNavController().navigateUp()
             }
