@@ -22,4 +22,7 @@ interface TransactionsDao {
 
     @Insert
     suspend fun insert(transaction: TransactionEntity)
+
+    @Query("DELETE FROM `transaction` WHERE id in (:transactionsId)")
+    fun deleteTransactions(transactionsId: List<Int>)
 }

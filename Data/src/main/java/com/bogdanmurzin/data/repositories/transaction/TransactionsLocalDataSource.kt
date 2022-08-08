@@ -18,5 +18,5 @@ interface TransactionsLocalDataSource {
 
     suspend fun updateTransaction(transaction: Transaction)
 
-    suspend fun deleteTransactions()
+    suspend fun deleteTransactions(transactionIds: List<Int>)
 }

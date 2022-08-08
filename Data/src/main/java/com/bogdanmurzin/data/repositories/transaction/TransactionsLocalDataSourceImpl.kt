@@ -82,9 +82,12 @@ class TransactionsLocalDataSourceImpl @Inject constructor(
             )
         }
 
-    override suspend fun deleteTransactions() {
-        TODO("Not yet implemented")
-    }
+    override suspend fun deleteTransactions(transactionIds: List<Int>) =
+        withContext(dispatcher) {
+            if (transactionIds.isNotEmpty()) {
+                transactionsDao.deleteTransactions(transactionIds)
+            }
+        }
 
     private fun getTransactionCategoryId(transaction: Transaction) =
         transactionCategoryDao.getTrxCategoryId(

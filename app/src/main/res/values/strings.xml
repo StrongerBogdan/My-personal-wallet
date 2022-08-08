@@ -11,4 +11,5 @@
     <string name="choose_account">Choose Account</string>
     <string name="choose_category">Choose Category</string>
     <string name="category_subtitle_template">(%s)</string>
+    <string name="delete">Delete</string>
 </resources>

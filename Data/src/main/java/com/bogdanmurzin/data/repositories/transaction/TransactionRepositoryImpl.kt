@@ -28,7 +28,7 @@ class TransactionRepositoryImpl @Inject constructor(
     override suspend fun updateTransaction(transaction: Transaction) =
         localDataSource.updateTransaction(transaction)
 
-    override suspend fun deleteTransactions() {
-        localDataSource.deleteTransactions()
+    override suspend fun deleteTransactions(transactionIds: List<Int>) {
+        localDataSource.deleteTransactions(transactionIds)
     }
 }

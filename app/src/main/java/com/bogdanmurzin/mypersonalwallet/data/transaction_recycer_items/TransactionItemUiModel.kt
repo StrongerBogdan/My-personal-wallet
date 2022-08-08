@@ -15,4 +15,5 @@ data class TransactionItemUiModel(
     val transactionAmount: String
 ) : RecyclerMultiTypeItem {
     override val type = MyMoneyTransactionRecyclerViewAdapter.ITEM_TYPE_TRANSACTION
+    var selected: Boolean = false
 }

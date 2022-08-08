@@ -2,22 +2,22 @@ package com.bogdanmurzin.mypersonalwallet.ui.viewmodel
 
 import androidx.lifecycle.*
 import androidx.navigation.NavDirections
-import androidx.navigation.fragment.findNavController
+import com.bogdanmurzin.domain.usecases.transaction.DeleteTransactionsUseCase
 import com.bogdanmurzin.domain.usecases.transaction.GetTransactionsUseCase
-import com.bogdanmurzin.mypersonalwallet.R
 import com.bogdanmurzin.mypersonalwallet.data.transaction_recycer_items.TransactionItemUiModel
 import com.bogdanmurzin.mypersonalwallet.mapper.TransactionUiMapper
 import com.bogdanmurzin.mypersonalwallet.ui.fragment.FragmentMoneyTransactionsDirections
 import com.bogdanmurzin.mypersonalwallet.util.Event
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
-import java.util.*
 import javax.inject.Inject
 
 @HiltViewModel
 class MainViewModel @Inject constructor(
     private val getTransactionsUseCase: GetTransactionsUseCase,
+    private val deleteTransactionsUseCase: DeleteTransactionsUseCase,
     private val transactionUiMapper: TransactionUiMapper
 ) : ViewModel() {
 
@@ -48,13 +48,24 @@ class MainViewModel @Inject constructor(
         }
     }
 
+    fun deleteTransactions(transactionIds: List<Int>) {
+        viewModelScope.launch(Dispatchers.IO) {
+            deleteTransactionsUseCase.invoke(transactionIds)
+        }
+    }
+
     @Suppress("UNCHECKED_CAST")
     class Factory(
         private val getTransactionsUseCase: GetTransactionsUseCase,
+        private val deleteTransactionsUseCase: DeleteTransactionsUseCase,
         private val transactionUiMapper: TransactionUiMapper
     ) : ViewModelProvider.NewInstanceFactory() {
 
         override fun <T : ViewModel> create(modelClass: Class<T>): T =
-            MainViewModel(getTransactionsUseCase, transactionUiMapper) as T
+            MainViewModel(
+                getTransactionsUseCase,
+                deleteTransactionsUseCase,
+                transactionUiMapper
+            ) as T
     }
 }

@@ -3,23 +3,27 @@ package com.bogdanmurzin.mypersonalwallet.adapter
 import android.net.Uri
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bogdanmurzin.mypersonalwallet.R
 import com.bogdanmurzin.mypersonalwallet.common.Constants
+import com.bogdanmurzin.mypersonalwallet.data.TrxCategoryUiModel
 import com.bogdanmurzin.mypersonalwallet.data.transaction_recycer_items.HeaderItemUiModel
 import com.bogdanmurzin.mypersonalwallet.data.transaction_recycer_items.TransactionItemUiModel
 import com.bogdanmurzin.mypersonalwallet.databinding.RvItemHeaderBinding
 import com.bogdanmurzin.mypersonalwallet.databinding.RvItemTransactionBinding
 import com.bumptech.glide.Glide
-import java.text.NumberFormat
-import java.util.*
 
 class MyMoneyTransactionRecyclerViewAdapter(
-    private val onItemClicked: (TransactionItemUiModel) -> Unit
+    private val onItemClicked: (TransactionItemUiModel) -> Unit,
+    private val showMenuDelete: (Boolean) -> Unit
 ) : ListAdapter<TransactionItemUiModel, RecyclerView.ViewHolder>(ItemDiffCallback) {
+
+    private var isEnabledDeleting = false
+    private var itemSelectedList = mutableListOf<TransactionItemUiModel>()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder =
         when (viewType) {
@@ -42,7 +46,35 @@ class MyMoneyTransactionRecyclerViewAdapter(
                     )
                 ).also { viewHolder ->
                     viewHolder.itemView.setOnClickListener {
-                        onItemClicked(getItem(viewHolder.absoluteAdapterPosition))
+                        val position = viewHolder.absoluteAdapterPosition
+                        val item = getItem(position)
+                        if (isEnabledDeleting) {
+                            // If this item is selected
+                            if (itemSelectedList.contains(item)) {
+                                itemSelectedList.remove(item)
+                                item.selected = false
+                                // return imageView
+                                returnCategoryImageView(
+                                    viewHolder.binding.categoryIv,
+                                    item.category
+                                )
+                                if (itemSelectedList.isEmpty()) {
+                                    showMenuDelete(false)
+                                    isEnabledDeleting = false
+                                }
+                                // If this item is not selected
+                            } else {
+                                selectItem(viewHolder, item)
+                            }
+                        } else {
+                            onItemClicked(item)
+                        }
+                    }
+                    viewHolder.itemView.setOnLongClickListener {
+                        val position = viewHolder.absoluteAdapterPosition
+                        val item = getItem(position)
+                        selectItem(viewHolder, item)
+                        true
                     }
                 }
             }
@@ -75,7 +107,7 @@ class MyMoneyTransactionRecyclerViewAdapter(
         }
     }
 
-    inner class MoneyTransactionViewHolder(private val binding: RvItemTransactionBinding) :
+    inner class MoneyTransactionViewHolder(val binding: RvItemTransactionBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
         fun bind(item: TransactionItemUiModel) {
@@ -103,6 +135,24 @@ class MyMoneyTransactionRecyclerViewAdapter(
             }
 
         }
+    }
+
+    private fun selectItem(
+        holder: MyMoneyTransactionRecyclerViewAdapter.MoneyTransactionViewHolder,
+        item: TransactionItemUiModel
+    ) {
+        isEnabledDeleting = true
+        itemSelectedList.add(item)
+        item.selected = true
+        holder.binding.categoryIv.setImageResource(R.drawable.ic_baseline_check)
+        showMenuDelete(true)
+    }
+
+    private fun returnCategoryImageView(categoryIv: ImageView, itemCategory: TrxCategoryUiModel) {
+        Glide.with(categoryIv.context)
+            .load(Uri.parse(itemCategory.imageUri))
+            .override(Constants.ICON_SCALE, Constants.ICON_SCALE)
+            .into(categoryIv)
     }
 
     object ItemDiffCallback : DiffUtil.ItemCallback<TransactionItemUiModel>() {
