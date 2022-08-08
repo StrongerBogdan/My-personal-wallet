@@ -48,4 +48,14 @@
             android:defaultValue="0"
             app:argType="integer" />
     </navigation>
+    <fragment
+        android:id="@+id/accountFragment"
+        android:name="com.bogdanmurzin.mypersonalwallet.ui.fragment.AccountFragment"
+        android:label="fragment_account"
+        tools:layout="@layout/fragment_account" />
+    <fragment
+        android:id="@+id/categoryFragment"
+        android:name="com.bogdanmurzin.mypersonalwallet.ui.fragment.CategoryFragment"
+        android:label="fragment_category"
+        tools:layout="@layout/fragment_category" />
 </navigation>
