@@ -26,8 +26,7 @@ class MainViewModel @Inject constructor(
     private val _action: SingleLiveEvent<NavDirections> = SingleLiveEvent()
     val action: SingleLiveEvent<NavDirections> = _action
 
-
-    init {
+    fun updateTransactions() {
         viewModelScope.launch {
             getTransactionList()
         }

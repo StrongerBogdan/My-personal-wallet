@@ -57,6 +57,8 @@ class FragmentMoneyTransactions : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setupRecycler()
+        // Update recycler when we return from another tab
+        viewModel.updateTransactions()
 
         binding.toolbar.inflateMenu(R.menu.delete_menu)
         updateToolbar(false)
