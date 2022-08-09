@@ -35,16 +35,12 @@
         app:layout_constraintTop_toBottomOf="@+id/materialTextView"
         tools:backgroundTint="@color/material_dynamic_primary50">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
+        <include
+            android:id="@+id/account_type"
+            layout="@layout/category_cardview"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent" />
 
-            <include android:id="@+id/account_type"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                layout="@layout/category_cardview"/>
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
     </com.google.android.material.card.MaterialCardView>
 
     <androidx.constraintlayout.widget.Guideline
@@ -68,10 +64,11 @@
         app:layout_constraintTop_toTopOf="@+id/account_cv"
         tools:backgroundTint="@color/material_dynamic_primary70">
 
-        <include android:id="@+id/transaction_category_type"
+        <include
+            android:id="@+id/transaction_category_type"
+            layout="@layout/category_cardview"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            layout="@layout/category_cardview"/>
+            android:layout_height="match_parent" />
 
     </com.google.android.material.card.MaterialCardView>
 
@@ -114,14 +111,13 @@
         android:layout_marginStart="@dimen/medium_margin"
         android:layout_marginEnd="@dimen/medium_margin"
         android:backgroundTint="@color/gray"
-        android:textSize="@dimen/caption_text_size"
         android:textColor="@color/white"
-        tools:text="123213123"
+        android:textSize="@dimen/caption_text_size"
         app:layout_constraintBottom_toBottomOf="@+id/transaction_description"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@+id/guideline2"
-        app:layout_constraintTop_toTopOf="@+id/transaction_amount_tv" >
-    </com.google.android.material.button.MaterialButton>
+        app:layout_constraintTop_toTopOf="@+id/transaction_amount_tv"
+        tools:text="123213123"/>
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline2"
