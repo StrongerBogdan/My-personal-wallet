@@ -1,18 +1,22 @@
 package com.bogdanmurzin.mypersonalwallet.ui.viewmodel
 
+import android.content.Context
+import android.net.Uri
 import androidx.lifecycle.*
 import com.bogdanmurzin.domain.entities.AccountType
 import com.bogdanmurzin.domain.usecases.account_type.GetAccountTypeUseCase
 import com.bogdanmurzin.domain.usecases.account_type.InsertAccountUseCase
 import com.bogdanmurzin.domain.usecases.account_type.UpdateAccountUseCase
+import com.bogdanmurzin.mypersonalwallet.common.Constants
 import com.bogdanmurzin.mypersonalwallet.util.EditingState
-import com.google.firebase.crashlytics.buildtools.reloc.org.apache.http.util.ByteArrayBuffer
+import com.bumptech.glide.Glide
+import com.bumptech.glide.load.engine.DiskCacheStrategy
+import com.bumptech.glide.request.RequestOptions
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import java.io.BufferedInputStream
-import java.net.URL
 import javax.inject.Inject
+
 
 @HiltViewModel
 class AddAccountViewModel @Inject constructor(
@@ -42,16 +46,13 @@ class AddAccountViewModel @Inject constructor(
         title: String,
         state: EditingState
     ): Boolean {
-        // TODO GET and save image
-        val image = getImage(currentImageUrl.value)
+        val image = currentImageUrl.value
 
         if (image != null && title.isNotEmpty()) {
             val accountType = AccountType(
                 id,
                 title,
-                // TODO DELETE TEST URI
-                imageUri = currentImageUrl.value
-                    ?: "https://cdn0.iconfinder.com/data/icons/education-364/24/test-flask-science-beaker-school-education-learning-256.png"
+                image
             )
             if (state == EditingState.NEW_TRANSACTION) {
                 addAccount(accountType)
@@ -77,21 +78,6 @@ class AddAccountViewModel @Inject constructor(
 
     fun setImageUrl(url: String) {
         _currentImageUrl.postValue(url)
-    }
-
-    private fun getImage(url: String?): ByteArray? {
-        if (url == null) return null
-
-        val imageUrl = URL(url)
-        val urlConnection = imageUrl.openConnection()
-        val inputStream = urlConnection.getInputStream()
-        val bufferedInputStream = BufferedInputStream(inputStream)
-        val byteArrayBuffer = ByteArrayBuffer(500)
-        var current = 0
-        while (bufferedInputStream.read().also { current = it } != -1) {
-            byteArrayBuffer.append(current)
-        }
-        return byteArrayBuffer.toByteArray()
     }
 
     @Suppress("UNCHECKED_CAST")
