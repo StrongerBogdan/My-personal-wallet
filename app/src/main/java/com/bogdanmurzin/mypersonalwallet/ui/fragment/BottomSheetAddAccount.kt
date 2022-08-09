@@ -2,13 +2,9 @@ package com.bogdanmurzin.mypersonalwallet.ui.fragment
 
 import android.net.Uri
 import android.os.Bundle
-import android.provider.ContactsContract.CommonDataKinds.Website.URL
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
-import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.navigation.navGraphViewModels
@@ -19,10 +15,7 @@ import com.bogdanmurzin.mypersonalwallet.ui.viewmodel.AddAccountViewModel
 import com.bogdanmurzin.mypersonalwallet.util.EditingState
 import com.bumptech.glide.Glide
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
-import com.google.firebase.crashlytics.buildtools.reloc.org.apache.http.util.ByteArrayBuffer
 import dagger.hilt.android.AndroidEntryPoint
-import java.io.BufferedInputStream
-import java.net.URL
 
 @AndroidEntryPoint
 class BottomSheetAddAccount : BottomSheetDialogFragment() {

@@ -29,21 +29,21 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/materialTextView">
+
         <include
             android:id="@+id/account_iv"
             layout="@layout/recycler_item_image"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-             />
+            android:layout_height="match_parent" />
     </FrameLayout>
 
     <com.google.android.material.textfield.MaterialAutoCompleteTextView
         android:id="@+id/account_title"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/medium_margin"
         android:layout_marginTop="@dimen/small_margin"
         android:layout_marginEnd="@dimen/medium_margin"
-        android:layout_marginStart="@dimen/medium_margin"
         android:layout_marginBottom="@dimen/small_half_margin"
         android:hint="@string/account_title"
         android:inputType="text"

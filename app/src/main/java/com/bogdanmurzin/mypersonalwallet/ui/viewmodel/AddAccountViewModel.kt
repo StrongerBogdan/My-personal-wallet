@@ -1,10 +1,7 @@
 package com.bogdanmurzin.mypersonalwallet.ui.viewmodel
 
-import android.util.Log
 import androidx.lifecycle.*
-import androidx.navigation.NavDirections
 import com.bogdanmurzin.domain.entities.AccountType
-import com.bogdanmurzin.domain.entities.Transaction
 import com.bogdanmurzin.domain.usecases.account_type.GetAccountTypeUseCase
 import com.bogdanmurzin.domain.usecases.account_type.InsertAccountUseCase
 import com.bogdanmurzin.domain.usecases.account_type.UpdateAccountUseCase
@@ -53,7 +50,8 @@ class AddAccountViewModel @Inject constructor(
                 id,
                 title,
                 // TODO DELETE TEST URI
-                imageUri = currentImageUrl.value ?: "https://cdn0.iconfinder.com/data/icons/education-364/24/test-flask-science-beaker-school-education-learning-256.png"
+                imageUri = currentImageUrl.value
+                    ?: "https://cdn0.iconfinder.com/data/icons/education-364/24/test-flask-science-beaker-school-education-learning-256.png"
             )
             if (state == EditingState.NEW_TRANSACTION) {
                 addAccount(accountType)

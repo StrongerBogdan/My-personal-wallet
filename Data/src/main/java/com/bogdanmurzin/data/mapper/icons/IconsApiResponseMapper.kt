@@ -1,8 +1,8 @@
 package com.epam.elearn.data.mappers.icons
 
 
-import com.bogdanmurzin.domain.entities.Icon
 import com.bogdanmurzin.data.api.icons.IconsApiResponse
+import com.bogdanmurzin.domain.entities.Icon
 import javax.inject.Inject
 
 class IconsApiResponseMapper @Inject constructor() {

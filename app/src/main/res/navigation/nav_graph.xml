@@ -9,12 +9,13 @@
         android:id="@+id/fragmentMoneyTransactions"
         android:name="com.bogdanmurzin.mypersonalwallet.ui.fragment.FragmentMoneyTransactions"
         android:label="fragment_money_transactions_list"
-        tools:layout="@layout/fragment_money_transactions_list" >
+        tools:layout="@layout/fragment_money_transactions_list">
         <action
             android:id="@+id/action_fragmentMoneyTransactions_to_bottomSheetAddTransaction"
             app:destination="@id/add_transaction_flow_graph" />
     </fragment>
-    <navigation android:id="@+id/add_transaction_flow_graph"
+    <navigation
+        android:id="@+id/add_transaction_flow_graph"
         app:startDestination="@id/bottomSheetAddTransaction">
         <dialog
             android:id="@+id/accountChooseDialogFragment"
@@ -44,7 +45,7 @@
             android:id="@+id/datePickerFragment"
             android:name="com.bogdanmurzin.mypersonalwallet.ui.fragment.DatePickerFragment"
             android:label="DatePickerFragment" />
-<!--        TODO DELETE? -->
+        <!--        TODO DELETE? -->
         <argument
             android:name="transactionId"
             android:defaultValue="0"
@@ -54,7 +55,7 @@
         android:id="@+id/accountFragment"
         android:name="com.bogdanmurzin.mypersonalwallet.ui.fragment.AccountFragment"
         android:label="fragment_account"
-        tools:layout="@layout/fragment_account" >
+        tools:layout="@layout/fragment_account">
         <action
             android:id="@+id/action_accountFragment_to_add_account_flow_graph"
             app:destination="@id/add_account_flow_graph" />
@@ -64,12 +65,13 @@
         android:name="com.bogdanmurzin.mypersonalwallet.ui.fragment.CategoryFragment"
         android:label="fragment_category"
         tools:layout="@layout/fragment_category" />
-    <navigation android:id="@+id/add_account_flow_graph"
+    <navigation
+        android:id="@+id/add_account_flow_graph"
         app:startDestination="@id/bottomSheetAddAccount">
         <dialog
             android:id="@+id/bottomSheetAddAccount"
             android:name="com.bogdanmurzin.mypersonalwallet.ui.fragment.BottomSheetAddAccount"
-            android:label="BottomSheetAddAccount" >
+            android:label="BottomSheetAddAccount">
             <!--            TODO DELETE?-->
             <argument
                 android:name="accountId"
