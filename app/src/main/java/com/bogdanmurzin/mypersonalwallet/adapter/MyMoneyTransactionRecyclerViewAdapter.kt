@@ -126,7 +126,7 @@ class MyMoneyTransactionRecyclerViewAdapter(
                     .override(Constants.ICON_SCALE, Constants.ICON_SCALE)
                     .into(accountIv)
 
-                categoryTv.text = item.category.title
+                categoryTv.text = item.category.compositeTitle
                 transactionAmountTv.text = item.transactionAmount
 
                 accountTypeTv.text = item.accountType.title
