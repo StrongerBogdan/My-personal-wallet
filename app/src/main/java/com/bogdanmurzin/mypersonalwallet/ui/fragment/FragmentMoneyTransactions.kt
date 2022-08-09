@@ -34,8 +34,6 @@ class FragmentMoneyTransactions : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentMoneyTransactionsListBinding.inflate(layoutInflater)
-        val navHostFragment = this.parentFragment as NavHostFragment?
-        Log.i(Constants.TAG, "FragmentMoneyTransactions: ${navHostFragment?.childFragmentManager?.backStackEntryCount}")
         binding.fab.setOnClickListener {
             viewModel.openBottomSheet(Event.OpenPreviewScreen(0))
         }
