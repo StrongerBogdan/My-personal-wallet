@@ -87,8 +87,8 @@
             app:argType="integer" />
         <dialog
             android:id="@+id/iconsActivity"
-            android:name="com.bogdanmurzin.mypersonalwallet.ui.activity.IconsActivity"
+            android:name="com.bogdanmurzin.mypersonalwallet.ui.fragment.IconsChooseFragment"
             android:label="activity_icons"
-            tools:layout="@layout/activity_icons" />
+            tools:layout="@layout/fragemnt_icons" />
     </navigation>
 </navigation>

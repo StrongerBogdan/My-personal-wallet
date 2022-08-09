@@ -1,4 +1,4 @@
-package com.bogdanmurzin.mypersonalwallet.ui.activity
+package com.bogdanmurzin.mypersonalwallet.ui.fragment
 
 import android.app.Dialog
 import android.os.Bundle
@@ -13,7 +13,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bogdanmurzin.domain.entities.Icon
 import com.bogdanmurzin.mypersonalwallet.R
 import com.bogdanmurzin.mypersonalwallet.adapter.IconsRecyclerViewAdapter
-import com.bogdanmurzin.mypersonalwallet.databinding.ActivityIconsBinding
+import com.bogdanmurzin.mypersonalwallet.databinding.FragemntIconsBinding
 import com.bogdanmurzin.mypersonalwallet.ui.presenter.IconsPresenter
 import com.bogdanmurzin.mypersonalwallet.ui.viewmodel.AddAccountViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -21,9 +21,9 @@ import javax.inject.Inject
 
 
 @AndroidEntryPoint
-class IconsActivity : DialogFragment(), IconsPresenter.IconView {
+class IconsChooseFragment : DialogFragment(), IconsPresenter.IconView {
 
-    private lateinit var binding: ActivityIconsBinding
+    private lateinit var binding: FragemntIconsBinding
     private lateinit var recyclerAdapter: IconsRecyclerViewAdapter
     private val viewModel: AddAccountViewModel by navGraphViewModels(R.id.add_account_flow_graph) {
         defaultViewModelProviderFactory
@@ -42,7 +42,7 @@ class IconsActivity : DialogFragment(), IconsPresenter.IconView {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = ActivityIconsBinding.inflate(layoutInflater)
+        binding = FragemntIconsBinding.inflate(layoutInflater)
         presenter.attachView(this)
         presenter.search(binding.search)
 
