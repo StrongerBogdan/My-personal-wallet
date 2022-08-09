@@ -13,4 +13,8 @@ interface AccountRepository {
 
     suspend fun getAccountId(account: AccountType): Int
 
+    suspend fun updateAccount(account: AccountType)
+
+    suspend fun insertAccount(account: AccountType)
+
 }

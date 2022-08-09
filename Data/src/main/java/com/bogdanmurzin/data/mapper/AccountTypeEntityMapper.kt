@@ -8,4 +8,7 @@ class AccountTypeEntityMapper @Inject constructor() {
 
     fun toAccountType(item: AccountTypeEntity): AccountType =
         AccountType(item.id, item.title, item.imageUri)
+
+    fun toAccountEntity(item: AccountType): AccountTypeEntity =
+        AccountTypeEntity(item.id, item.title, item.imageUri)
 }

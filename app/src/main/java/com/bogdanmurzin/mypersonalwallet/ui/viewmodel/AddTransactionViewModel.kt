@@ -16,6 +16,7 @@ import com.bogdanmurzin.mypersonalwallet.data.transaction_recycer_items.Transact
 import com.bogdanmurzin.mypersonalwallet.mapper.TransactionUiMapper
 import com.bogdanmurzin.mypersonalwallet.mapper.TrxCategoryUiMapper
 import com.bogdanmurzin.mypersonalwallet.ui.fragment.BottomSheetAddTransaction
+import com.bogdanmurzin.mypersonalwallet.util.EditingState
 import com.bogdanmurzin.mypersonalwallet.util.TransactionComponentsFormatter
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -95,7 +96,6 @@ class AddTransactionViewModel @Inject constructor(
 
     fun selectDate(date: Date) {
         _selectedDate.postValue(date)
-
     }
 
     fun setUpData(id: Int) {
@@ -160,7 +160,7 @@ class AddTransactionViewModel @Inject constructor(
         id: Int,
         rawTransactionAmount: String,
         rawDescription: String,
-        editingState: BottomSheetAddTransaction.EditingState
+        editingState: EditingState
     ): Boolean {
         val transactionAmount =
             transactionComponentsFormatter.formatTransactionAmount(rawTransactionAmount)
@@ -182,7 +182,7 @@ class AddTransactionViewModel @Inject constructor(
                 accountType,
                 transactionAmount.toFloat()
             )
-            if (editingState == BottomSheetAddTransaction.EditingState.NEW_TRANSACTION) {
+            if (editingState == EditingState.NEW_TRANSACTION) {
                 addTransaction(transaction)
             } else {
                 updateTransaction(transaction)

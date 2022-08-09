@@ -20,6 +20,7 @@
             android:id="@+id/accountChooseDialogFragment"
             android:name="com.bogdanmurzin.mypersonalwallet.ui.fragment.AccountChooseDialogFragment"
             android:label="AccountChooseDialogFragment">
+            <!--        TODO DELETE? -->
             <argument
                 android:name="category"
                 app:argType="com.bogdanmurzin.mypersonalwallet.util.CategoryArg" />
@@ -43,6 +44,7 @@
             android:id="@+id/datePickerFragment"
             android:name="com.bogdanmurzin.mypersonalwallet.ui.fragment.DatePickerFragment"
             android:label="DatePickerFragment" />
+<!--        TODO DELETE? -->
         <argument
             android:name="transactionId"
             android:defaultValue="0"
@@ -52,10 +54,39 @@
         android:id="@+id/accountFragment"
         android:name="com.bogdanmurzin.mypersonalwallet.ui.fragment.AccountFragment"
         android:label="fragment_account"
-        tools:layout="@layout/fragment_account" />
+        tools:layout="@layout/fragment_account" >
+        <action
+            android:id="@+id/action_accountFragment_to_add_account_flow_graph"
+            app:destination="@id/add_account_flow_graph" />
+    </fragment>
     <fragment
         android:id="@+id/categoryFragment"
         android:name="com.bogdanmurzin.mypersonalwallet.ui.fragment.CategoryFragment"
         android:label="fragment_category"
         tools:layout="@layout/fragment_category" />
+    <navigation android:id="@+id/add_account_flow_graph"
+        app:startDestination="@id/bottomSheetAddAccount">
+        <dialog
+            android:id="@+id/bottomSheetAddAccount"
+            android:name="com.bogdanmurzin.mypersonalwallet.ui.fragment.BottomSheetAddAccount"
+            android:label="BottomSheetAddAccount" >
+            <!--            TODO DELETE?-->
+            <argument
+                android:name="accountId"
+                android:defaultValue="0"
+                app:argType="integer" />
+            <action
+                android:id="@+id/action_bottomSheetAddAccount_to_iconsActivity"
+                app:destination="@id/iconsActivity" />
+        </dialog>
+        <argument
+            android:name="accountId"
+            android:defaultValue="0"
+            app:argType="integer" />
+        <dialog
+            android:id="@+id/iconsActivity"
+            android:name="com.bogdanmurzin.mypersonalwallet.ui.activity.IconsActivity"
+            android:label="activity_icons"
+            tools:layout="@layout/activity_icons" />
+    </navigation>
 </navigation>

@@ -15,4 +15,9 @@
     <string name="account">Account</string>
     <string name="home">Home</string>
     <string name="category">Category</string>
+    <string name="add">Add</string>
+    <string name="create_new_account_type">Create new Account type</string>
+    <string name="account_title">Account title</string>
+    <string name="account_icon">Account icon</string>
+    <string name="cancel">Cancel</string>
 </resources>

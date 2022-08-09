@@ -5,9 +5,11 @@ import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.text.format.DateFormat
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.navigation.navGraphViewModels
@@ -18,6 +20,7 @@ import com.bogdanmurzin.mypersonalwallet.common.Constants.EMPTY_STRING
 import com.bogdanmurzin.mypersonalwallet.databinding.FragmentBottomsheetAddTransactionBinding
 import com.bogdanmurzin.mypersonalwallet.ui.viewmodel.AddTransactionViewModel
 import com.bogdanmurzin.mypersonalwallet.util.CategoryArg
+import com.bogdanmurzin.mypersonalwallet.util.EditingState
 import com.bumptech.glide.Glide
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import dagger.hilt.android.AndroidEntryPoint
@@ -157,10 +160,5 @@ class BottomSheetAddTransaction : BottomSheetDialogFragment() {
                 }
             }
         })
-    }
-
-    enum class EditingState {
-        NEW_TRANSACTION,
-        EXISTING_TRANSACTION
     }
 }

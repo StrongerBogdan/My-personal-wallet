@@ -6,6 +6,7 @@
     <dimen name="medium_half_margin">8dp</dimen>
 
     <dimen name="icon_size">48dp</dimen>
+    <dimen name="image_button_size">32dp</dimen>
 
     <!--    Text size   -->
     <dimen name="tiny_text_size">6sp</dimen>

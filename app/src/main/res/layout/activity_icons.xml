@@ -6,14 +6,30 @@
     android:layout_height="match_parent"
     tools:context=".ui.activity.IconsActivity">
 
+    <ImageView
+        android:id="@+id/cancel_iv"
+        android:layout_width="@dimen/image_button_size"
+        android:layout_height="@dimen/image_button_size"
+        android:src="@drawable/ic_baseline_cross"
+        android:layout_marginStart="@dimen/medium_margin"
+        app:layout_constraintBottom_toTopOf="@+id/recycler"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/search"
+        app:layout_constraintTop_toTopOf="parent"
+        android:contentDescription="@string/cancel" />
+
     <SearchView
         android:id="@+id/search"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_margin="@dimen/medium_margin"
+        android:layout_marginEnd="@dimen/medium_margin"
+        android:layout_marginBottom="@dimen/medium_margin"
+        android:layout_marginTop="@dimen/medium_margin"
+        android:queryHint="@string/account_icon"
+        android:iconifiedByDefault="false"
         app:layout_constraintBottom_toTopOf="@+id/recycler"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintStart_toEndOf="@id/cancel_iv"
         app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.recyclerview.widget.RecyclerView

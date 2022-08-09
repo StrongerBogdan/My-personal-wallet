@@ -21,4 +21,10 @@ class AccountRepositoryImpl @Inject constructor(
     override suspend fun getAccountId(account: AccountType): Int =
         localDataSource.getAccountId(account)
 
+    override suspend fun updateAccount(account: AccountType) =
+        localDataSource.updateAccount(account)
+
+    override suspend fun insertAccount(account: AccountType) =
+        localDataSource.insertAccount(account)
+
 }

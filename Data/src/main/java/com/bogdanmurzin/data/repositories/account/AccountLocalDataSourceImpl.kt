@@ -4,6 +4,7 @@ import com.bogdanmurzin.data.db.AccountTypeDao
 import com.bogdanmurzin.data.mapper.AccountTypeEntityMapper
 import com.bogdanmurzin.domain.entities.AccountType
 import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
@@ -34,5 +35,19 @@ class AccountLocalDataSourceImpl @Inject constructor(
     override suspend fun getAccountId(account: AccountType): Int =
         withContext(dispatcher) {
             accountTypeDao.getAccountId(account.title, account.imageUri)
+        }
+
+    override suspend fun updateAccount(account: AccountType) =
+        withContext(dispatcher) {
+            accountTypeDao.update(
+                accountTypeEntityMapper.toAccountEntity(account)
+            )
+        }
+
+    override suspend fun insertAccount(account: AccountType) =
+        withContext(dispatcher) {
+            accountTypeDao.insert(
+                accountTypeEntityMapper.toAccountEntity(account)
+            )
         }
 }

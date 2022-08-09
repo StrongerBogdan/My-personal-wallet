@@ -11,7 +11,7 @@ import com.bogdanmurzin.mypersonalwallet.databinding.RecyclerItemImageBinding
 import com.bumptech.glide.Glide
 
 
-class IconsRecyclerViewAdapter :
+class IconsRecyclerViewAdapter(val onIconClicked: (Icon) -> Unit) :
     ListAdapter<Icon, IconsRecyclerViewAdapter.ViewHolder>(ItemDiffCallback) {
 
     lateinit var context: Context
@@ -30,6 +30,9 @@ class IconsRecyclerViewAdapter :
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val item = getItem(position)
         holder.bind(item)
+        holder.itemView.setOnClickListener {
+            onIconClicked(item)
+        }
     }
 
     inner class ViewHolder(private val binding: RecyclerItemImageBinding) :

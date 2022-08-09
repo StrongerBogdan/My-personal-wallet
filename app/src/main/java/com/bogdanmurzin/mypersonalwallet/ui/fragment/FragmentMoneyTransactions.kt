@@ -1,17 +1,20 @@
 package com.bogdanmurzin.mypersonalwallet.ui.fragment
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bogdanmurzin.mypersonalwallet.R
 import com.bogdanmurzin.mypersonalwallet.adapter.MyMoneyTransactionRecyclerViewAdapter
+import com.bogdanmurzin.mypersonalwallet.common.Constants
 import com.bogdanmurzin.mypersonalwallet.databinding.FragmentMoneyTransactionsListBinding
 import com.bogdanmurzin.mypersonalwallet.ui.viewmodel.MainViewModel
 import com.bogdanmurzin.mypersonalwallet.util.Event
@@ -31,7 +34,8 @@ class FragmentMoneyTransactions : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentMoneyTransactionsListBinding.inflate(layoutInflater)
-
+        val navHostFragment = this.parentFragment as NavHostFragment?
+        Log.i(Constants.TAG, "FragmentMoneyTransactions: ${navHostFragment?.childFragmentManager?.backStackEntryCount}")
         binding.fab.setOnClickListener {
             viewModel.openBottomSheet(Event.OpenPreviewScreen(0))
         }
