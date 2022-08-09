@@ -23,14 +23,14 @@ import com.google.android.material.chip.ChipGroup
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class AccountChooseDialogFragment : DialogFragment() {
+class CategoryChooseDialogFragment : DialogFragment() {
 
     private lateinit var binding: DialogCategoryChooseBinding
     private lateinit var imageRecyclerAdapter: ImageRecyclerViewAdapter
     private val viewModel: AddTransactionViewModel by navGraphViewModels(R.id.add_transaction_flow_graph) {
         defaultViewModelProviderFactory
     }
-    private val args: AccountChooseDialogFragmentArgs by navArgs()
+    private val args: CategoryChooseDialogFragmentArgs by navArgs()
 
     override fun onCreateView(
         inflater: LayoutInflater,

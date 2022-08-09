@@ -19,7 +19,7 @@
         app:startDestination="@id/bottomSheetAddTransaction">
         <dialog
             android:id="@+id/accountChooseDialogFragment"
-            android:name="com.bogdanmurzin.mypersonalwallet.ui.fragment.AccountChooseDialogFragment"
+            android:name="com.bogdanmurzin.mypersonalwallet.ui.fragment.CategoryChooseDialogFragment"
             android:label="AccountChooseDialogFragment">
             <!--        TODO DELETE? -->
             <argument
@@ -62,7 +62,7 @@
     </fragment>
     <fragment
         android:id="@+id/categoryFragment"
-        android:name="com.bogdanmurzin.mypersonalwallet.ui.fragment.CategoryFragment"
+        android:name="com.bogdanmurzin.mypersonalwallet.ui.fragment.TrxCategoryFragment"
         android:label="fragment_category"
         tools:layout="@layout/fragment_category" />
     <navigation

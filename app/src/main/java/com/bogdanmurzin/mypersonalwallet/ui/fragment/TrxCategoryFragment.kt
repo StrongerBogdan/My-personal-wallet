@@ -7,7 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import com.bogdanmurzin.mypersonalwallet.R
 
-class CategoryFragment : Fragment() {
+class TrxCategoryFragment : Fragment() {
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
