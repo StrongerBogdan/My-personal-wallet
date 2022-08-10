@@ -22,4 +22,5 @@
     <string name="account_icon">Account icon</string>
     <string name="cancel">Cancel</string>
     <string name="subcategory">Subcategory</string>
+    <string name="search_icons">Search icons</string>
 </resources>
