@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bogdanmurzin.mypersonalwallet.R
 import com.bogdanmurzin.mypersonalwallet.adapter.ImageRecyclerViewAdapter
+import com.bogdanmurzin.mypersonalwallet.common.Constants.SPAN_COUNT
 import com.bogdanmurzin.mypersonalwallet.databinding.FragmentAccountBinding
 import com.bogdanmurzin.mypersonalwallet.ui.viewmodel.AccountViewModel
 import com.bogdanmurzin.mypersonalwallet.util.Event
@@ -24,23 +25,21 @@ class AccountFragment : Fragment() {
 
     private val viewModel: AccountViewModel by viewModels()
 
-    // Start intent
-    // val intent = Intent(requireContext(), IconsActivity::class.java)
-    // startActivity(intent)
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentAccountBinding.inflate(layoutInflater)
-        binding.toolbar.inflateMenu(R.menu.add_menu)
-        binding.toolbar.setOnMenuItemClickListener {
-            when (it.itemId) {
-                R.id.m_add -> {
-                    add()
-                    true
+        with(binding.accountTypeLayout.toolbar) {
+            inflateMenu(R.menu.add_menu)
+            setOnMenuItemClickListener {
+                when (it.itemId) {
+                    R.id.m_add -> {
+                        add()
+                        true
+                    }
+                    else -> false
                 }
-                else -> false
             }
         }
 
@@ -71,7 +70,7 @@ class AccountFragment : Fragment() {
             // Create dialog with editing Account
             viewModel.openBottomSheet(Event.OpenPreviewScreen(it.id))
         }
-        with(binding.categoryRecycler) {
+        with(binding.accountTypeLayout.categoryRecycler) {
             layoutManager = layoutMngr
             adapter = imageRecyclerAdapter
         }
@@ -81,7 +80,4 @@ class AccountFragment : Fragment() {
         viewModel.openBottomSheet(Event.OpenPreviewScreen(0))
     }
 
-    companion object {
-        const val SPAN_COUNT = 6
-    }
 }

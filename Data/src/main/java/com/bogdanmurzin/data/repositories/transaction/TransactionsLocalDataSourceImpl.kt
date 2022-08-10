@@ -61,12 +61,11 @@ class TransactionsLocalDataSourceImpl @Inject constructor(
 
     override suspend fun insertTransaction(transaction: Transaction) =
         withContext(dispatcher) {
-
             transactionsDao.insert(
                 transactionsEntityMapper.toTransactionEntity(
                     transaction,
-                    getTransactionCategoryId(transaction),
-                    getAccountTypeId(transaction)
+                    transaction.category.id,
+                    transaction.accountType.id
                 )
             )
         }
@@ -76,8 +75,8 @@ class TransactionsLocalDataSourceImpl @Inject constructor(
             transactionsDao.update(
                 transactionsEntityMapper.toTransactionEntity(
                     transaction,
-                    getTransactionCategoryId(transaction),
-                    getAccountTypeId(transaction)
+                    transaction.category.id,
+                    transaction.accountType.id
                 )
             )
         }
@@ -88,17 +87,5 @@ class TransactionsLocalDataSourceImpl @Inject constructor(
                 transactionsDao.deleteTransactions(transactionIds)
             }
         }
-
-    private fun getTransactionCategoryId(transaction: Transaction) =
-        transactionCategoryDao.getTrxCategoryId(
-            transaction.category.title,
-            transaction.category.imageUri
-        )
-
-    private fun getAccountTypeId(transaction: Transaction) =
-        accountTypeDao.getAccountId(
-            transaction.accountType.title,
-            transaction.accountType.imageUri
-        )
 
 }

@@ -7,15 +7,19 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.DialogFragment
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import androidx.navigation.navGraphViewModels
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bogdanmurzin.domain.entities.Icon
 import com.bogdanmurzin.mypersonalwallet.R
 import com.bogdanmurzin.mypersonalwallet.adapter.IconsRecyclerViewAdapter
+import com.bogdanmurzin.mypersonalwallet.common.Constants.SPAN_COUNT
 import com.bogdanmurzin.mypersonalwallet.databinding.FragemntIconsBinding
 import com.bogdanmurzin.mypersonalwallet.ui.presenter.IconsPresenter
 import com.bogdanmurzin.mypersonalwallet.ui.viewmodel.AddAccountViewModel
+import com.bogdanmurzin.mypersonalwallet.ui.viewmodel.AddTrxCategoryViewModel
+import com.bogdanmurzin.mypersonalwallet.util.CategoryArg
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
@@ -25,9 +29,13 @@ class IconsChooseFragment : DialogFragment(), IconsPresenter.IconView {
 
     private lateinit var binding: FragemntIconsBinding
     private lateinit var recyclerAdapter: IconsRecyclerViewAdapter
-    private val viewModel: AddAccountViewModel by navGraphViewModels(R.id.add_account_flow_graph) {
+    private val accountViewModel: AddAccountViewModel by navGraphViewModels(R.id.add_account_flow_graph) {
         defaultViewModelProviderFactory
     }
+    private val trxCategoryViewModel: AddTrxCategoryViewModel by navGraphViewModels(R.id.add_trx_category_flow_graph) {
+        defaultViewModelProviderFactory
+    }
+    private val args: IconsChooseFragmentArgs by navArgs()
 
     @Inject
     lateinit var presenter: IconsPresenter
@@ -68,10 +76,12 @@ class IconsChooseFragment : DialogFragment(), IconsPresenter.IconView {
         val layoutManager: RecyclerView.LayoutManager =
             GridLayoutManager(requireContext(), SPAN_COUNT)
         recyclerAdapter = IconsRecyclerViewAdapter {
-            viewModel.setImageUrl(it.preview)
+            if (args.category == CategoryArg.ACCOUNT_TYPE) {
+                accountViewModel.setImageUrl(it.preview)
+            } else {
+                trxCategoryViewModel.setImageUrl(it.preview)
+            }
             findNavController().navigateUp()
-
-
         }
         val recyclerView = binding.recycler
         recyclerView.adapter = recyclerAdapter
@@ -96,7 +106,4 @@ class IconsChooseFragment : DialogFragment(), IconsPresenter.IconView {
         presenter.clearCompositeDisposable()
     }
 
-    companion object {
-        const val SPAN_COUNT = 5
-    }
 }

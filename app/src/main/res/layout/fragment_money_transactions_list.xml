@@ -21,9 +21,12 @@
         android:id="@+id/transaction_recycler"
         android:name="com.bogdanmurzin.mypersonalwallet.FragmentMoneyTransactions"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
         app:layoutManager="LinearLayoutManager"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/toolbar"
+        app:layout_constraintBottom_toBottomOf="parent"
         tools:context=".ui.fragment.FragmentMoneyTransactions"
         tools:listitem="@layout/rv_item_transaction" />
 

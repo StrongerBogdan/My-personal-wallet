@@ -5,6 +5,7 @@ import com.bogdanmurzin.data.mapper.TransactionCategoryEntityMapper
 import com.bogdanmurzin.domain.entities.TransactionCategory
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
@@ -22,9 +23,11 @@ class TrxCategoryLocalDataSourceImpl @Inject constructor(
 
     override suspend fun getAllTrxCategories(): Flow<List<TransactionCategory>> =
         withContext(dispatcher) {
-            transactionCategoryEntityMapper.toFlowOfTransactionCategory(
-                transactionCategoryDao.getAllTrxCategories()
-            )
+            transactionCategoryDao.getAllTrxCategories().map { list ->
+                list.map { item ->
+                    transactionCategoryEntityMapper.toTransactionCategory(item)
+                }
+            }
         }
 
     override suspend fun getTrxCategoryId(trxCategory: TransactionCategory): Int =
@@ -34,9 +37,11 @@ class TrxCategoryLocalDataSourceImpl @Inject constructor(
 
     override suspend fun getAllTrxSubCategories(title: String): Flow<List<TransactionCategory>> =
         withContext(dispatcher) {
-            transactionCategoryEntityMapper.toFlowOfTransactionCategory(
-                transactionCategoryDao.getAllTrxSubCategories(title)
-            )
+            transactionCategoryDao.getAllTrxSubCategories(title).map { list ->
+                list.map { item ->
+                    transactionCategoryEntityMapper.toTransactionCategory(item)
+                }
+            }
         }
 
     override suspend fun getTrxCategoryIdBySubcategory(title: String, subcategory: String?): Int =
@@ -48,5 +53,20 @@ class TrxCategoryLocalDataSourceImpl @Inject constructor(
                 transactionCategoryDao
                     .getTrxCategoryIdBySubcategory(title, subcategory)
             }
+        }
+
+    override suspend fun insertTrxCategory(trxCategory: TransactionCategory) =
+        withContext(dispatcher) {
+            transactionCategoryDao.insert(
+                transactionCategoryEntityMapper.toTransactionCategoryEntity(trxCategory)
+            )
+        }
+
+    override suspend fun updateTrxCategory(trxCategory: TransactionCategory) =
+        withContext(dispatcher) {
+            val trxCategoryOld = getTrxCategoryById(trxCategory.id)
+            transactionCategoryDao.update(
+                trxCategory.title, trxCategoryOld.title
+            )
         }
 }

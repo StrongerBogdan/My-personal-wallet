@@ -1,7 +1,6 @@
 package com.bogdanmurzin.data.db
 
-import androidx.room.Dao
-import androidx.room.Query
+import androidx.room.*
 import com.bogdanmurzin.data.entity.AccountTypeEntity
 import com.bogdanmurzin.data.entity.TransactionCategoryEntity
 import com.bogdanmurzin.data.entity.TransactionEntity
@@ -30,4 +29,10 @@ interface TransactionCategoryDao {
     // IF subcategory is not null
     @Query("SELECT * FROM `transaction_category` WHERE title = :title AND subcategory = :subcategory")
     fun getTrxCategoryIdBySubcategory(title: String, subcategory: String): Int
+
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    suspend fun insert(trxCategory: TransactionCategoryEntity)
+
+    @Query("Update transaction_category SET title = :titleNew WHERE title = :titleOld")
+    fun update(titleNew: String, titleOld: String)
 }

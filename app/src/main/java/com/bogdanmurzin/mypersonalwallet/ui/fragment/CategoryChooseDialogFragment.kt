@@ -15,6 +15,7 @@ import com.bogdanmurzin.domain.entities.CategoryEntity
 import com.bogdanmurzin.domain.entities.TransactionCategory
 import com.bogdanmurzin.mypersonalwallet.R
 import com.bogdanmurzin.mypersonalwallet.adapter.ImageRecyclerViewAdapter
+import com.bogdanmurzin.mypersonalwallet.common.Constants.SPAN_COUNT
 import com.bogdanmurzin.mypersonalwallet.databinding.DialogCategoryChooseBinding
 import com.bogdanmurzin.mypersonalwallet.ui.viewmodel.AddTransactionViewModel
 import com.bogdanmurzin.mypersonalwallet.util.CategoryArg
@@ -132,9 +133,5 @@ class CategoryChooseDialogFragment : DialogFragment() {
             layoutManager = layoutMngr
             adapter = imageRecyclerAdapter
         }
-    }
-
-    companion object {
-        const val SPAN_COUNT = 4
     }
 }

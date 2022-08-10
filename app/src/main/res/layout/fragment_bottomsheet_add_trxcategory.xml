@@ -2,7 +2,8 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/materialTextView"
@@ -12,47 +13,67 @@
         android:layout_marginTop="@dimen/small_margin"
         android:layout_marginEnd="@dimen/medium_margin"
         android:layout_marginBottom="@dimen/small_margin"
-        android:text="@string/account_type"
+        android:text="@string/trxcategory_type"
         android:textAlignment="center"
         android:textSize="@dimen/headline5_text_size"
-        app:layout_constraintBottom_toTopOf="@id/account_container"
+        app:layout_constraintBottom_toTopOf="@id/trxcategory_container"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <FrameLayout
-        android:id="@+id/account_container"
+        android:id="@+id/trxcategory_container"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/medium_margin"
-        app:layout_constraintBottom_toTopOf="@id/account_title"
+        app:layout_constraintBottom_toTopOf="@id/trxcategory_category"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/materialTextView">
 
         <include
-            android:id="@+id/account_iv"
+            android:id="@+id/trxcategory_iv"
             layout="@layout/recycler_item_image"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
     </FrameLayout>
 
     <com.google.android.material.textfield.MaterialAutoCompleteTextView
-        android:id="@+id/account_title"
+        android:id="@+id/trxcategory_category"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/medium_margin"
         android:layout_marginTop="@dimen/small_margin"
         android:layout_marginEnd="@dimen/medium_margin"
         android:layout_marginBottom="@dimen/small_half_margin"
-        android:hint="@string/account_title"
+        android:hint="@string/category"
         android:inputType="text"
         android:textAlignment="center"
         android:textSize="@dimen/headline5_text_size"
+        app:layout_constraintBottom_toTopOf="@id/subcategories_scroll"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/trxcategory_container" />
+
+    <HorizontalScrollView
+        android:id="@+id/subcategories_scroll"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:scrollbars="none"
+        android:visibility="gone"
         app:layout_constraintBottom_toTopOf="@id/done_btn"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/account_container" />
+        app:layout_constraintTop_toBottomOf="@id/trxcategory_category"
+        tools:visibility="visible">
+
+        <com.google.android.material.chip.ChipGroup
+            android:id="@+id/subcategory_chip_group"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:chipSpacingHorizontal="0dp"
+            app:singleSelection="true" />
+    </HorizontalScrollView>
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/done_btn"
@@ -72,6 +93,6 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/account_title" />
+        app:layout_constraintTop_toBottomOf="@id/subcategories_scroll" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

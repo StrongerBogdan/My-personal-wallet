@@ -2,9 +2,16 @@ package com.bogdanmurzin.data.entity
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
+import androidx.room.Index
 import androidx.room.PrimaryKey
 
-@Entity(tableName = "transaction_category")
+@Entity(
+    tableName = "transaction_category",
+    indices = [Index(
+        value = ["title", "subcategory", "transaction_pic_uri"],
+        unique = true
+    )]
+)
 data class TransactionCategoryEntity(
     @PrimaryKey(autoGenerate = true) val id: Int,
     @ColumnInfo(name = "title") val title: String,

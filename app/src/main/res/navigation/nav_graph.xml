@@ -21,7 +21,6 @@
             android:id="@+id/accountChooseDialogFragment"
             android:name="com.bogdanmurzin.mypersonalwallet.ui.fragment.CategoryChooseDialogFragment"
             android:label="AccountChooseDialogFragment">
-            <!--        TODO DELETE? -->
             <argument
                 android:name="category"
                 app:argType="com.bogdanmurzin.mypersonalwallet.util.CategoryArg" />
@@ -64,7 +63,11 @@
         android:id="@+id/categoryFragment"
         android:name="com.bogdanmurzin.mypersonalwallet.ui.fragment.TrxCategoryFragment"
         android:label="fragment_category"
-        tools:layout="@layout/fragment_category" />
+        tools:layout="@layout/fragment_category" >
+        <action
+            android:id="@+id/action_categoryFragment_to_add_trx_category_flow_graph"
+            app:destination="@id/add_trx_category_flow_graph" />
+    </fragment>
     <navigation
         android:id="@+id/add_account_flow_graph"
         app:startDestination="@id/bottomSheetAddAccount">
@@ -79,16 +82,57 @@
                 app:argType="integer" />
             <action
                 android:id="@+id/action_bottomSheetAddAccount_to_iconsActivity"
-                app:destination="@id/iconsActivity" />
+                app:destination="@id/iconsFragment" />
         </dialog>
         <argument
             android:name="accountId"
             android:defaultValue="0"
             app:argType="integer" />
         <dialog
-            android:id="@+id/iconsActivity"
+            android:id="@+id/iconsFragment"
             android:name="com.bogdanmurzin.mypersonalwallet.ui.fragment.IconsChooseFragment"
             android:label="activity_icons"
-            tools:layout="@layout/fragemnt_icons" />
+            tools:layout="@layout/fragemnt_icons" >
+            <argument
+                android:name="category"
+                app:argType="com.bogdanmurzin.mypersonalwallet.util.CategoryArg" />
+        </dialog>
+    </navigation>
+    <navigation
+        android:id="@+id/add_trx_category_flow_graph"
+        app:startDestination="@id/bottomSheetAddTrxCategory">
+        <dialog
+            android:id="@+id/iconsFragment"
+            android:name="com.bogdanmurzin.mypersonalwallet.ui.fragment.IconsChooseFragment"
+            android:label="activity_icons"
+            tools:layout="@layout/fragemnt_icons" >
+            <argument
+                android:name="category"
+                app:argType="com.bogdanmurzin.mypersonalwallet.util.CategoryArg" />
+        </dialog>
+        <dialog
+            android:id="@+id/bottomSheetAddTrxCategory"
+            android:name="com.bogdanmurzin.mypersonalwallet.ui.fragment.BottomSheetAddTrxCategory"
+            android:label="BottomSheetAddTrxCategory" >
+            <action
+                android:id="@+id/action_bottomSheetAddTrxCategory_to_iconsActivity"
+                app:destination="@id/iconsFragment" />
+            <argument
+                android:name="trxCategoryId"
+                android:defaultValue="0"
+                app:argType="integer" />
+            <action
+                android:id="@+id/action_bottomSheetAddTrxCategory_to_addSubcategoryFragment"
+                app:destination="@id/addSubcategoryFragment" />
+        </dialog>
+        <!--            TODO DELETE?!-->
+        <argument
+            android:name="trxCategoryId"
+            android:defaultValue="0"
+            app:argType="integer" />
+        <dialog
+            android:id="@+id/addSubcategoryFragment"
+            android:name="com.bogdanmurzin.mypersonalwallet.ui.fragment.AddSubcategoryFragment"
+            android:label="AddSubcategoryFragment" />
     </navigation>
 </navigation>

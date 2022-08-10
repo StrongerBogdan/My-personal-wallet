@@ -15,4 +15,8 @@ interface TrxCategoryRepository {
 
     suspend fun getTrxCategoryIdBySubcategory(title: String, subcategory: String?): Int
 
+    suspend fun insertTrxCategory(trxCategory: TransactionCategory)
+
+    suspend fun updateTrxCategory(trxCategory: TransactionCategory)
+
 }

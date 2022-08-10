@@ -22,7 +22,7 @@ class MyMoneyTransactionRecyclerViewAdapter(
     private val showMenuDelete: (Boolean) -> Unit
 ) : ListAdapter<TransactionItemUiModel, RecyclerView.ViewHolder>(ItemDiffCallback) {
 
-    private var isEnabledDeleting = false
+    var isEnabledDeleting = false
     private var itemSelectedList = mutableListOf<TransactionItemUiModel>()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder =

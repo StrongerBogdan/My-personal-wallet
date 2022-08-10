@@ -1,9 +1,6 @@
 package com.bogdanmurzin.data.db
 
-import androidx.room.Dao
-import androidx.room.Insert
-import androidx.room.Query
-import androidx.room.Update
+import androidx.room.*
 import com.bogdanmurzin.data.entity.AccountTypeEntity
 import com.bogdanmurzin.data.entity.TransactionEntity
 import com.bogdanmurzin.domain.entities.AccountType
@@ -22,9 +19,9 @@ interface AccountTypeDao {
     @Query("SELECT * FROM `account_type` WHERE title = :title AND account_pic_uri = :imageUri")
     fun getAccountId(title: String, imageUri: String): Int
 
-    @Update
+    @Update(onConflict = OnConflictStrategy.IGNORE)
     fun update(accountType: AccountTypeEntity)
 
-    @Insert
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insert(accountType: AccountTypeEntity)
 }

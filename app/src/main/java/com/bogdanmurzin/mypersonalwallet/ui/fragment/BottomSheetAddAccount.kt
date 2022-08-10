@@ -12,6 +12,7 @@ import com.bogdanmurzin.mypersonalwallet.R
 import com.bogdanmurzin.mypersonalwallet.common.Constants
 import com.bogdanmurzin.mypersonalwallet.databinding.FragmentBottomsheetAddAccountBinding
 import com.bogdanmurzin.mypersonalwallet.ui.viewmodel.AddAccountViewModel
+import com.bogdanmurzin.mypersonalwallet.util.CategoryArg
 import com.bogdanmurzin.mypersonalwallet.util.EditingState
 import com.bumptech.glide.Glide
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
@@ -34,7 +35,7 @@ class BottomSheetAddAccount : BottomSheetDialogFragment() {
         binding.accountContainer.setOnClickListener {
             findNavController().navigate(
                 BottomSheetAddAccountDirections
-                    .actionBottomSheetAddAccountToIconsActivity()
+                    .actionBottomSheetAddAccountToIconsActivity(CategoryArg.ACCOUNT_TYPE)
             )
 
         }
