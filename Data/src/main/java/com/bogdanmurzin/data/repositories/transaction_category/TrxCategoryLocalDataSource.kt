@@ -16,7 +16,8 @@ interface TrxCategoryLocalDataSource {
 
     suspend fun getAllTrxSubCategories(title: String): Flow<List<TransactionCategory>>
 
-    suspend fun getTrxCategoryIdBySubcategory(title: String, subcategory: String?): Int
+    suspend fun getTrxCategoryBySubcategory(title: String, subcategory: String?)
+            : TransactionCategory
 
     suspend fun insertTrxCategory(trxCategory: TransactionCategory)
 

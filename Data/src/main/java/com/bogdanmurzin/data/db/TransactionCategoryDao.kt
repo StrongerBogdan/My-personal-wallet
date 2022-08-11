@@ -5,6 +5,7 @@ import com.bogdanmurzin.data.entity.AccountTypeEntity
 import com.bogdanmurzin.data.entity.TransactionCategoryEntity
 import com.bogdanmurzin.data.entity.TransactionEntity
 import com.bogdanmurzin.domain.entities.Transaction
+import com.bogdanmurzin.domain.entities.TransactionCategory
 import kotlinx.coroutines.flow.Flow
 
 @Dao
@@ -24,11 +25,11 @@ interface TransactionCategoryDao {
 
     // IF subcategory is null
     @Query("SELECT * FROM `transaction_category` WHERE title = :title AND  subcategory is NULL")
-    fun getTrxCategoryIdBySubcategory(title: String): Int
+    fun getTrxCategoryIdBySubcategory(title: String): TransactionCategoryEntity
 
     // IF subcategory is not null
     @Query("SELECT * FROM `transaction_category` WHERE title = :title AND subcategory = :subcategory")
-    fun getTrxCategoryIdBySubcategory(title: String, subcategory: String): Int
+    fun getTrxCategoryIdBySubcategory(title: String, subcategory: String): TransactionCategoryEntity
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insert(trxCategory: TransactionCategoryEntity)

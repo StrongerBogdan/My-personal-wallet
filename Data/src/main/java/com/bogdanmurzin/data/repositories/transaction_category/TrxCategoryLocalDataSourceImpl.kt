@@ -44,15 +44,16 @@ class TrxCategoryLocalDataSourceImpl @Inject constructor(
             }
         }
 
-    override suspend fun getTrxCategoryIdBySubcategory(title: String, subcategory: String?): Int =
+    override suspend fun getTrxCategoryBySubcategory(title: String, subcategory: String?): TransactionCategory =
         withContext(dispatcher) {
-            return@withContext if (subcategory == null) {
+            val result = if (subcategory == null) {
                 transactionCategoryDao
                     .getTrxCategoryIdBySubcategory(title)
             } else {
                 transactionCategoryDao
                     .getTrxCategoryIdBySubcategory(title, subcategory)
             }
+            return@withContext transactionCategoryEntityMapper.toTransactionCategory(result)
         }
 
     override suspend fun insertTrxCategory(trxCategory: TransactionCategory) =

@@ -4,18 +4,18 @@ import androidx.lifecycle.*
 import com.bogdanmurzin.domain.entities.AccountType
 import com.bogdanmurzin.domain.entities.Transaction
 import com.bogdanmurzin.domain.entities.TransactionCategory
-import com.bogdanmurzin.domain.usecases.account_type.GetAccountIdUseCase
 import com.bogdanmurzin.domain.usecases.account_type.GetAccountTypeUseCase
 import com.bogdanmurzin.domain.usecases.account_type.GetAllAccountTypesUseCase
 import com.bogdanmurzin.domain.usecases.transaction.GetTransactionByIdUseCase
 import com.bogdanmurzin.domain.usecases.transaction.InsertTransactionUseCase
 import com.bogdanmurzin.domain.usecases.transaction.UpdateTransactionUseCase
-import com.bogdanmurzin.domain.usecases.transaction_category.*
+import com.bogdanmurzin.domain.usecases.transaction_category.GetAllTrxCategoryUseCase
+import com.bogdanmurzin.domain.usecases.transaction_category.GetAllTrxSubCategoriesUseCase
+import com.bogdanmurzin.domain.usecases.transaction_category.GetTrxCategoryBySubcategoryUseCase
 import com.bogdanmurzin.mypersonalwallet.data.TrxCategoryUiModel
 import com.bogdanmurzin.mypersonalwallet.data.transaction_recycer_items.TransactionItemUiModel
 import com.bogdanmurzin.mypersonalwallet.mapper.TransactionUiMapper
 import com.bogdanmurzin.mypersonalwallet.mapper.TrxCategoryUiMapper
-import com.bogdanmurzin.mypersonalwallet.ui.fragment.BottomSheetAddTransaction
 import com.bogdanmurzin.mypersonalwallet.util.EditingState
 import com.bogdanmurzin.mypersonalwallet.util.TransactionComponentsFormatter
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -28,13 +28,10 @@ import javax.inject.Inject
 class AddTransactionViewModel @Inject constructor(
     private val getAccountTypeUseCase: GetAccountTypeUseCase,
     private val getAllAccountTypesUseCase: GetAllAccountTypesUseCase,
-    private val getAccountIdUseCase: GetAccountIdUseCase,
 
-    private val getTrxCategoryUseCase: GetTrxCategoryUseCase,
     private val getAllTrxCategoryUseCase: GetAllTrxCategoryUseCase,
-    private val getTrxCategoryIdUseCase: GetTrxCategoryIdUseCase,
     private val getAllTrxSubCategoriesUseCase: GetAllTrxSubCategoriesUseCase,
-    private val getTrxCategoryIdBySubcategoryUseCase: GetTrxCategoryIdBySubcategoryUseCase,
+    private val getTrxCategoryBySubcategoryUseCase: GetTrxCategoryBySubcategoryUseCase,
 
     private val insertTransactionUseCase: InsertTransactionUseCase,
     private val getTransactionByIdUseCase: GetTransactionByIdUseCase,
@@ -63,11 +60,6 @@ class AddTransactionViewModel @Inject constructor(
     private var selectedCategoryTitle: String? = null
     private var selectedSubcategoryTitle: String? = null
 
-    private suspend fun getTrxCategory(id: Int) {
-        val selectedTrxCategory = getTrxCategoryUseCase.invoke(id)
-        _selectedTrxCategory.postValue(trxCategoryUiMapper.toTrxCategoryUiModel(selectedTrxCategory))
-    }
-
     fun loadAllTrxSubCategories(trxCategory: TransactionCategory) {
         viewModelScope.launch(Dispatchers.IO) {
             // Save title
@@ -79,8 +71,8 @@ class AddTransactionViewModel @Inject constructor(
         }
     }
 
-    private suspend fun getTrxCategoryIdBySubcategory(title: String, subcategory: String?): Int =
-        getTrxCategoryIdBySubcategoryUseCase.invoke(title, subcategory)
+    private suspend fun getTrxCategoryIdBySubcategory(title: String, subcategory: String?): TransactionCategory =
+        getTrxCategoryBySubcategoryUseCase.invoke(title, subcategory)
 
     private fun addTransaction(transaction: Transaction) {
         viewModelScope.launch(Dispatchers.IO) {
@@ -112,11 +104,14 @@ class AddTransactionViewModel @Inject constructor(
 
     private fun selectTransactionCategory(selectedCategoryTitle: String) {
         viewModelScope.launch(Dispatchers.IO) {
-            val trxId = getTrxCategoryIdBySubcategory(
+            val trxCategory = getTrxCategoryIdBySubcategory(
                 selectedCategoryTitle,
                 selectedSubcategoryTitle
             )
-            getTrxCategory(trxId)
+            // Save category
+            _selectedTrxCategory.postValue(
+                trxCategoryUiMapper.toTrxCategoryUiModel(trxCategory)
+            )
         }
     }
 
@@ -196,13 +191,10 @@ class AddTransactionViewModel @Inject constructor(
     class Factory(
         private val getAccountTypeUseCase: GetAccountTypeUseCase,
         private val getAllAccountTypesUseCase: GetAllAccountTypesUseCase,
-        private val getAccountIdUseCase: GetAccountIdUseCase,
 
-        private val getTrxCategoryUseCase: GetTrxCategoryUseCase,
         private val getAllTrxCategoryUseCase: GetAllTrxCategoryUseCase,
-        private val getTrxCategoryIdUseCase: GetTrxCategoryIdUseCase,
         private val getAllTrxSubCategoriesUseCase: GetAllTrxSubCategoriesUseCase,
-        private val getTrxCategoryIdBySubcategoryUseCase: GetTrxCategoryIdBySubcategoryUseCase,
+        private val getTrxCategoryBySubcategoryUseCase: GetTrxCategoryBySubcategoryUseCase,
 
         private val insertTransactionUseCase: InsertTransactionUseCase,
         private val getTransactionByIdUseCase: GetTransactionByIdUseCase,
@@ -217,12 +209,9 @@ class AddTransactionViewModel @Inject constructor(
             AddTransactionViewModel(
                 getAccountTypeUseCase,
                 getAllAccountTypesUseCase,
-                getAccountIdUseCase,
-                getTrxCategoryUseCase,
                 getAllTrxCategoryUseCase,
-                getTrxCategoryIdUseCase,
                 getAllTrxSubCategoriesUseCase,
-                getTrxCategoryIdBySubcategoryUseCase,
+                getTrxCategoryBySubcategoryUseCase,
                 insertTransactionUseCase,
                 getTransactionByIdUseCase,
                 updateTransactionUseCase,
