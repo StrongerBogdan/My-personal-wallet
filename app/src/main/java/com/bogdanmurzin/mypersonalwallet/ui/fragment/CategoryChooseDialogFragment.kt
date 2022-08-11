@@ -5,9 +5,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.DialogFragment
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
-import androidx.navigation.navGraphViewModels
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bogdanmurzin.domain.entities.AccountType
@@ -15,10 +15,12 @@ import com.bogdanmurzin.domain.entities.CategoryEntity
 import com.bogdanmurzin.domain.entities.TransactionCategory
 import com.bogdanmurzin.mypersonalwallet.R
 import com.bogdanmurzin.mypersonalwallet.adapter.ImageRecyclerViewAdapter
+import com.bogdanmurzin.mypersonalwallet.common.Constants
 import com.bogdanmurzin.mypersonalwallet.common.Constants.SPAN_COUNT
 import com.bogdanmurzin.mypersonalwallet.databinding.DialogCategoryChooseBinding
-import com.bogdanmurzin.mypersonalwallet.ui.viewmodel.AddTransactionViewModel
+import com.bogdanmurzin.mypersonalwallet.ui.viewmodel.CategoryChooseViewModel
 import com.bogdanmurzin.mypersonalwallet.util.CategoryArg
+import com.bogdanmurzin.mypersonalwallet.util.setNavigationResult
 import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipGroup
 import dagger.hilt.android.AndroidEntryPoint
@@ -28,9 +30,7 @@ class CategoryChooseDialogFragment : DialogFragment() {
 
     private lateinit var binding: DialogCategoryChooseBinding
     private lateinit var imageRecyclerAdapter: ImageRecyclerViewAdapter
-    private val viewModel: AddTransactionViewModel by navGraphViewModels(R.id.add_transaction_flow_graph) {
-        defaultViewModelProviderFactory
-    }
+    private val chooseViewModel: CategoryChooseViewModel by viewModels()
     private val args: CategoryChooseDialogFragmentArgs by navArgs()
 
     override fun onCreateView(
@@ -46,8 +46,7 @@ class CategoryChooseDialogFragment : DialogFragment() {
                 resources.getString(R.string.choose_category)
 
         binding.doneBtn.setOnClickListener {
-            viewModel.onDoneBtnClicked()
-            findNavController().navigateUp()
+            chooseViewModel.chooseCategory()
         }
 
         return binding.root
@@ -60,33 +59,41 @@ class CategoryChooseDialogFragment : DialogFragment() {
         if (args.category == CategoryArg.ACCOUNT_TYPE) {
             binding.doneBtn.visibility = View.GONE
             setupRecycler {
-                viewModel.selectAccountType(it as AccountType)
-                findNavController().navigateUp()
+                chooseViewModel.selectAccountType(it as AccountType)
             }
             // Get All user accounts and show them
-            viewModel.showAllAccounts()
+            chooseViewModel.showAllAccounts()
             // Transaction Category cardView
         } else {
             // setup main recycler
             setupRecycler {
                 // Remove selected subcategory
-                viewModel.selectSubcategory(null)
+                chooseViewModel.selectSubcategory(null)
                 // "trx" it's short form of "transaction"
-                viewModel.loadAllTrxSubCategories(it as TransactionCategory)
+                chooseViewModel.loadAllTrxSubCategories(it as TransactionCategory)
             }
             // Get All user transaction categories and show them
-            viewModel.showAllTrxCategories()
+            chooseViewModel.showAllTrxCategories()
         }
     }
 
     private fun observeViewModel() {
+        chooseViewModel.selectedAccountType.observe(viewLifecycleOwner) {
+            setNavigationResult(it.id, Constants.ACCOUNT_TYPE_RESULT_KEY)
+            findNavController().navigateUp()
+        }
+        chooseViewModel.selectedTrxCategory.observe(viewLifecycleOwner) {
+            setNavigationResult(it.id, Constants.TRX_CATEGORY_RESULT_KEY)
+            findNavController().navigateUp()
+        }
+
         if (args.category == CategoryArg.TRANSACTION_CATEGORY) {
             // show all user transaction categories
-            viewModel.trxCategories.observe(viewLifecycleOwner) {
+            chooseViewModel.trxCategories.observe(viewLifecycleOwner) {
                 imageRecyclerAdapter.submitList(it)
             }
             // Load all subCategories selected category
-            viewModel.trxSubCategories.observe(viewLifecycleOwner) { list ->
+            chooseViewModel.trxSubCategories.observe(viewLifecycleOwner) { list ->
                 if (list.isNotEmpty()) {
                     binding.subcategoriesScroll.visibility = View.VISIBLE
                     with(binding.subcategoryChipGroup) {
@@ -99,7 +106,8 @@ class CategoryChooseDialogFragment : DialogFragment() {
                         setOnCheckedStateChangeListener { group, checkedList ->
                             // There is always one element
                             val chip: Chip = group.findViewById(checkedList[0])
-                            viewModel.selectSubcategory(chip.text.toString())
+                            //viewModel.selectSubcategory(chip.text.toString())
+                            chooseViewModel.selectSubcategory(chip.text.toString())
                         }
                     }
                 } else {
@@ -109,7 +117,7 @@ class CategoryChooseDialogFragment : DialogFragment() {
             }
         } else {
             // show all user account types
-            viewModel.accountTypes.observe(viewLifecycleOwner) {
+            chooseViewModel.accountTypes.observe(viewLifecycleOwner) {
                 imageRecyclerAdapter.submitList(it)
             }
         }

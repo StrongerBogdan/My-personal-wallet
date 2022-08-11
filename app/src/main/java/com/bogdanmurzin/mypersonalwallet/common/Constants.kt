@@ -11,4 +11,6 @@ object Constants {
     const val RETROFIT_ICONS_NAMED = "RetrofitIconsClient"
     const val SPAN_COUNT = 4
     const val DATE_RESULT_KEY = "date_result_key"
+    const val TRX_CATEGORY_RESULT_KEY = "trx_category_result_key"
+    const val ACCOUNT_TYPE_RESULT_KEY = "account_type_result_key"
 }

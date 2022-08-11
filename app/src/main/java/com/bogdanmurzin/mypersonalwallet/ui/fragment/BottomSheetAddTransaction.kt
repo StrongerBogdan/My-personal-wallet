@@ -13,9 +13,11 @@ import androidx.navigation.fragment.navArgs
 import androidx.navigation.navGraphViewModels
 import com.bogdanmurzin.mypersonalwallet.R
 import com.bogdanmurzin.mypersonalwallet.common.Constants
+import com.bogdanmurzin.mypersonalwallet.common.Constants.ACCOUNT_TYPE_RESULT_KEY
 import com.bogdanmurzin.mypersonalwallet.common.Constants.DATE_RESULT_KEY
 import com.bogdanmurzin.mypersonalwallet.common.Constants.DOLLAR_OR_COMA_OR_DOT_REGEX
 import com.bogdanmurzin.mypersonalwallet.common.Constants.EMPTY_STRING
+import com.bogdanmurzin.mypersonalwallet.common.Constants.TRX_CATEGORY_RESULT_KEY
 import com.bogdanmurzin.mypersonalwallet.databinding.FragmentBottomsheetAddTransactionBinding
 import com.bogdanmurzin.mypersonalwallet.ui.viewmodel.AddTransactionViewModel
 import com.bogdanmurzin.mypersonalwallet.util.CategoryArg
@@ -85,8 +87,20 @@ class BottomSheetAddTransaction : BottomSheetDialogFragment() {
         setupViewModel()
 
         // get result from Date picker
-        val result = getNavigationResultLiveData<Date>(DATE_RESULT_KEY)
-        result?.observe(viewLifecycleOwner) { date -> viewModel.selectDate(date) }
+        val datePickerResult = getNavigationResultLiveData<Date>(DATE_RESULT_KEY)
+        datePickerResult?.observe(viewLifecycleOwner) { date -> viewModel.selectDate(date) }
+        // get result from CategoryChoose
+        val trxCategoryChooseResult =
+            getNavigationResultLiveData<Int>(TRX_CATEGORY_RESULT_KEY)
+        trxCategoryChooseResult?.observe(viewLifecycleOwner) { trxCategoryId ->
+            viewModel.selectTrxCategory(trxCategoryId)
+        }
+        val accountChooseResult =
+            getNavigationResultLiveData<Int>(ACCOUNT_TYPE_RESULT_KEY)
+        accountChooseResult?.observe(viewLifecycleOwner) { accountId ->
+            viewModel.selectAccountType(accountId)
+        }
+
     }
 
     private fun setupViewModel() {
