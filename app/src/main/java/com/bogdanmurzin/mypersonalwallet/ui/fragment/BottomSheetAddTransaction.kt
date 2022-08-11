@@ -5,26 +5,27 @@ import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.text.format.DateFormat
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.navigation.navGraphViewModels
 import com.bogdanmurzin.mypersonalwallet.R
 import com.bogdanmurzin.mypersonalwallet.common.Constants
+import com.bogdanmurzin.mypersonalwallet.common.Constants.DATE_RESULT_KEY
 import com.bogdanmurzin.mypersonalwallet.common.Constants.DOLLAR_OR_COMA_OR_DOT_REGEX
 import com.bogdanmurzin.mypersonalwallet.common.Constants.EMPTY_STRING
 import com.bogdanmurzin.mypersonalwallet.databinding.FragmentBottomsheetAddTransactionBinding
 import com.bogdanmurzin.mypersonalwallet.ui.viewmodel.AddTransactionViewModel
 import com.bogdanmurzin.mypersonalwallet.util.CategoryArg
 import com.bogdanmurzin.mypersonalwallet.util.EditingState
+import com.bogdanmurzin.mypersonalwallet.util.getNavigationResultLiveData
 import com.bumptech.glide.Glide
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import dagger.hilt.android.AndroidEntryPoint
 import java.text.NumberFormat
+import java.util.*
 
 
 @AndroidEntryPoint
@@ -82,6 +83,10 @@ class BottomSheetAddTransaction : BottomSheetDialogFragment() {
         }
 
         setupViewModel()
+
+        // get result from Date picker
+        val result = getNavigationResultLiveData<Date>(DATE_RESULT_KEY)
+        result?.observe(viewLifecycleOwner) { date -> viewModel.selectDate(date) }
     }
 
     private fun setupViewModel() {

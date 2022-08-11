@@ -10,4 +10,5 @@ object Constants {
     val DOLLAR_OR_COMA_OR_DOT_REGEX = Regex("[$,.]")
     const val RETROFIT_ICONS_NAMED = "RetrofitIconsClient"
     const val SPAN_COUNT = 4
+    const val DATE_RESULT_KEY = "date_result_key"
 }

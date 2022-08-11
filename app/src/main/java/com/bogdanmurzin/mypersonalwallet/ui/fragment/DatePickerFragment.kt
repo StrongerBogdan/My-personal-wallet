@@ -5,18 +5,13 @@ import android.app.Dialog
 import android.os.Bundle
 import android.widget.DatePicker
 import androidx.fragment.app.DialogFragment
-import androidx.navigation.navGraphViewModels
-import com.bogdanmurzin.mypersonalwallet.R
-import com.bogdanmurzin.mypersonalwallet.ui.viewmodel.AddTransactionViewModel
+import com.bogdanmurzin.mypersonalwallet.common.Constants.DATE_RESULT_KEY
+import com.bogdanmurzin.mypersonalwallet.util.setNavigationResult
 import dagger.hilt.android.AndroidEntryPoint
 import java.util.*
 
 @AndroidEntryPoint
 class DatePickerFragment : DialogFragment(), DatePickerDialog.OnDateSetListener {
-
-    private val viewModel: AddTransactionViewModel by navGraphViewModels(R.id.add_transaction_flow_graph) {
-        defaultViewModelProviderFactory
-    }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         // Use the current date as the default date in the picker
@@ -30,10 +25,10 @@ class DatePickerFragment : DialogFragment(), DatePickerDialog.OnDateSetListener 
     }
 
     override fun onDateSet(datePicker: DatePicker, year: Int, month: Int, day: Int) {
-        viewModel.selectDate(datePicker.getDate())
+        setNavigationResult(datePicker.getDate(), DATE_RESULT_KEY)
     }
 
-    fun DatePicker.getDate(): Date {
+    private fun DatePicker.getDate(): Date {
         val calendar = Calendar.getInstance()
         calendar.set(year, month, dayOfMonth)
         return calendar.time
