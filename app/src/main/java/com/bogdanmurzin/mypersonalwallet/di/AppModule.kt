@@ -13,11 +13,21 @@ import dagger.hilt.components.SingletonComponent
 @InstallIn(SingletonComponent::class)
 object AppModule {
 
+    @Volatile
+    private var INSTANCE: AppDatabase? = null
+
     @Provides
     fun provideRatesDatabase(@ApplicationContext context: Context): AppDatabase =
-        Room.databaseBuilder(
-            context.applicationContext,
-            AppDatabase::class.java,
-            AppDatabase::class.simpleName!!
-        ).build()
+        INSTANCE ?: synchronized(this) {
+            val instance = Room.databaseBuilder(
+                context.applicationContext,
+                AppDatabase::class.java,
+                AppDatabase::class.simpleName!!
+            )
+                .build()
+            INSTANCE = instance
+            // return instance
+            instance
+        }
+
 }
