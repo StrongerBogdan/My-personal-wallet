@@ -16,15 +16,11 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.MyPersonalWallet"
         tools:targetApi="31">
-<!--        <activity-->
-<!--            android:name=".ui.activity.IconsActivity"-->
-<!--            android:exported="false" />-->
         <activity
             android:name="com.bogdanmurzin.mypersonalwallet.ui.activity.MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>

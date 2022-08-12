@@ -19,7 +19,8 @@ import com.bumptech.glide.Glide
 
 class MyMoneyTransactionRecyclerViewAdapter(
     private val onItemClicked: (TransactionItemUiModel) -> Unit,
-    private val showMenuDelete: (Boolean) -> Unit
+    private val showMenuDelete: (Boolean) -> Unit,
+    private val getAllSelectedItems: (List<TransactionItemUiModel>) -> Unit
 ) : ListAdapter<TransactionItemUiModel, RecyclerView.ViewHolder>(ItemDiffCallback) {
 
     var isEnabledDeleting = false
@@ -45,35 +46,29 @@ class MyMoneyTransactionRecyclerViewAdapter(
                         false
                     )
                 ).also { viewHolder ->
+                    // Set on short click listener
                     viewHolder.itemView.setOnClickListener {
                         val position = viewHolder.absoluteAdapterPosition
                         val item = getItem(position)
                         if (isEnabledDeleting) {
-                            // If this item is selected
+                            // If this item is already selected
                             if (itemSelectedList.contains(item)) {
-                                itemSelectedList.remove(item)
-                                item.selected = false
-                                // return imageView
-                                returnCategoryImageView(
-                                    viewHolder.binding.categoryIv,
-                                    item.category
-                                )
-                                if (itemSelectedList.isEmpty()) {
-                                    showMenuDelete(false)
-                                    isEnabledDeleting = false
-                                }
-                                // If this item is not selected
+                                unselectItem(viewHolder, item)
                             } else {
+                                // If this item is not selected
                                 selectItem(viewHolder, item)
                             }
+                            provideAllSelectedItems()
                         } else {
                             onItemClicked(item)
                         }
                     }
+                    // Set on long click listener
                     viewHolder.itemView.setOnLongClickListener {
                         val position = viewHolder.absoluteAdapterPosition
                         val item = getItem(position)
                         selectItem(viewHolder, item)
+                        provideAllSelectedItems()
                         true
                     }
                 }
@@ -86,6 +81,12 @@ class MyMoneyTransactionRecyclerViewAdapter(
                 (holder as HeaderViewHolder).bind(getItem(position) as HeaderItemUiModel)
             ITEM_TYPE_TRANSACTION ->
                 (holder as MoneyTransactionViewHolder).bind(getItem(position) as TransactionItemUiModel)
+                    .also {
+                        val item = getItem(position)
+                        if (item.isSelected) {
+                            selectItem(holder, item)
+                        }
+                    }
         }
     }
 
@@ -143,12 +144,37 @@ class MyMoneyTransactionRecyclerViewAdapter(
     ) {
         isEnabledDeleting = true
         itemSelectedList.add(item)
-        item.selected = true
+        item.isSelected = true
         holder.binding.categoryIv.setImageResource(R.drawable.ic_baseline_check)
         showMenuDelete(true)
     }
 
-    private fun returnCategoryImageView(categoryIv: ImageView, itemCategory: TrxCategoryUiModel) {
+    private fun unselectItem(
+        holder: MoneyTransactionViewHolder,
+        item: TransactionItemUiModel
+    ) {
+        itemSelectedList.remove(item)
+        item.isSelected = false
+        // return imageView
+        setCategoryImageView(
+            holder.binding.categoryIv,
+            item.category
+        )
+        if (itemSelectedList.isEmpty()) {
+            showMenuDelete(false)
+            isEnabledDeleting = false
+        }
+    }
+
+    private fun provideAllSelectedItems() {
+        // Clear item selected list. There may be excess after removal
+        itemSelectedList =
+            itemSelectedList.filter { currentList.contains(it) } as MutableList<TransactionItemUiModel>
+        // Provide data
+        getAllSelectedItems(itemSelectedList)
+    }
+
+    private fun setCategoryImageView(categoryIv: ImageView, itemCategory: TrxCategoryUiModel) {
         Glide.with(categoryIv.context)
             .load(Uri.parse(itemCategory.imageUri))
             .override(Constants.ICON_SCALE, Constants.ICON_SCALE)

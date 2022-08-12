@@ -1,20 +1,17 @@
 package com.bogdanmurzin.mypersonalwallet.ui.fragment
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bogdanmurzin.mypersonalwallet.R
 import com.bogdanmurzin.mypersonalwallet.adapter.MyMoneyTransactionRecyclerViewAdapter
-import com.bogdanmurzin.mypersonalwallet.common.Constants
 import com.bogdanmurzin.mypersonalwallet.databinding.FragmentMoneyTransactionsListBinding
 import com.bogdanmurzin.mypersonalwallet.ui.viewmodel.MainViewModel
 import com.bogdanmurzin.mypersonalwallet.util.Event
@@ -38,6 +35,14 @@ class FragmentMoneyTransactions : Fragment() {
             viewModel.openBottomSheet(Event.OpenPreviewScreen(0))
         }
 
+        viewModel.transactionsList.observe(viewLifecycleOwner) {
+            recyclerAdapter.submitList(it)
+        }
+
+        viewModel.action.observe(viewLifecycleOwner) {
+            findNavController().navigate(it)
+        }
+
         return binding.root
     }
 
@@ -47,7 +52,11 @@ class FragmentMoneyTransactions : Fragment() {
             // Create dialog with editing Transaction
             viewModel.openBottomSheet(Event.OpenPreviewScreen(it.id))
         }, { show ->
+            // Update toolbar (show/unshow delete icon)
             updateToolbar(show)
+            viewModel.isDeleteEnabled = show
+        }, { selectedList ->
+            viewModel.selectedTransactionsIds = selectedList.map { it.id }
         })
         val recyclerView = binding.transactionRecycler
         recyclerView.adapter = recyclerAdapter
@@ -61,24 +70,21 @@ class FragmentMoneyTransactions : Fragment() {
         viewModel.updateTransactions()
 
         binding.toolbar.inflateMenu(R.menu.delete_menu)
-        updateToolbar(false)
+        updateToolbar(viewModel.isDeleteEnabled)
 
         binding.toolbar.setOnMenuItemClickListener {
             when (it.itemId) {
                 R.id.m_delete -> {
                     delete()
-                    true
+
+                    viewModel.isDeleteEnabled = true
+                    viewModel.isDeleteEnabled
                 }
-                else -> false
+                else -> {
+                    viewModel.isDeleteEnabled = false
+                    viewModel.isDeleteEnabled
+                }
             }
-        }
-
-        viewModel.transactionsList.observe(viewLifecycleOwner) {
-            recyclerAdapter.submitList(it)
-        }
-
-        viewModel.action.observe(viewLifecycleOwner) {
-            findNavController().navigate(it)
         }
     }
 
@@ -87,19 +93,19 @@ class FragmentMoneyTransactions : Fragment() {
             .setTitle("Delete")
             .setMessage("Do you want to delete the transactions")
             .setPositiveButton("Delete") { _, _ ->
-                val selectedList = recyclerAdapter.currentList.filter { it.selected }.map { it.id }
+                val selectedList =
+                    recyclerAdapter.currentList.filter { it.isSelected }.map { it.id }
                 viewModel.deleteTransactions(selectedList)
-                recyclerAdapter.isEnabledDeleting = false
-                updateToolbar(false)
+                viewModel.isDeleteEnabled = false
+                recyclerAdapter.isEnabledDeleting = viewModel.isDeleteEnabled
+                updateToolbar(viewModel.isDeleteEnabled)
             }
             .setNegativeButton("Cancel") { _, _ -> }
         alertDialog.show()
     }
 
-    fun updateToolbar(show: Boolean) {
+    private fun updateToolbar(show: Boolean) {
         val saveItem = binding.toolbar.menu.findItem(R.id.m_delete)
         saveItem.isVisible = show
-
     }
-
 }

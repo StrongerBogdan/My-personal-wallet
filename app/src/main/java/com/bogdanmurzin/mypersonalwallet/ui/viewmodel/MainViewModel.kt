@@ -26,6 +26,9 @@ class MainViewModel @Inject constructor(
     private val _action: SingleLiveEvent<NavDirections> = SingleLiveEvent()
     val action: SingleLiveEvent<NavDirections> = _action
 
+    var isDeleteEnabled = false
+    var selectedTransactionsIds = listOf<Int>()
+
     fun updateTransactions() {
         viewModelScope.launch {
             getTransactionList()
@@ -34,7 +37,9 @@ class MainViewModel @Inject constructor(
 
     private suspend fun getTransactionList() {
         return getTransactionsUseCase.invoke()
-            .map { list -> transactionUiMapper.toListOfTransactionUiModel(list) }
+            .map { list ->
+                transactionUiMapper.toListOfTransactionUiModel(list, selectedTransactionsIds)
+            }
             .collect { _transactionList.postValue(it) }
     }
 

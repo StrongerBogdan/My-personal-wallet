@@ -12,8 +12,9 @@ data class TransactionItemUiModel(
     val date: Date,
     val description: String?,
     val accountType: AccountType,
-    val transactionAmount: String
+    val transactionAmount: String,
+    var isSelected: Boolean = false
 ) : RecyclerMultiTypeItem {
     override val type = MyMoneyTransactionRecyclerViewAdapter.ITEM_TYPE_TRANSACTION
-    var selected: Boolean = false
+
 }
