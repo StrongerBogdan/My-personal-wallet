@@ -14,6 +14,7 @@ import com.bogdanmurzin.mypersonalwallet.data.transaction_recycer_items.Transact
 import com.bogdanmurzin.mypersonalwallet.mapper.TransactionUiMapper
 import com.bogdanmurzin.mypersonalwallet.mapper.TrxCategoryUiMapper
 import com.bogdanmurzin.mypersonalwallet.ui.fragment.BottomSheetAddTransactionDirections
+import com.bogdanmurzin.mypersonalwallet.util.CategoryArg
 import com.bogdanmurzin.mypersonalwallet.util.EditingState
 import com.bogdanmurzin.mypersonalwallet.util.Event
 import com.bogdanmurzin.mypersonalwallet.util.TransactionComponentsFormatter
@@ -48,8 +49,8 @@ class AddTransactionViewModel @Inject constructor(
     var loadedTransaction: LiveData<TransactionItemUiModel> = _loadedTransaction
     private val _doneAction: SingleLiveEvent<Result<Boolean>> = SingleLiveEvent()
     var doneAction: LiveData<Result<Boolean>> = _doneAction
-    private val _action: SingleLiveEvent<NavDirections> = SingleLiveEvent()
-    var action: LiveData<NavDirections> = _action
+    private val _action: SingleLiveEvent<Event> = SingleLiveEvent()
+    var action: LiveData<Event> = _action
 
     private fun addTransaction(transaction: Transaction) {
         viewModelScope.launch(Dispatchers.IO) {
@@ -147,15 +148,8 @@ class AddTransactionViewModel @Inject constructor(
         }
     }
 
-    fun openCategoryChoose(event: Event) {
-        if (event is Event.OpenCategoryScreen) {
-            _action.postValue(
-                BottomSheetAddTransactionDirections
-                    .actionBottomSheetAddTransactionToAccountChooseDialogFragment(
-                        event.type
-                    )
-            )
-        }
+    fun openCategoryChoose(type: CategoryArg) {
+        _action.postValue(Event.OpenCategoryScreen(type))
     }
 
     @Suppress("UNCHECKED_CAST")

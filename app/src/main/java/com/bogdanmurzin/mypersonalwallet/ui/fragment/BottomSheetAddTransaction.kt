@@ -145,18 +145,25 @@ class BottomSheetAddTransaction : BottomSheetDialogFragment() {
             }
         }
         // clicked on cardView
-        viewModel.action.observe(viewLifecycleOwner) {
-            findNavController().navigate(it)
+        viewModel.action.observe(viewLifecycleOwner) { event ->
+            if (event is Event.OpenCategoryScreen) {
+                findNavController().navigate(
+                    BottomSheetAddTransactionDirections
+                        .actionBottomSheetAddTransactionToAccountChooseDialogFragment(
+                            event.type
+                        )
+                )
+            }
         }
     }
 
     private fun setupCardViews() {
         binding.accountCv.setOnClickListener {
-            viewModel.openCategoryChoose(Event.OpenCategoryScreen(CategoryArg.ACCOUNT_TYPE))
+            viewModel.openCategoryChoose(CategoryArg.ACCOUNT_TYPE)
         }
 
         binding.transactionCv.setOnClickListener {
-            viewModel.openCategoryChoose(Event.OpenCategoryScreen(CategoryArg.TRANSACTION_CATEGORY))
+            viewModel.openCategoryChoose(CategoryArg.TRANSACTION_CATEGORY)
         }
     }
 

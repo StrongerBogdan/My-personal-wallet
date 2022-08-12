@@ -32,15 +32,20 @@ class FragmentMoneyTransactions : Fragment() {
     ): View {
         binding = FragmentMoneyTransactionsListBinding.inflate(layoutInflater)
         binding.fab.setOnClickListener {
-            viewModel.openBottomSheet(Event.OpenPreviewScreen(0))
+            viewModel.openBottomSheet(0)
         }
 
         viewModel.transactionsList.observe(viewLifecycleOwner) {
             recyclerAdapter.submitList(it)
         }
 
-        viewModel.action.observe(viewLifecycleOwner) {
-            findNavController().navigate(it)
+        viewModel.action.observe(viewLifecycleOwner) { event ->
+            if (event is Event.OpenPreviewScreen) {
+                findNavController().navigate(
+                    FragmentMoneyTransactionsDirections
+                        .actionFragmentMoneyTransactionsToBottomSheetAddTransaction(event.id)
+                )
+            }
         }
 
         return binding.root
@@ -50,7 +55,7 @@ class FragmentMoneyTransactions : Fragment() {
         val layoutManager: RecyclerView.LayoutManager = LinearLayoutManager(requireContext())
         recyclerAdapter = MyMoneyTransactionRecyclerViewAdapter({
             // Create dialog with editing Transaction
-            viewModel.openBottomSheet(Event.OpenPreviewScreen(it.id))
+            viewModel.openBottomSheet(it.id)
         }, { show ->
             // Update toolbar (show/unshow delete icon)
             updateToolbar(show)
