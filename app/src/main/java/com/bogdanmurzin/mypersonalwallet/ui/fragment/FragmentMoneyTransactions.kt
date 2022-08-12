@@ -94,10 +94,14 @@ class FragmentMoneyTransactions : Fragment() {
     }
 
     private fun delete() {
+        val deleteString = requireContext().getString(R.string.delete)
+        val messageString = requireContext().getString(R.string.delete_message)
+        val cancelString = requireContext().getString(R.string.cancel)
+
         val alertDialog = AlertDialog.Builder(requireContext())
-            .setTitle("Delete")
-            .setMessage("Do you want to delete the transactions")
-            .setPositiveButton("Delete") { _, _ ->
+            .setTitle(deleteString)
+            .setMessage(messageString)
+            .setPositiveButton(deleteString) { _, _ ->
                 val selectedList =
                     recyclerAdapter.currentList.filter { it.isSelected }.map { it.id }
                 viewModel.deleteTransactions(selectedList)
@@ -105,7 +109,7 @@ class FragmentMoneyTransactions : Fragment() {
                 recyclerAdapter.isEnabledDeleting = viewModel.isDeleteEnabled
                 updateToolbar(viewModel.isDeleteEnabled)
             }
-            .setNegativeButton("Cancel") { _, _ -> }
+            .setNegativeButton(cancelString) { _, _ -> }
         alertDialog.show()
     }
 
