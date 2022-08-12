@@ -1,8 +1,6 @@
 package com.bogdanmurzin.data.db
 
-import android.content.Context
 import androidx.room.Database
-import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import com.bogdanmurzin.data.entity.AccountTypeEntity
@@ -19,23 +17,4 @@ abstract class AppDatabase : RoomDatabase() {
     abstract fun transactionsDao(): TransactionsDao
     abstract fun accountTypeDao(): AccountTypeDao
     abstract fun transactionCategoryDao(): TransactionCategoryDao
-
-    companion object {
-        @Volatile
-        private var INSTANCE: AppDatabase? = null
-
-        fun getDatabase(context: Context): AppDatabase {
-            return INSTANCE ?: synchronized(this) {
-                val instance = Room.databaseBuilder(
-                    context.applicationContext,
-                    AppDatabase::class.java,
-                    AppDatabase::class.simpleName!!
-                )
-                    .build()
-                INSTANCE = instance
-                // return instance
-                instance
-            }
-        }
-    }
 }

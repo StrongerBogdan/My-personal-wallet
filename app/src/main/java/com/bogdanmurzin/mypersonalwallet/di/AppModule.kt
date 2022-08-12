@@ -1,6 +1,7 @@
 package com.bogdanmurzin.mypersonalwallet.di
 
 import android.content.Context
+import androidx.room.Room
 import com.bogdanmurzin.data.db.AppDatabase
 import dagger.Module
 import dagger.Provides
@@ -14,5 +15,9 @@ object AppModule {
 
     @Provides
     fun provideRatesDatabase(@ApplicationContext context: Context): AppDatabase =
-        AppDatabase.getDatabase(context)
+        Room.databaseBuilder(
+            context.applicationContext,
+            AppDatabase::class.java,
+            AppDatabase::class.simpleName!!
+        ).build()
 }
