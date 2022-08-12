@@ -19,14 +19,13 @@ class ImageRecyclerViewAdapter(
 ) :
     ListAdapter<CategoryEntity, ImageRecyclerViewAdapter.ViewHolder>(ItemDiffCallback) {
 
-    lateinit var context: Context
     var selectedPosition = RecyclerView.NO_POSITION
 
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int
     ): ImageRecyclerViewAdapter.ViewHolder {
-        context = parent.context
+        parent.context
         return ViewHolder(
             RvCategoryItemBinding
                 .inflate(LayoutInflater.from(parent.context), parent, false)
@@ -54,7 +53,7 @@ class ImageRecyclerViewAdapter(
 
         fun bind(entity: CategoryEntity) {
             binding.titleAccountType.text = entity.title
-            Glide.with(context)
+            Glide.with(binding.root.context)
                 .load(entity.imageUri)
                 .override(ICON_SCALE, ICON_SCALE)
                 .into(binding.ivIcon)

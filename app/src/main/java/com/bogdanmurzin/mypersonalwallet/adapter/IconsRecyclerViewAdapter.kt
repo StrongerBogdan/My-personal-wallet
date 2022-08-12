@@ -14,13 +14,10 @@ import com.bumptech.glide.Glide
 class IconsRecyclerViewAdapter(val onIconClicked: (Icon) -> Unit) :
     ListAdapter<Icon, IconsRecyclerViewAdapter.ViewHolder>(ItemDiffCallback) {
 
-    lateinit var context: Context
-
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int
     ): IconsRecyclerViewAdapter.ViewHolder {
-        context = parent.context
         return ViewHolder(
             RecyclerItemImageBinding
                 .inflate(LayoutInflater.from(parent.context), parent, false)
@@ -39,7 +36,7 @@ class IconsRecyclerViewAdapter(val onIconClicked: (Icon) -> Unit) :
         RecyclerView.ViewHolder(binding.root) {
 
         fun bind(icon: Icon) {
-            Glide.with(context)
+            Glide.with(binding.root.context)
                 .load(icon.preview)
                 .override(ICON_SCALE, ICON_SCALE)
                 .into(binding.ivIcon)
