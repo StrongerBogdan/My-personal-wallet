@@ -1,6 +1,7 @@
 package com.bogdanmurzin.mypersonalwallet.ui.viewmodel
 
 import androidx.lifecycle.*
+import androidx.navigation.NavDirections
 import com.bogdanmurzin.domain.entities.AccountType
 import com.bogdanmurzin.domain.entities.Transaction
 import com.bogdanmurzin.domain.usecases.account_type.GetAccountTypeUseCase
@@ -12,11 +13,14 @@ import com.bogdanmurzin.mypersonalwallet.data.TrxCategoryUiModel
 import com.bogdanmurzin.mypersonalwallet.data.transaction_recycer_items.TransactionItemUiModel
 import com.bogdanmurzin.mypersonalwallet.mapper.TransactionUiMapper
 import com.bogdanmurzin.mypersonalwallet.mapper.TrxCategoryUiMapper
+import com.bogdanmurzin.mypersonalwallet.ui.fragment.BottomSheetAddTransactionDirections
 import com.bogdanmurzin.mypersonalwallet.util.EditingState
+import com.bogdanmurzin.mypersonalwallet.util.Event
 import com.bogdanmurzin.mypersonalwallet.util.TransactionComponentsFormatter
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import java.io.IOException
 import java.util.*
 import javax.inject.Inject
 
@@ -42,7 +46,10 @@ class AddTransactionViewModel @Inject constructor(
     val selectedDate: LiveData<Date> = _selectedDate
     private val _loadedTransaction: MutableLiveData<TransactionItemUiModel> = MutableLiveData()
     var loadedTransaction: LiveData<TransactionItemUiModel> = _loadedTransaction
-
+    private val _doneAction: SingleLiveEvent<Result<Boolean>> = SingleLiveEvent()
+    var doneAction: LiveData<Result<Boolean>> = _doneAction
+    private val _action: SingleLiveEvent<NavDirections> = SingleLiveEvent()
+    var action: LiveData<NavDirections> = _action
 
     private fun addTransaction(transaction: Transaction) {
         viewModelScope.launch(Dispatchers.IO) {
@@ -72,7 +79,7 @@ class AddTransactionViewModel @Inject constructor(
         }
     }
 
-    fun onBottomSheetDoneBtnClicked(
+    fun validateData(
         id: Int,
         rawTransactionAmount: String,
         rawDescription: String,
@@ -122,6 +129,31 @@ class AddTransactionViewModel @Inject constructor(
                 trxCategoryUiMapper.toTrxCategoryUiModel(
                     getTrxCategoryUseCase.invoke(trxCategoryId)
                 )
+            )
+        }
+    }
+
+    fun onBottomSheetDoneBtnClicked(
+        id: Int,
+        rawTransactionAmount: String,
+        rawDescription: String,
+        editingState: EditingState
+    ) {
+        val result = validateData(id, rawTransactionAmount, rawDescription, editingState)
+        if (result) {
+            _doneAction.postValue(Result.success(true))
+        } else {
+            _doneAction.postValue(Result.failure(IOException("Not all fields have filled")))
+        }
+    }
+
+    fun openCategoryChoose(event: Event) {
+        if (event is Event.OpenCategoryScreen) {
+            _action.postValue(
+                BottomSheetAddTransactionDirections
+                    .actionBottomSheetAddTransactionToAccountChooseDialogFragment(
+                        event.type
+                    )
             )
         }
     }

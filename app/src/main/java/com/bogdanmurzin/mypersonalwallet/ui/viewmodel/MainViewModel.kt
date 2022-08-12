@@ -24,7 +24,7 @@ class MainViewModel @Inject constructor(
     private val _transactionList: MutableLiveData<List<TransactionItemUiModel>> = MutableLiveData()
     var transactionsList: LiveData<List<TransactionItemUiModel>> = _transactionList
     private val _action: SingleLiveEvent<NavDirections> = SingleLiveEvent()
-    val action: SingleLiveEvent<NavDirections> = _action
+    val action: LiveData<NavDirections> = _action
 
     var isDeleteEnabled = false
     var selectedTransactionsIds = listOf<Int>()
@@ -45,7 +45,7 @@ class MainViewModel @Inject constructor(
 
     fun openBottomSheet(event: Event) {
         if (event is Event.OpenPreviewScreen) {
-            action.postValue(
+            _action.postValue(
                 FragmentMoneyTransactionsDirections
                     .actionFragmentMoneyTransactionsToBottomSheetAddTransaction(event.id)
             )

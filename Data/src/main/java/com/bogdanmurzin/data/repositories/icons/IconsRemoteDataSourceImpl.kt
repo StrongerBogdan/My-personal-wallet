@@ -16,7 +16,7 @@ class IconsRemoteDataSourceImpl @Inject constructor(
         val iconsObservable = service.getIcons(query)
         return iconsObservable.flatMap { result ->
             if (result.totalCount == 0) {
-                Observable.just(Result.failure(IllegalStateException()))
+                Observable.just(Result.failure(IllegalStateException("found zero results")))
             } else {
                 Observable.just(Result.success(mapper.toIconList(result)))
             }

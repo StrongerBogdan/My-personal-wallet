@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.text.format.DateFormat
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -22,6 +23,7 @@ import com.bogdanmurzin.mypersonalwallet.databinding.FragmentBottomsheetAddTrans
 import com.bogdanmurzin.mypersonalwallet.ui.viewmodel.AddTransactionViewModel
 import com.bogdanmurzin.mypersonalwallet.util.CategoryArg
 import com.bogdanmurzin.mypersonalwallet.util.EditingState
+import com.bogdanmurzin.mypersonalwallet.util.Event
 import com.bogdanmurzin.mypersonalwallet.util.getNavigationResultLiveData
 import com.bumptech.glide.Glide
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
@@ -70,18 +72,12 @@ class BottomSheetAddTransaction : BottomSheetDialogFragment() {
         // When the user clicks the Done button, use the data here to either update
         // an existing item or create a new one
         binding.doneBtn.setOnClickListener {
-            if (viewModel.onBottomSheetDoneBtnClicked(
-                    args.transactionId,
-                    binding.transactionAmountTv.text.toString(),
-                    binding.transactionDescription.text.toString(),
-                    editingState
-                )
-            ) {
-                // if validated and added/edited successfully
-                findNavController().navigateUp()
-            }
-
-            // TODO add canceling dialog
+            viewModel.onBottomSheetDoneBtnClicked(
+                args.transactionId,
+                binding.transactionAmountTv.text.toString(),
+                binding.transactionDescription.text.toString(),
+                editingState
+            )
         }
 
         setupViewModel()
@@ -137,25 +133,30 @@ class BottomSheetAddTransaction : BottomSheetDialogFragment() {
                 DateFormat.getDateFormat(requireContext().applicationContext)
             binding.datePicker.text = dateFormat.format(date)
         }
+        // clicked on Done btn result
+        viewModel.doneAction.observe(viewLifecycleOwner) { result ->
+            result.onSuccess {
+                // if validated and added/edited successfully
+                findNavController().navigateUp()
+            }
+            result.onFailure {
+                Log.e(Constants.TAG, "setupViewModel: ${it.message} ")
+                // TODO add canceling dialog
+            }
+        }
+        // clicked on cardView
+        viewModel.action.observe(viewLifecycleOwner) {
+            findNavController().navigate(it)
+        }
     }
 
     private fun setupCardViews() {
         binding.accountCv.setOnClickListener {
-            findNavController().navigate(
-                BottomSheetAddTransactionDirections
-                    .actionBottomSheetAddTransactionToAccountChooseDialogFragment(
-                        CategoryArg.ACCOUNT_TYPE
-                    )
-            )
+            viewModel.openCategoryChoose(Event.OpenCategoryScreen(CategoryArg.ACCOUNT_TYPE))
         }
 
         binding.transactionCv.setOnClickListener {
-            findNavController().navigate(
-                BottomSheetAddTransactionDirections
-                    .actionBottomSheetAddTransactionToAccountChooseDialogFragment(
-                        CategoryArg.TRANSACTION_CATEGORY
-                    )
-            )
+            viewModel.openCategoryChoose(Event.OpenCategoryScreen(CategoryArg.TRANSACTION_CATEGORY))
         }
     }
 
