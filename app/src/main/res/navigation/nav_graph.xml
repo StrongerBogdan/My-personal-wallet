@@ -39,7 +39,6 @@
             android:id="@+id/datePickerFragment"
             android:name="com.bogdanmurzin.mypersonalwallet.ui.fragment.DatePickerFragment"
             android:label="DatePickerFragment" />
-        <!--        TODO DELETE? -->
         <argument
             android:name="transactionId"
             android:defaultValue="0"
@@ -127,7 +126,6 @@
                 android:id="@+id/action_bottomSheetAddTrxCategory_to_addSubcategoryFragment"
                 app:destination="@id/addSubcategoryFragment" />
         </dialog>
-        <!--            TODO DELETE?!-->
         <argument
             android:name="trxCategoryId"
             android:defaultValue="0"
