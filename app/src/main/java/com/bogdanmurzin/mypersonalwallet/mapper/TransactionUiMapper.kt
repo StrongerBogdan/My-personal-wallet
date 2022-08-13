@@ -11,12 +11,11 @@ class TransactionUiMapper @Inject constructor(private val trxCategoryUiMapper: T
     fun toListOfTransactionUiModel(
         list: List<Transaction>,
         selectedTransactions: List<Int> = listOf()
-    ): List<TransactionItemUiModel> {
-        return list.map {
+    ): List<TransactionItemUiModel> =
+        list.map {
             val isSelected = selectedTransactions.contains(it.id)
             toTransactionUiModel(it, isSelected)
-        }
-    }
+        }.sortedByDescending { it.date }
 
     fun toTransactionUiModel(
         item: Transaction,
