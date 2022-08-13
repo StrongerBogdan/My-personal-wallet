@@ -1,8 +1,10 @@
 package com.bogdanmurzin.mypersonalwallet.di
 
 import android.content.Context
+import android.content.SharedPreferences
 import androidx.room.Room
 import com.bogdanmurzin.data.db.AppDatabase
+import com.bogdanmurzin.mypersonalwallet.common.Constants.PREF_THEME_COLOR
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -29,5 +31,10 @@ object AppModule {
             // return instance
             instance
         }
+
+    @Provides
+    fun provideSharedPreference(@ApplicationContext context: Context): SharedPreferences {
+        return context.getSharedPreferences(PREF_THEME_COLOR, Context.MODE_PRIVATE)
+    }
 
 }
