@@ -147,12 +147,18 @@ class BottomSheetAddTransaction : BottomSheetDialogFragment() {
         // clicked on cardView
         viewModel.action.observe(viewLifecycleOwner) { event ->
             if (event is Event.OpenCategoryScreen) {
-                findNavController().navigate(
-                    BottomSheetAddTransactionDirections
-                        .actionBottomSheetAddTransactionToAccountChooseDialogFragment(
-                            event.type
-                        )
-                )
+                if (event.type == CategoryArg.ACCOUNT_TYPE) {
+                    findNavController().navigate(
+                        BottomSheetAddTransactionDirections
+                            .actionBottomSheetAddTransactionToAccountTypeChooseDialogFragment()
+                    )
+                }
+                if (event.type == CategoryArg.TRANSACTION_CATEGORY){
+                    findNavController().navigate(
+                        BottomSheetAddTransactionDirections
+                            .actionBottomSheetAddTransactionToTrxCategoryChooseDialogFragment()
+                    )
+                }
             }
         }
     }
