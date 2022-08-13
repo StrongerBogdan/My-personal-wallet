@@ -1,12 +1,10 @@
 package com.bogdanmurzin.mypersonalwallet.ui.viewmodel
 
 import androidx.lifecycle.*
-import androidx.navigation.NavDirections
 import com.bogdanmurzin.domain.usecases.transaction.DeleteTransactionsUseCase
 import com.bogdanmurzin.domain.usecases.transaction.GetTransactionsUseCase
 import com.bogdanmurzin.mypersonalwallet.data.transaction_recycer_items.TransactionItemUiModel
 import com.bogdanmurzin.mypersonalwallet.mapper.TransactionUiMapper
-import com.bogdanmurzin.mypersonalwallet.ui.fragment.FragmentMoneyTransactionsDirections
 import com.bogdanmurzin.mypersonalwallet.util.Event
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -51,6 +49,10 @@ class MainViewModel @Inject constructor(
         viewModelScope.launch(Dispatchers.IO) {
             deleteTransactionsUseCase.invoke(transactionIds)
         }
+    }
+
+    fun startSettingsActivity() {
+        _action.postValue(Event.OpenSettingsActivity)
     }
 
     @Suppress("UNCHECKED_CAST")

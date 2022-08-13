@@ -1,5 +1,6 @@
 package com.bogdanmurzin.mypersonalwallet.ui.fragment
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -13,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bogdanmurzin.mypersonalwallet.R
 import com.bogdanmurzin.mypersonalwallet.adapter.MyMoneyTransactionRecyclerViewAdapter
 import com.bogdanmurzin.mypersonalwallet.databinding.FragmentMoneyTransactionsListBinding
+import com.bogdanmurzin.mypersonalwallet.ui.activity.SettingsActivity
 import com.bogdanmurzin.mypersonalwallet.ui.viewmodel.MainViewModel
 import com.bogdanmurzin.mypersonalwallet.util.Event
 import dagger.hilt.android.AndroidEntryPoint
@@ -44,6 +46,11 @@ class FragmentMoneyTransactions : Fragment() {
                 findNavController().navigate(
                     FragmentMoneyTransactionsDirections
                         .actionFragmentMoneyTransactionsToBottomSheetAddTransaction(event.id)
+                )
+            }
+            if (event is Event.OpenSettingsActivity) {
+                startActivity(
+                    Intent(requireContext(), SettingsActivity::class.java)
                 )
             }
         }
@@ -85,6 +92,10 @@ class FragmentMoneyTransactions : Fragment() {
                     viewModel.isDeleteEnabled = true
                     viewModel.isDeleteEnabled
                 }
+                R.id.m_settings -> {
+                    viewModel.startSettingsActivity()
+                    true
+                }
                 else -> {
                     viewModel.isDeleteEnabled = false
                     viewModel.isDeleteEnabled
@@ -114,7 +125,9 @@ class FragmentMoneyTransactions : Fragment() {
     }
 
     private fun updateToolbar(show: Boolean) {
-        val saveItem = binding.toolbar.menu.findItem(R.id.m_delete)
-        saveItem.isVisible = show
+        val deleteIcon = binding.toolbar.menu.findItem(R.id.m_delete)
+        val settingIcon = binding.toolbar.menu.findItem(R.id.m_settings)
+        deleteIcon.isVisible = show
+        settingIcon.isVisible = !show
     }
 }

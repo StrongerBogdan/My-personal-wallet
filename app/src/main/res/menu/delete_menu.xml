@@ -6,4 +6,9 @@
         android:title="@string/delete"
         app:showAsAction="always"
         android:icon="@drawable/ic_baseline_delete"/>
+    <item
+        android:id="@+id/m_settings"
+        android:title="@string/settings"
+        app:showAsAction="ifRoom"
+        android:icon="@drawable/ic_baseline_settings"/>
 </menu>
