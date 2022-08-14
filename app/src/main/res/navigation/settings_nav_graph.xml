@@ -16,6 +16,6 @@
     </fragment>
     <dialog
         android:id="@+id/chooseColorFragmentDialog"
-        android:name="com.bogdanmurzin.mypersonalwallet.ui.fragment.ChoosColorFragmentDialog"
+        android:name="com.bogdanmurzin.mypersonalwallet.ui.fragment.ChooseColorFragmentDialog"
         android:label="ChooseColorFragmentDialog" />
 </navigation>

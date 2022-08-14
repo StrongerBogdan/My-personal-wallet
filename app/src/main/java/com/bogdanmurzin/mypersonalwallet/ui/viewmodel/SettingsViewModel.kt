@@ -5,7 +5,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.bogdanmurzin.mypersonalwallet.common.Constants.DEFAULT_COLOR
+import com.bogdanmurzin.mypersonalwallet.common.Constants.DEFAULT_THEME
 import com.bogdanmurzin.mypersonalwallet.common.Constants.PREF_THEME_COLOR
 import com.bogdanmurzin.mypersonalwallet.util.Event
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -22,7 +22,7 @@ class SettingsViewModel @Inject constructor(
     val action: LiveData<Event> = _action
 
     init {
-        _themeColor.value = preferences.getInt(PREF_THEME_COLOR, DEFAULT_COLOR)
+        _themeColor.value = preferences.getInt(PREF_THEME_COLOR, DEFAULT_THEME)
     }
 
     fun changeThemeColor(themeId: Int) {
@@ -34,7 +34,7 @@ class SettingsViewModel @Inject constructor(
         with(preferences.edit()) {
             putInt(
                 PREF_THEME_COLOR,
-                _themeColor.value ?: DEFAULT_COLOR
+                _themeColor.value ?: DEFAULT_THEME
             )
             apply()
         }

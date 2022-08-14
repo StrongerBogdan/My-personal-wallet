@@ -3,7 +3,6 @@ package com.bogdanmurzin.mypersonalwallet.ui.fragment
 import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -15,8 +14,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bogdanmurzin.mypersonalwallet.R
 import com.bogdanmurzin.mypersonalwallet.adapter.MyMoneyTransactionRecyclerViewAdapter
-import com.bogdanmurzin.mypersonalwallet.common.Constants
-import com.bogdanmurzin.mypersonalwallet.common.Constants.TAG
 import com.bogdanmurzin.mypersonalwallet.databinding.FragmentMoneyTransactionsListBinding
 import com.bogdanmurzin.mypersonalwallet.ui.activity.SettingsActivity
 import com.bogdanmurzin.mypersonalwallet.ui.viewmodel.MainViewModel
@@ -41,9 +38,8 @@ class FragmentMoneyTransactions : Fragment() {
         savedInstanceState: Bundle?
     ): View {
 
-        val themeResId = preferences.getInt(Constants.PREF_THEME_COLOR, Constants.DEFAULT_COLOR)
-        requireContext().theme.applyStyle(themeResId, true)
-//        requireContext().theme.applyStyle(R.style.OverlayPrimaryColorGreen, true)
+//        val themeResId = preferences.getInt(PREF_THEME_COLOR, DEFAULT_THEME)
+//        requireContext().theme.applyStyle(themeResId, true)
 
         binding = FragmentMoneyTransactionsListBinding.inflate(layoutInflater)
 

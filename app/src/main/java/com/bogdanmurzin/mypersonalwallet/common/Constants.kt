@@ -1,11 +1,12 @@
 package com.bogdanmurzin.mypersonalwallet.common
 
 import android.graphics.Color
+import com.bogdanmurzin.mypersonalwallet.R
 
 object Constants {
     // Shared prefs
     const val PREF_THEME_COLOR = "shared_pref_theme_color"
-    const val DEFAULT_COLOR = Color.GRAY
+    const val DEFAULT_THEME = R.style.OverlayPrimaryColorGreen
 
     // UI
     const val ICON_SCALE = 100
@@ -20,6 +21,7 @@ object Constants {
 
     // Result keys
     const val COLOR_RESULT = "color_result"
+    const val SETTINGS_RESULT = "settings_result"
     const val DATE_RESULT_KEY = "date_result_key"
     const val TRX_CATEGORY_RESULT_KEY = "trx_category_result_key"
     const val ACCOUNT_TYPE_RESULT_KEY = "account_type_result_key"

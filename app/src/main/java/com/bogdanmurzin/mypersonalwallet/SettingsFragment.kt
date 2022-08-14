@@ -7,8 +7,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.ColorInt
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.content.res.AppCompatResources
-import androidx.core.graphics.drawable.DrawableCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -65,7 +63,6 @@ class SettingsFragment : Fragment() {
             theme.resolveAttribute(android.R.attr.colorPrimary, typedValue, true)
             @ColorInt val color = typedValue.data
 
-            // changeButtonColor(color)
             binding.settingsThemeColor.background.setTint(color)
             binding.toolbar.background.setTint(color)
         }
@@ -79,17 +76,5 @@ class SettingsFragment : Fragment() {
 
     }
 
-    private fun changeButtonColor(color: Int) {
-        val unwrappedDrawable =
-            AppCompatResources.getDrawable(requireContext(), R.drawable.round_rect_shape_recycler)
-        if (unwrappedDrawable != null) {
-            val wrappedDrawable = DrawableCompat.wrap(unwrappedDrawable)
-            DrawableCompat.setTint(wrappedDrawable, color)
-
-            binding.settingsThemeColor.background = wrappedDrawable
-        }
-
-
-    }
 
 }

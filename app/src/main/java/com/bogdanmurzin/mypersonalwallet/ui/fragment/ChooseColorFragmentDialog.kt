@@ -11,7 +11,7 @@ import com.bogdanmurzin.mypersonalwallet.common.Constants
 import com.bogdanmurzin.mypersonalwallet.databinding.DialogFragmentColorPickerBinding
 import com.bogdanmurzin.mypersonalwallet.util.setNavigationResult
 
-class ChoosColorFragmentDialog : DialogFragment() {
+class ChooseColorFragmentDialog : DialogFragment() {
 
     private lateinit var binding: DialogFragmentColorPickerBinding
     private lateinit var colorBtn1: Button
@@ -43,10 +43,10 @@ class ChoosColorFragmentDialog : DialogFragment() {
             returnThemeId(R.style.OverlayPrimaryColorGreen)
         }
         colorBtn2.setOnClickListener {
-            returnThemeId(R.style.OverlayPrimaryColorBlue)
+            returnThemeId(R.style.OverlayPrimaryColorPurple)
         }
         colorBtn3.setOnClickListener {
-            returnThemeId(R.style.OverlayPrimaryColorBlack)
+            returnThemeId(R.style.OverlayPrimaryColorCoral)
         }
         colorBtn4.setOnClickListener {
             returnThemeId(R.style.OverlayPrimaryColorOrange)

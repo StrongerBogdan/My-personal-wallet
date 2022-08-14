@@ -4,8 +4,6 @@ import android.content.SharedPreferences
 import androidx.lifecycle.*
 import com.bogdanmurzin.domain.usecases.transaction.DeleteTransactionsUseCase
 import com.bogdanmurzin.domain.usecases.transaction.GetTransactionsUseCase
-import com.bogdanmurzin.mypersonalwallet.common.Constants.DEFAULT_COLOR
-import com.bogdanmurzin.mypersonalwallet.common.Constants.PREF_THEME_COLOR
 import com.bogdanmurzin.mypersonalwallet.data.transaction_recycer_items.TransactionItemUiModel
 import com.bogdanmurzin.mypersonalwallet.mapper.TransactionUiMapper
 import com.bogdanmurzin.mypersonalwallet.util.Event
