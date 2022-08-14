@@ -28,7 +28,9 @@
         app:layout_constraintTop_toBottomOf="@+id/toolbar"
         app:layout_constraintBottom_toBottomOf="parent"
         tools:context=".ui.fragment.FragmentMoneyTransactions"
-        tools:listitem="@layout/rv_item_transaction" />
+        tools:listitem="@layout/rv_item_transaction"
+        android:paddingBottom="64dp"
+        android:clipToPadding="false"/>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fab"
