@@ -34,6 +34,6 @@ interface TransactionCategoryDao {
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insert(trxCategory: TransactionCategoryEntity)
 
-    @Query("Update transaction_category SET title = :titleNew WHERE title = :titleOld")
-    fun update(titleNew: String, titleOld: String)
+    @Query("Update transaction_category SET title = :titleNew, transaction_pic_uri = :imageUri WHERE title = :titleOld")
+    fun update(titleNew: String, titleOld: String, imageUri: String)
 }

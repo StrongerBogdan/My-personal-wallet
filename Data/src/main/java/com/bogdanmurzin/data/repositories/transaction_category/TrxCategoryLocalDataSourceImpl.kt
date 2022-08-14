@@ -67,7 +67,7 @@ class TrxCategoryLocalDataSourceImpl @Inject constructor(
         withContext(dispatcher) {
             val trxCategoryOld = getTrxCategoryById(trxCategory.id)
             transactionCategoryDao.update(
-                trxCategory.title, trxCategoryOld.title
+                trxCategory.title, trxCategoryOld.title, trxCategory.imageUri
             )
         }
 }
