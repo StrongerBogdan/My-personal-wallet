@@ -5,7 +5,7 @@
     android:layout_height="200dp">
 
 
-    <androidx.appcompat.widget.AppCompatButton
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/color_pick_1"
         android:layout_width="@dimen/color_picker_size"
         android:layout_height="@dimen/color_picker_size"
@@ -13,44 +13,44 @@
         android:layout_marginTop="@dimen/color_picker_margin"
         android:layout_marginEnd="@dimen/color_picker_margin"
         android:background="@drawable/round_rect_shape_recycler"
-        android:backgroundTint="@color/green"
+        android:theme="@style/OverlayPrimaryColorGreen"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/color_pick_2"
         app:layout_constraintHorizontal_chainStyle="packed"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <androidx.appcompat.widget.AppCompatButton
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/color_pick_2"
         android:layout_width="@dimen/color_picker_size"
         android:layout_height="@dimen/color_picker_size"
         android:layout_margin="@dimen/color_picker_margin"
         android:background="@drawable/round_rect_shape_recycler"
-        android:backgroundTint="@color/neon_blue"
+        android:theme="@style/OverlayPrimaryColorPurple"
         app:layout_constraintBottom_toBottomOf="@+id/color_pick_1"
         app:layout_constraintEnd_toStartOf="@+id/color_pick_3"
         app:layout_constraintStart_toEndOf="@+id/color_pick_1"
         app:layout_constraintTop_toTopOf="@+id/color_pick_1" />
 
-    <androidx.appcompat.widget.AppCompatButton
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/color_pick_3"
         android:layout_width="@dimen/color_picker_size"
         android:layout_height="@dimen/color_picker_size"
         android:layout_margin="@dimen/color_picker_margin"
         android:background="@drawable/round_rect_shape_recycler"
-        android:backgroundTint="@color/black"
+        android:theme="@style/OverlayPrimaryColorCoral"
         app:layout_constraintBottom_toBottomOf="@+id/color_pick_2"
         app:layout_constraintEnd_toStartOf="@+id/color_pick_4"
         app:layout_constraintStart_toEndOf="@+id/color_pick_2"
         app:layout_constraintTop_toTopOf="@+id/color_pick_2" />
 
-    <androidx.appcompat.widget.AppCompatButton
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/color_pick_4"
         android:layout_width="@dimen/color_picker_size"
         android:layout_height="@dimen/color_picker_size"
         android:layout_margin="@dimen/color_picker_margin"
         android:background="@drawable/round_rect_shape_recycler"
-        android:backgroundTint="@color/orange"
+        android:theme="@style/OverlayPrimaryColorOrange"
         app:layout_constraintBottom_toBottomOf="@+id/color_pick_3"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/color_pick_3"
