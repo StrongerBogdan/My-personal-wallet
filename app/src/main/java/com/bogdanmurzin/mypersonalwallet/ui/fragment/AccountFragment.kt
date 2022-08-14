@@ -19,11 +19,9 @@ import com.google.android.material.appbar.MaterialToolbar
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class AccountFragment : Fragment() {
+class AccountFragment : CategoryFragment() {
 
     private lateinit var binding: FragmentAccountBinding
-    private lateinit var imageRecyclerAdapter: ImageRecyclerViewAdapter
-    private var toolbar: MaterialToolbar? = null
 
     private val viewModel: AccountViewModel by viewModels()
 
@@ -31,30 +29,12 @@ class AccountFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+        super.onCreateView(inflater, container, savedInstanceState)
         binding = FragmentAccountBinding.inflate(layoutInflater)
-        toolbar = activity?.findViewById(R.id.toolbar)
-        toolbar?.let { toolbar ->
-            updateToolbar(true)
-            toolbar.setOnMenuItemClickListener {
-                when (it.itemId) {
-                    R.id.m_add -> {
-                        add()
-                        true
-                    }
-                    else -> false
-                }
-            }
-        }
-
         return binding.root
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        observeViewModel()
-        setupRecycler()
-    }
-
-    private fun observeViewModel() {
+    override fun observeViewModel() {
         // show all user account types
         viewModel.accountTypes.observe(viewLifecycleOwner) {
             imageRecyclerAdapter.submitList(it)
@@ -65,7 +45,7 @@ class AccountFragment : Fragment() {
         }
     }
 
-    private fun setupRecycler() {
+    override fun setupRecycler() {
         val layoutMngr: RecyclerView.LayoutManager =
             GridLayoutManager(requireContext(), SPAN_COUNT)
 
@@ -79,21 +59,7 @@ class AccountFragment : Fragment() {
         }
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
-        updateToolbar(false)
-    }
-
-    private fun add() {
+    override fun add() {
         viewModel.openBottomSheet(Event.OpenPreviewScreen(0))
     }
-
-    fun updateToolbar(isShowAddIcon: Boolean) {
-        toolbar?.let {
-            it.menu.findItem(R.id.m_add).isVisible = isShowAddIcon
-            it.menu.findItem(R.id.m_delete).isVisible = !isShowAddIcon
-            it.menu.findItem(R.id.m_settings).isVisible = !isShowAddIcon
-        }
-    }
-
 }

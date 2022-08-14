@@ -80,7 +80,6 @@ class BottomSheetAddTrxCategory : BottomSheetDialogFragment() {
         // Loaded Transaction categories for editing
         viewModel.loadedTrxCategories.observe(viewLifecycleOwner) { trxCategory ->
             binding.trxcategoryCategory.setText(trxCategory.title)
-            // TODO select subcategory chip
         }
         viewModel.currentImageUrl.observe(viewLifecycleOwner) { imageUrl ->
             if (imageUrl != null) {
