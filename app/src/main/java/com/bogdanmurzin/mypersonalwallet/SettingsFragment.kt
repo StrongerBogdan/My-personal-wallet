@@ -34,6 +34,7 @@ class SettingsFragment : Fragment() {
             setSupportActionBar(binding.toolbar)
             supportActionBar?.setDisplayHomeAsUpEnabled(true)
             supportActionBar?.setDisplayShowHomeEnabled(true)
+            supportActionBar?.setHomeAsUpIndicator(androidx.appcompat.R.drawable.abc_ic_ab_back_material)
         }
 
         binding.settingsThemeColor.setOnClickListener {
@@ -58,7 +59,7 @@ class SettingsFragment : Fragment() {
         viewModel.themeColor.observe(viewLifecycleOwner) { themeResId ->
             // get color and set the theme
             val theme = requireContext().theme
-            theme.applyStyle(themeResId, true)
+//            theme.applyStyle(themeResId, true)
             val typedValue = TypedValue()
             theme.resolveAttribute(android.R.attr.colorPrimary, typedValue, true)
             @ColorInt val color = typedValue.data

@@ -21,10 +21,6 @@ class SettingsViewModel @Inject constructor(
     private val _action: SingleLiveEvent<Event> = SingleLiveEvent()
     val action: LiveData<Event> = _action
 
-    init {
-        _themeColor.value = preferences.getInt(PREF_THEME_COLOR, DEFAULT_THEME)
-    }
-
     fun changeThemeColor(themeId: Int) {
         _themeColor.value = themeId
         updatePreferences()

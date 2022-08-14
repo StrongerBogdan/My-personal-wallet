@@ -11,7 +11,7 @@
         android:layout_height="?attr/actionBarSize"
         android:background="?attr/colorPrimary"
         android:elevation="4dp"
-        android:theme="@style/M_ThemeOverlay_Toolbar"
+        style="@style/M_ThemeOverlay_Toolbar"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -48,10 +48,10 @@
                 android:layout_height="@dimen/color_picker_size"
                 android:layout_margin="@dimen/medium_margin"
                 android:background="@drawable/round_rect_shape_recycler"
+                android:backgroundTint="?attr/colorPrimary"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                tools:backgroundTint="@color/green" />
+                app:layout_constraintTop_toTopOf="parent" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

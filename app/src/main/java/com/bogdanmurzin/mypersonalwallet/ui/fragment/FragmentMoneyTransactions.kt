@@ -38,9 +38,6 @@ class FragmentMoneyTransactions : Fragment() {
         savedInstanceState: Bundle?
     ): View {
 
-//        val themeResId = preferences.getInt(PREF_THEME_COLOR, DEFAULT_THEME)
-//        requireContext().theme.applyStyle(themeResId, true)
-
         binding = FragmentMoneyTransactionsListBinding.inflate(layoutInflater)
 
         binding.fab.setOnClickListener {
@@ -138,4 +135,6 @@ class FragmentMoneyTransactions : Fragment() {
         deleteIcon.isVisible = show
         settingIcon.isVisible = !show
     }
+
+
 }

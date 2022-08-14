@@ -54,6 +54,7 @@ class ChooseColorFragmentDialog : DialogFragment() {
     }
 
     private fun returnThemeId(themeId: Int) {
+        activity?.recreate()
         setNavigationResult(themeId, Constants.COLOR_RESULT)
         findNavController().navigateUp()
     }
