@@ -15,6 +15,7 @@ import com.bogdanmurzin.mypersonalwallet.common.Constants.SPAN_COUNT
 import com.bogdanmurzin.mypersonalwallet.databinding.FragmentAccountBinding
 import com.bogdanmurzin.mypersonalwallet.ui.viewmodel.AccountViewModel
 import com.bogdanmurzin.mypersonalwallet.util.Event
+import com.google.android.material.appbar.MaterialToolbar
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -22,6 +23,7 @@ class AccountFragment : Fragment() {
 
     private lateinit var binding: FragmentAccountBinding
     private lateinit var imageRecyclerAdapter: ImageRecyclerViewAdapter
+    private var toolbar: MaterialToolbar? = null
 
     private val viewModel: AccountViewModel by viewModels()
 
@@ -30,9 +32,10 @@ class AccountFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentAccountBinding.inflate(layoutInflater)
-        with(binding.accountTypeLayout.toolbar) {
-            inflateMenu(R.menu.add_menu)
-            setOnMenuItemClickListener {
+        toolbar = activity?.findViewById(R.id.toolbar)
+        toolbar?.let { toolbar ->
+            updateToolbar(true)
+            toolbar.setOnMenuItemClickListener {
                 when (it.itemId) {
                     R.id.m_add -> {
                         add()
@@ -76,8 +79,21 @@ class AccountFragment : Fragment() {
         }
     }
 
+    override fun onDestroy() {
+        super.onDestroy()
+        updateToolbar(false)
+    }
+
     private fun add() {
         viewModel.openBottomSheet(Event.OpenPreviewScreen(0))
+    }
+
+    fun updateToolbar(isShowAddIcon: Boolean) {
+        toolbar?.let {
+            it.menu.findItem(R.id.m_add).isVisible = isShowAddIcon
+            it.menu.findItem(R.id.m_delete).isVisible = !isShowAddIcon
+            it.menu.findItem(R.id.m_settings).isVisible = !isShowAddIcon
+        }
     }
 
 }

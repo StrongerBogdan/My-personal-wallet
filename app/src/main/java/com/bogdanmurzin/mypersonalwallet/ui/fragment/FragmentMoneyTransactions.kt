@@ -18,6 +18,7 @@ import com.bogdanmurzin.mypersonalwallet.databinding.FragmentMoneyTransactionsLi
 import com.bogdanmurzin.mypersonalwallet.ui.activity.SettingsActivity
 import com.bogdanmurzin.mypersonalwallet.ui.viewmodel.MainViewModel
 import com.bogdanmurzin.mypersonalwallet.util.Event
+import com.google.android.material.appbar.MaterialToolbar
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
@@ -27,6 +28,7 @@ class FragmentMoneyTransactions : Fragment() {
 
     private lateinit var binding: FragmentMoneyTransactionsListBinding
     private lateinit var recyclerAdapter: MyMoneyTransactionRecyclerViewAdapter
+    private var toolbar: MaterialToolbar? = null
 
     @Inject
     lateinit var preferences: SharedPreferences
@@ -86,10 +88,12 @@ class FragmentMoneyTransactions : Fragment() {
         // Update recycler when we return from another tab
         viewModel.updateTransactions()
 
-        binding.toolbar.inflateMenu(R.menu.delete_menu)
+        toolbar = activity?.findViewById(R.id.toolbar)
+        toolbar?.menu?.findItem(R.menu.add_menu)?.isVisible = false
+        //toolbar?.inflateMenu(R.menu.delete_menu)
         updateToolbar(viewModel.isDeleteEnabled)
 
-        binding.toolbar.setOnMenuItemClickListener {
+        toolbar?.setOnMenuItemClickListener {
             when (it.itemId) {
                 R.id.m_delete -> {
                     delete()
@@ -130,10 +134,10 @@ class FragmentMoneyTransactions : Fragment() {
     }
 
     private fun updateToolbar(show: Boolean) {
-        val deleteIcon = binding.toolbar.menu.findItem(R.id.m_delete)
-        val settingIcon = binding.toolbar.menu.findItem(R.id.m_settings)
-        deleteIcon.isVisible = show
-        settingIcon.isVisible = !show
+        val deleteIcon = toolbar?.menu?.findItem(R.id.m_delete)
+        val settingIcon = toolbar?.menu?.findItem(R.id.m_settings)
+        deleteIcon?.isVisible = show
+        settingIcon?.isVisible = !show
     }
 
 
