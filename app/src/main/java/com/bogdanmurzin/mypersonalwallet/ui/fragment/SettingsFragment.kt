@@ -1,4 +1,4 @@
-package com.bogdanmurzin.mypersonalwallet
+package com.bogdanmurzin.mypersonalwallet.ui.fragment
 
 import android.os.Bundle
 import android.util.TypedValue
