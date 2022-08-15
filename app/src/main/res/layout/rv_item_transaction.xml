@@ -5,6 +5,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:theme="@style/DarkCardView"
+    style="@style/DarkCardView"
     android:layout_marginTop="1dp"
     android:elevation="1dp">
 
@@ -12,16 +14,29 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <ImageView
-            android:id="@+id/category_iv"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:contentDescription="@string/category_icon_desc"
-            android:padding="8dp"
+        <androidx.cardview.widget.CardView
+            android:id="@+id/category_iv_container"
+            android:layout_width="@dimen/icon_size"
+            android:layout_height="@dimen/icon_size"
+            android:layout_gravity="center"
+            android:layout_margin="@dimen/small_half_margin"
+            app:cardCornerRadius="50dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:id="@+id/category_iv"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:contentDescription="@string/category_icon_desc"
+            android:layout_gravity="center"
+            android:scaleType="centerInside"
+            android:padding="8dp"
+            android:background="@color/white"
             tools:src="@drawable/ic_shopping_cart" />
+        </androidx.cardview.widget.CardView>
+
 
         <TextView
             android:id="@+id/category_tv"
@@ -29,7 +44,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/small_margin"
             android:textSize="@dimen/subtitle_text_size"
-            app:layout_constraintStart_toEndOf="@id/category_iv"
+            app:layout_constraintStart_toEndOf="@id/category_iv_container"
             app:layout_constraintTop_toTopOf="parent"
             tools:text="Groceries" />
 

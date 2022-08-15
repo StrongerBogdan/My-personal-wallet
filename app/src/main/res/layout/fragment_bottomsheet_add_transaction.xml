@@ -23,17 +23,18 @@
 
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/account_cv"
+        style="@style/LightCardView"
         android:layout_width="0dp"
         android:layout_height="100dp"
         android:layout_marginStart="@dimen/small_margin"
         android:layout_marginTop="@dimen/small_half_margin"
         android:layout_marginEnd="@dimen/small_margin"
         android:layout_marginBottom="@dimen/small_half_margin"
+        android:theme="@style/LightCardView"
         app:layout_constraintBottom_toTopOf="@+id/transaction_amount_tv"
         app:layout_constraintEnd_toStartOf="@+id/guideline"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/materialTextView"
-        tools:backgroundTint="@color/material_dynamic_primary50">
+        app:layout_constraintTop_toBottomOf="@+id/materialTextView">
 
         <include
             android:id="@+id/account_type"
@@ -54,15 +55,16 @@
 
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/transaction_cv"
+        style="@style/LightCardView"
         android:layout_width="0dp"
         android:layout_height="100dp"
         android:layout_marginStart="@dimen/small_margin"
         android:layout_marginEnd="@dimen/small_margin"
+        android:theme="@style/LightCardView"
         app:layout_constraintBottom_toBottomOf="@+id/account_cv"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/guideline"
-        app:layout_constraintTop_toTopOf="@+id/account_cv"
-        tools:backgroundTint="@color/material_dynamic_primary70">
+        app:layout_constraintTop_toTopOf="@+id/account_cv">
 
         <include
             android:id="@+id/transaction_category_type"
@@ -110,14 +112,14 @@
         android:layout_height="0dp"
         android:layout_marginStart="@dimen/medium_margin"
         android:layout_marginEnd="@dimen/medium_margin"
-        android:backgroundTint="@color/gray"
-        android:textColor="@color/white"
+        android:backgroundTint="?attr/colorSecondary"
+        android:textColor="?attr/colorOnSecondary"
         android:textSize="@dimen/caption_text_size"
         app:layout_constraintBottom_toBottomOf="@+id/transaction_description"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@+id/guideline2"
         app:layout_constraintTop_toTopOf="@+id/transaction_amount_tv"
-        tools:text="123213123"/>
+        tools:text="123213123" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline2"
@@ -136,12 +138,12 @@
         android:layout_marginTop="@dimen/small_half_margin"
         android:layout_marginEnd="@dimen/medium_margin"
         android:layout_marginBottom="@dimen/small_half_margin"
-        android:backgroundTint="@color/black"
+        android:backgroundTint="?attr/colorPrimary"
         android:gravity="center"
         android:paddingTop="@dimen/small_margin"
         android:paddingBottom="@dimen/small_margin"
         android:text="@string/done"
-        android:textColor="@color/white"
+        android:textColor="?attr/colorOnPrimary"
         android:textSize="@dimen/button_text_size"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

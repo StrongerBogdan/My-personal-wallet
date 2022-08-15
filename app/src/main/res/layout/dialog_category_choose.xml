@@ -5,14 +5,13 @@
     android:layout_width="350dp"
     android:layout_height="wrap_content">
 
-    <TextView
+    <com.google.android.material.textview.MaterialTextView
         android:id="@+id/title_account_choose"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/medium_margin"
         android:text="@string/choose_account"
         android:textAlignment="center"
-        android:textColor="@color/black"
         android:textSize="@dimen/headline5_text_size"
         app:layout_constraintBottom_toTopOf="@id/account_recycler"
         app:layout_constraintEnd_toEndOf="parent"
@@ -60,12 +59,12 @@
         android:layout_marginTop="@dimen/small_margin"
         android:layout_marginEnd="@dimen/medium_margin"
         android:layout_marginBottom="@dimen/small_half_margin"
-        android:backgroundTint="@color/black"
+        android:backgroundTint="?attr/colorPrimary"
         android:gravity="center"
         android:paddingTop="@dimen/small_margin"
         android:paddingBottom="@dimen/small_margin"
         android:text="@string/done"
-        android:textColor="@color/white"
+        android:textColor="?attr/colorOnPrimary"
         android:textSize="@dimen/button_text_size"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

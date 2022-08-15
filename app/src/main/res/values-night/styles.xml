@@ -1,45 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <style name="Divider">
-        <item name="android:background">?android:attr/listDivider</item>
+    <style name="DarkCardView" parent="CardView.Dark">
+        <item name="cardBackgroundColor">@color/gray_dark</item>
     </style>
 
-    <style name="Divider.Horizontal" parent="Divider">
-        <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">10dp</item>
 
-    </style>
-
-    <style name="LightCardView" parent="CardView.Dark">
-        <item name="cardBackgroundColor">@color/grayish_white</item>
-        <item name="android:textColor">@color/gray_dark</item>
-    </style>
-
-    <style name="Divider.Vertical" parent="Divider">
-        <item name="android:layout_width">10dp</item>
-        <item name="android:layout_height">match_parent</item>
-    </style>
-
-    <style name="AppTheme.FullScreenDialog" parent="Theme.MaterialComponents.Light.Dialog">
-        <item name="colorPrimaryDark">?attr/colorPrimaryDark</item>
-        <item name="colorAccent">?attr/colorAccent</item>
-        <item name="colorPrimary">?attr/colorPrimary</item>
-        <item name="android:windowIsFloating">false</item>
-        <item name="android:windowBackground">@android:color/white</item>
-        <item name="actionMenuTextColor">?attr/colorAccent</item>
-    </style>
-
-    <style name="M_ThemeOverlay_Toolbar" parent="ThemeOverlay.MaterialComponents.Toolbar.Primary">
-        <!-- color used by navigation icon and overflow icon -->
-        <item name="colorOnPrimary">?attr/colorOnPrimary</item>
-        <item name="titleTextColor">?attr/colorOnPrimary</item>
+    <style name="DarkCardView1" parent="">
+        <item name="cardBackgroundColor">@color/gray_dark</item>
 
     </style>
 
     <style name="OverlayPrimaryColorGreen">
-        <item name="colorPrimary">@color/green</item>
-        <item name="colorPrimaryVariant">@color/green_dark</item>
+        <item name="colorPrimary">@color/green_light</item>
+        <item name="colorPrimaryVariant">@color/green</item>
         <item name="colorOnPrimary">@color/grayish_white</item>
         <item name="colorSecondary">@color/orange</item>
         <item name="colorOnSecondary">@color/black</item>
@@ -68,8 +42,8 @@
     </style>
 
     <style name="OverlayPrimaryColorPurple">
-        <item name="colorPrimary">@color/violet</item>
-        <item name="colorPrimaryVariant">@color/violet_dark</item>
+        <item name="colorPrimary">@color/violet_light</item>
+        <item name="colorPrimaryVariant">@color/violet</item>
         <item name="colorOnPrimary">@color/grayish_white</item>
         <item name="colorSecondary">@color/light_blue</item>
         <item name="colorOnSecondary">@color/black</item>

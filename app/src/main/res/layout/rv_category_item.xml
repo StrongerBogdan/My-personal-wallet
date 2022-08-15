@@ -24,7 +24,7 @@
             android:layout_height="match_parent"
             android:layout_gravity="center"
             android:scaleType="centerInside"
-            tools:background="@android:color/system_accent1_400"
+            android:background="@color/white"
             tools:ignore="ContentDescription"
             tools:src="@drawable/ic_example" />
 

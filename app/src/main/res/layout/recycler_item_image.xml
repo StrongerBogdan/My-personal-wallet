@@ -23,7 +23,7 @@
             android:layout_gravity="center"
             android:src="@drawable/ic_example"
             android:scaleType="centerInside"
-            tools:background="@android:color/holo_orange_light"
+            android:background="@color/white"
             tools:ignore="ContentDescription" />
 
     </androidx.cardview.widget.CardView>
