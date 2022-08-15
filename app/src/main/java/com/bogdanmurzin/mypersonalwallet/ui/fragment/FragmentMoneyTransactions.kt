@@ -2,13 +2,17 @@ package com.bogdanmurzin.mypersonalwallet.ui.fragment
 
 import android.content.Intent
 import android.content.SharedPreferences
+import android.content.res.Configuration
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentContainerView
 import androidx.fragment.app.viewModels
+import androidx.navigation.findNavController
+import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -19,6 +23,7 @@ import com.bogdanmurzin.mypersonalwallet.ui.activity.SettingsActivity
 import com.bogdanmurzin.mypersonalwallet.ui.viewmodel.MainViewModel
 import com.bogdanmurzin.mypersonalwallet.util.Event
 import com.google.android.material.appbar.MaterialToolbar
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
@@ -39,11 +44,19 @@ class FragmentMoneyTransactions : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-
         binding = FragmentMoneyTransactionsListBinding.inflate(layoutInflater)
 
+        val isLandscape = requireContext().resources.getBoolean(R.bool.isLandscape)
+        if (isLandscape) {
+            landscapeConfigure()
+        }
+
         binding.fab.setOnClickListener {
-            viewModel.openBottomSheet(0)
+            if (isLandscape) {
+                viewModel.openAddTransactionMasterDetail(0)
+            } else {
+                viewModel.openBottomSheet(0)
+            }
         }
 
         viewModel.transactionsList.observe(viewLifecycleOwner) {
@@ -57,6 +70,12 @@ class FragmentMoneyTransactions : Fragment() {
                         .actionFragmentMoneyTransactionsToBottomSheetAddTransaction(event.id)
                 )
             }
+            if (event is Event.OpenMasterDetailLayout) {
+                val navHostFragment =
+                    activity?.supportFragmentManager?.findFragmentById(R.id.details_fragment_container) as NavHostFragment
+                val navController = navHostFragment.navController
+                //navController.navigate(R.id.action_fragmentMoneyTransactions_to_bottomSheetAddTransaction)
+            }
             if (event is Event.OpenSettingsActivity) {
                 startActivity(Intent(requireContext(), SettingsActivity::class.java))
             }
@@ -65,11 +84,37 @@ class FragmentMoneyTransactions : Fragment() {
         return binding.root
     }
 
+    private fun landscapeConfigure() {
+        // Whe have fab in the rail view
+        activity?.let { act ->
+            binding.fab.visibility = View.GONE
+
+            val railFab = act.findViewById<FloatingActionButton>(R.id.fab)
+            railFab.setOnClickListener {
+                val isLandscape = requireContext().resources.getBoolean(R.bool.isLandscape)
+                if (isLandscape) {
+                    viewModel.openAddTransactionMasterDetail(0)
+                } else {
+                    viewModel.openBottomSheet(0)
+                }
+
+            }
+            val detailsContainer =
+                act.findViewById<FragmentContainerView>(R.id.details_fragment_container)
+            detailsContainer.visibility = View.VISIBLE
+        }
+    }
+
     private fun setupRecycler() {
         val layoutManager: RecyclerView.LayoutManager = LinearLayoutManager(requireContext())
         recyclerAdapter = MyMoneyTransactionRecyclerViewAdapter({
             // Create dialog with editing Transaction
-            viewModel.openBottomSheet(it.id)
+            val isLandscape = requireContext().resources.getBoolean(R.bool.isLandscape)
+            if (isLandscape) {
+                viewModel.openAddTransactionMasterDetail(it.id)
+            } else {
+                viewModel.openBottomSheet(it.id)
+            }
         }, { show ->
             // Update toolbar (show/unshow delete icon)
             updateToolbar(show)
