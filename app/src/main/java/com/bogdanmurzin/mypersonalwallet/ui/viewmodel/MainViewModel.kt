@@ -47,10 +47,6 @@ class MainViewModel @Inject constructor(
         _action.postValue(Event.OpenPreviewScreen(id))
     }
 
-    fun openAddTransactionMasterDetail(id: Int) {
-        _action.postValue(Event.OpenMasterDetailLayout(id))
-    }
-
     fun deleteTransactions(transactionIds: List<Int>) {
         viewModelScope.launch(Dispatchers.IO) {
             deleteTransactionsUseCase.invoke(transactionIds)

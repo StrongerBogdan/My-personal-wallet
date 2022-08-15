@@ -12,51 +12,46 @@
         tools:layout="@layout/fragment_money_transactions_list">
         <action
             android:id="@+id/action_fragmentMoneyTransactions_to_bottomSheetAddTransaction"
-            app:destination="@id/add_transaction_graph">
+            app:destination="@id/add_transaction_flow_graph" />
+    </fragment>
+    <navigation
+        android:id="@+id/add_transaction_flow_graph"
+        app:startDestination="@id/bottomSheetAddTransaction">
+        <dialog
+            android:id="@+id/bottomSheetAddTransaction"
+            android:name="com.bogdanmurzin.mypersonalwallet.ui.fragment.BottomSheetAddTransaction"
+            android:label="BottomSheetAddTransaction">
             <argument
                 android:name="transactionId"
                 android:defaultValue="0"
                 app:argType="integer" />
-        </action>
-    </fragment>
-    <!--    <navigation-->
-    <!--        android:id="@+id/add_transaction_flow_graph"-->
-    <!--        app:startDestination="@id/bottomSheetAddTransaction">-->
-    <!--        <dialog-->
-    <!--            android:id="@+id/bottomSheetAddTransaction"-->
-    <!--            android:name="com.bogdanmurzin.mypersonalwallet.ui.fragment.BottomSheetAddTransaction"-->
-    <!--            android:label="BottomSheetAddTransaction">-->
-    <!--            <argument-->
-    <!--                android:name="transactionId"-->
-    <!--                android:defaultValue="0"-->
-    <!--                app:argType="integer" />-->
-    <!--            <action-->
-    <!--                android:id="@+id/action_bottomSheetAddTransaction_to_datePickerFragment"-->
-    <!--                app:destination="@id/datePickerFragment" />-->
-    <!--            <action-->
-    <!--                android:id="@+id/action_bottomSheetAddTransaction_to_accountTypeChooseDialogFragment"-->
-    <!--                app:destination="@id/accountTypeChooseDialogFragment" />-->
-    <!--            <action-->
-    <!--                android:id="@+id/action_bottomSheetAddTransaction_to_trxCategoryChooseDialogFragment"-->
-    <!--                app:destination="@id/trxCategoryChooseDialogFragment" />-->
-    <!--        </dialog>-->
-    <!--        <dialog-->
-    <!--            android:id="@+id/datePickerFragment"-->
-    <!--            android:name="com.bogdanmurzin.mypersonalwallet.ui.fragment.DatePickerFragment"-->
-    <!--            android:label="DatePickerFragment" />-->
-    <!--        <argument-->
-    <!--            android:name="transactionId"-->
-    <!--            android:defaultValue="0"-->
-    <!--            app:argType="integer" />-->
-    <!--        <dialog-->
-    <!--            android:id="@+id/accountTypeChooseDialogFragment"-->
-    <!--            android:name="com.bogdanmurzin.mypersonalwallet.ui.fragment.AccountTypeChooseDialogFragment"-->
-    <!--            android:label="AccountTypeChooseDialogFragment" />-->
-    <!--        <dialog-->
-    <!--            android:id="@+id/trxCategoryChooseDialogFragment"-->
-    <!--            android:name="com.bogdanmurzin.mypersonalwallet.ui.fragment.TrxCategoryChooseDialogFragment"-->
-    <!--            android:label="TrxCategoryChooseDialogFragment" />-->
-    <!--    </navigation>-->
+            <action
+                android:id="@+id/action_bottomSheetAddTransaction_to_datePickerFragment"
+                app:destination="@id/datePickerFragment" />
+            <action
+                android:id="@+id/action_bottomSheetAddTransaction_to_accountTypeChooseDialogFragment"
+                app:destination="@id/accountTypeChooseDialogFragment" />
+            <action
+                android:id="@+id/action_bottomSheetAddTransaction_to_trxCategoryChooseDialogFragment"
+                app:destination="@id/trxCategoryChooseDialogFragment" />
+        </dialog>
+        <dialog
+            android:id="@+id/datePickerFragment"
+            android:name="com.bogdanmurzin.mypersonalwallet.ui.fragment.DatePickerFragment"
+            android:label="DatePickerFragment" />
+        <argument
+            android:name="transactionId"
+            android:defaultValue="0"
+            app:argType="integer" />
+        <dialog
+            android:id="@+id/accountTypeChooseDialogFragment"
+            android:name="com.bogdanmurzin.mypersonalwallet.ui.fragment.AccountTypeChooseDialogFragment"
+            android:label="AccountTypeChooseDialogFragment" />
+        <dialog
+            android:id="@+id/trxCategoryChooseDialogFragment"
+            android:name="com.bogdanmurzin.mypersonalwallet.ui.fragment.TrxCategoryChooseDialogFragment"
+            android:label="TrxCategoryChooseDialogFragment" />
+    </navigation>
     <fragment
         android:id="@+id/accountFragment"
         android:name="com.bogdanmurzin.mypersonalwallet.ui.fragment.AccountFragment"
@@ -70,7 +65,7 @@
         android:id="@+id/categoryFragment"
         android:name="com.bogdanmurzin.mypersonalwallet.ui.fragment.TrxCategoryFragment"
         android:label="fragment_category"
-        tools:layout="@layout/fragment_category">
+        tools:layout="@layout/fragment_category" >
         <action
             android:id="@+id/action_categoryFragment_to_add_trx_category_flow_graph"
             app:destination="@id/add_trx_category_flow_graph" />
@@ -98,7 +93,7 @@
             android:id="@+id/iconsFragment"
             android:name="com.bogdanmurzin.mypersonalwallet.ui.fragment.IconsChooseFragment"
             android:label="activity_icons"
-            tools:layout="@layout/fragemnt_icons">
+            tools:layout="@layout/fragemnt_icons" >
             <argument
                 android:name="category"
                 app:argType="com.bogdanmurzin.mypersonalwallet.util.CategoryArg" />
@@ -111,7 +106,7 @@
             android:id="@+id/iconsFragment"
             android:name="com.bogdanmurzin.mypersonalwallet.ui.fragment.IconsChooseFragment"
             android:label="activity_icons"
-            tools:layout="@layout/fragemnt_icons">
+            tools:layout="@layout/fragemnt_icons" >
             <argument
                 android:name="category"
                 app:argType="com.bogdanmurzin.mypersonalwallet.util.CategoryArg" />
@@ -119,7 +114,7 @@
         <dialog
             android:id="@+id/bottomSheetAddTrxCategory"
             android:name="com.bogdanmurzin.mypersonalwallet.ui.fragment.BottomSheetAddTrxCategory"
-            android:label="BottomSheetAddTrxCategory">
+            android:label="BottomSheetAddTrxCategory" >
             <action
                 android:id="@+id/action_bottomSheetAddTrxCategory_to_iconsActivity"
                 app:destination="@id/iconsFragment" />
@@ -140,10 +135,4 @@
             android:name="com.bogdanmurzin.mypersonalwallet.ui.fragment.AddSubcategoryFragment"
             android:label="AddSubcategoryFragment" />
     </navigation>
-    <include app:graph="@navigation/add_transaction_graph">
-        <argument
-            android:name="transactionId"
-            android:defaultValue="0"
-            app:argType="integer" />
-    </include>
 </navigation>

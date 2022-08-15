@@ -36,7 +36,7 @@ import java.util.*
 class BottomSheetAddTransaction : BottomSheetDialogFragment() {
 
     private lateinit var binding: FragmentBottomsheetAddTransactionBinding
-    private val viewModel: AddTransactionViewModel by navGraphViewModels(R.id.add_transaction_graph) {
+    private val viewModel: AddTransactionViewModel by navGraphViewModels(R.id.add_transaction_flow_graph) {
         defaultViewModelProviderFactory
     }
 
