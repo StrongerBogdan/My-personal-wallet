@@ -100,9 +100,6 @@ class FragmentMoneyTransactions : Fragment() {
         viewModel.updateTransactions()
 
         toolbar = activity?.findViewById(R.id.toolbar)
-        toolbar?.menu?.findItem(R.menu.add_menu)?.isVisible = false
-        //toolbar?.inflateMenu(R.menu.delete_menu)
-        updateToolbar(viewModel.isDeleteEnabled)
 
         toolbar?.setOnMenuItemClickListener {
             when (it.itemId) {
@@ -122,6 +119,11 @@ class FragmentMoneyTransactions : Fragment() {
                 }
             }
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        updateToolbar(viewModel.isDeleteEnabled)
     }
 
     private fun delete() {
