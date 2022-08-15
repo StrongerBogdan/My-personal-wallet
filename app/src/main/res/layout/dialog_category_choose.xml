@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="350dp"
-    android:layout_height="450dp">
+    android:layout_height="wrap_content">
 
     <TextView
         android:id="@+id/title_account_choose"
@@ -23,7 +23,7 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/account_recycler"
         android:layout_width="wrap_content"
-        android:layout_height="300dp"
+        android:layout_height="100dp"
         android:layout_margin="@dimen/medium_margin"
         app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
         app:layout_constraintBottom_toTopOf="@id/subcategories_scroll"
@@ -36,8 +36,8 @@
         android:id="@+id/subcategories_scroll"
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:visibility="gone"
         android:scrollbars="none"
+        android:visibility="gone"
         app:layout_constraintBottom_toTopOf="@id/done_btn"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

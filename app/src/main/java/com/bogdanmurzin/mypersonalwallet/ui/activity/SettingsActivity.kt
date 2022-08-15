@@ -23,6 +23,12 @@ class SettingsActivity : AppCompatActivity() {
         theme.applyStyle(themeResId, true)
 
         binding = ActivitySettingsBinding.inflate(layoutInflater)
+
+        setSupportActionBar(binding.toolbar)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        supportActionBar?.setDisplayShowHomeEnabled(true)
+        supportActionBar?.setHomeAsUpIndicator(androidx.appcompat.R.drawable.abc_ic_ab_back_material)
+
         setContentView(binding.root)
     }
 

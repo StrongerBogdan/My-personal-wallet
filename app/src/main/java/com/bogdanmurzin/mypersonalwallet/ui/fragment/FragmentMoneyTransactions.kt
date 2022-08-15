@@ -19,6 +19,7 @@ import com.bogdanmurzin.mypersonalwallet.ui.activity.SettingsActivity
 import com.bogdanmurzin.mypersonalwallet.ui.viewmodel.MainViewModel
 import com.bogdanmurzin.mypersonalwallet.util.Event
 import com.google.android.material.appbar.MaterialToolbar
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
@@ -35,6 +36,10 @@ class FragmentMoneyTransactions : Fragment() {
 
     private val viewModel: MainViewModel by viewModels()
 
+    private val onFabClickListener = View.OnClickListener {
+        viewModel.openBottomSheet(0)
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -42,9 +47,7 @@ class FragmentMoneyTransactions : Fragment() {
 
         binding = FragmentMoneyTransactionsListBinding.inflate(layoutInflater)
 
-        binding.fab.setOnClickListener {
-            viewModel.openBottomSheet(0)
-        }
+        binding.fab.setOnClickListener(onFabClickListener)
 
         viewModel.transactionsList.observe(viewLifecycleOwner) {
             recyclerAdapter.submitList(it)
@@ -61,6 +64,14 @@ class FragmentMoneyTransactions : Fragment() {
                 startActivity(Intent(requireContext(), SettingsActivity::class.java))
             }
         }
+
+        val isLandscape = resources.getBoolean(R.bool.isLandscape)
+        if (isLandscape) {
+            binding.fab.visibility = View.GONE
+            activity?.findViewById<FloatingActionButton>(R.id.fab)
+                ?.setOnClickListener(onFabClickListener)
+        } else
+            binding.fab.visibility = View.VISIBLE
 
         return binding.root
     }
@@ -133,11 +144,12 @@ class FragmentMoneyTransactions : Fragment() {
         alertDialog.show()
     }
 
-    private fun updateToolbar(show: Boolean) {
+    private fun updateToolbar(showDelete: Boolean) {
         val deleteIcon = toolbar?.menu?.findItem(R.id.m_delete)
         val settingIcon = toolbar?.menu?.findItem(R.id.m_settings)
-        deleteIcon?.isVisible = show
-        settingIcon?.isVisible = !show
+        deleteIcon?.isVisible = showDelete
+        val isLandscape = resources.getBoolean(R.bool.isLandscape)
+        settingIcon?.isVisible = !showDelete && !isLandscape
     }
 
 

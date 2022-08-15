@@ -5,18 +5,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.bogdanmurzin.mypersonalwallet.R
 import com.bogdanmurzin.mypersonalwallet.adapter.ImageRecyclerViewAdapter
-import com.bogdanmurzin.mypersonalwallet.common.Constants
-import com.bogdanmurzin.mypersonalwallet.util.Event
 import com.google.android.material.appbar.MaterialToolbar
 
 abstract class CategoryFragment : Fragment() {
 
     protected lateinit var imageRecyclerAdapter: ImageRecyclerViewAdapter
-    protected var toolbar: MaterialToolbar? = null
+    private var toolbar: MaterialToolbar? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -53,7 +49,7 @@ abstract class CategoryFragment : Fragment() {
         updateToolbar(false)
     }
 
-    protected fun updateToolbar(isShowAddIcon: Boolean) {
+    private fun updateToolbar(isShowAddIcon: Boolean) {
         toolbar?.let {
             it.menu.findItem(R.id.m_add).isVisible = isShowAddIcon
             it.menu.findItem(R.id.m_delete).isVisible = !isShowAddIcon

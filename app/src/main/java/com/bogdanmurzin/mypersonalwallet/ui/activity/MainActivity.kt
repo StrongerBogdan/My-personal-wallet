@@ -2,6 +2,7 @@ package com.bogdanmurzin.mypersonalwallet.ui.activity
 
 import android.content.SharedPreferences
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener
+import android.content.res.Configuration
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.fragment.NavHostFragment
@@ -10,6 +11,7 @@ import com.bogdanmurzin.mypersonalwallet.R
 import com.bogdanmurzin.mypersonalwallet.common.Constants
 import com.bogdanmurzin.mypersonalwallet.common.Constants.PREF_THEME_COLOR
 import com.bogdanmurzin.mypersonalwallet.databinding.ActivityMainBinding
+import com.google.android.material.navigation.NavigationBarView
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
@@ -42,11 +44,17 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        binding.toolbar?.inflateMenu(R.menu.add_menu)
+        binding.toolbar.inflateMenu(R.menu.add_menu)
 
         val navHostFragment =
             supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
         val navController = navHostFragment.navController
-        binding.bottomNavView.setupWithNavController(navController)
+
+        (binding.bottomNavView as NavigationBarView).setupWithNavController(navController)
+    }
+
+    override fun onConfigurationChanged(newConfig: Configuration) {
+        super.onConfigurationChanged(newConfig)
+        recreate()
     }
 }

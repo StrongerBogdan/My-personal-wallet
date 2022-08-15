@@ -6,7 +6,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.ColorInt
-import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -29,13 +28,6 @@ class SettingsFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentSettingsBinding.inflate(layoutInflater)
-
-        with(activity as AppCompatActivity) {
-            setSupportActionBar(binding.toolbar)
-            supportActionBar?.setDisplayHomeAsUpEnabled(true)
-            supportActionBar?.setDisplayShowHomeEnabled(true)
-            supportActionBar?.setHomeAsUpIndicator(androidx.appcompat.R.drawable.abc_ic_ab_back_material)
-        }
 
         binding.settingsThemeColor.setOnClickListener {
             viewModel.openThemeColorChooser()
@@ -65,7 +57,6 @@ class SettingsFragment : Fragment() {
             @ColorInt val color = typedValue.data
 
             binding.settingsThemeColor.background.setTint(color)
-            binding.toolbar.background.setTint(color)
         }
 
         // get result from Choosing color

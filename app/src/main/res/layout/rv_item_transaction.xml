@@ -28,7 +28,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/small_margin"
-            android:textSize="@dimen/headline5_text_size"
+            android:textSize="@dimen/subtitle_text_size"
             app:layout_constraintStart_toEndOf="@id/category_iv"
             app:layout_constraintTop_toTopOf="parent"
             tools:text="Groceries" />
@@ -38,7 +38,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/small_margin"
-            android:textSize="@dimen/headline6_text_size"
+            android:textSize="@dimen/button_text_size"
             app:layout_constraintStart_toEndOf="@id/account_iv"
             app:layout_constraintTop_toBottomOf="@id/category_tv"
             tools:text="Card" />
@@ -61,7 +61,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/small_margin"
-            android:textSize="@dimen/subtitle_text_size"
+            android:textSize="@dimen/button_text_size"
             app:layout_constraintStart_toStartOf="@id/category_tv"
             app:layout_constraintTop_toBottomOf="@id/account_type_tv"
             tools:text="Blah-blah-blah" />
@@ -71,7 +71,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="@dimen/small_margin"
-            android:textSize="@dimen/headline5_text_size"
+            android:textSize="@dimen/subtitle_text_size"
             app:layout_constraintBaseline_toBaselineOf="@+id/category_tv"
             app:layout_constraintEnd_toEndOf="parent"
             tools:text="+$2,550" />
