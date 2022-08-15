@@ -44,11 +44,11 @@ abstract class CategoryChooseDialogFragment : DialogFragment() {
 
     protected open fun observeViewModel() {
         chooseViewModel.selectedAccountType.observe(viewLifecycleOwner) {
-            setNavigationResult(it.id, Constants.ACCOUNT_TYPE_RESULT_KEY)
+            setNavigationResult(it?.id, Constants.ACCOUNT_TYPE_RESULT_KEY)
             findNavController().navigateUp()
         }
         chooseViewModel.selectedTrxCategory.observe(viewLifecycleOwner) {
-            setNavigationResult(it.id, Constants.TRX_CATEGORY_RESULT_KEY)
+            setNavigationResult(it?.id, Constants.TRX_CATEGORY_RESULT_KEY)
             findNavController().navigateUp()
         }
     }

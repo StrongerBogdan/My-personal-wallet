@@ -39,8 +39,8 @@ class AddTransactionViewModel @Inject constructor(
     private val transactionComponentsFormatter: TransactionComponentsFormatter
 ) : ViewModel() {
 
-    private val _selectedAccountType: MutableLiveData<AccountType> = MutableLiveData()
-    val selectedAccountType: LiveData<AccountType> = _selectedAccountType
+    private val _selectedAccountType: MutableLiveData<AccountType?> = MutableLiveData()
+    val selectedAccountType: LiveData<AccountType?> = _selectedAccountType
     private val _selectedTrxCategory: MutableLiveData<TrxCategoryUiModel> = MutableLiveData()
     val selectedTrxCategory: LiveData<TrxCategoryUiModel> = _selectedTrxCategory
     private val _selectedDate: MutableLiveData<Date> = MutableLiveData(Calendar.getInstance().time)

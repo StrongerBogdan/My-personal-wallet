@@ -108,9 +108,9 @@ class BottomSheetAddTransaction : BottomSheetDialogFragment() {
         // When changed account type (user chose one)
         viewModel.selectedAccountType.observe(viewLifecycleOwner) { account ->
             binding.accountType.categoryEntitySubcategoryTv.visibility = View.GONE
-            binding.accountType.categoryEntityTitleTv.text = account.title
+            binding.accountType.categoryEntityTitleTv.text = account?.title
             Glide.with(requireContext())
-                .load(Uri.parse(account.imageUri))
+                .load(Uri.parse(account?.imageUri))
                 .override(Constants.ICON_SCALE, Constants.ICON_SCALE)
                 .into(binding.accountType.categoryEntityIv)
         }

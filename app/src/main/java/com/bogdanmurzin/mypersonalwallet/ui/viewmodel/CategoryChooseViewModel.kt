@@ -23,8 +23,8 @@ class CategoryChooseViewModel @Inject constructor(
     private val getTrxCategoryBySubcategoryUseCase: GetTrxCategoryBySubcategoryUseCase
 ) : ViewModel() {
 
-    private val _selectedAccountType: MutableLiveData<AccountType> = MutableLiveData()
-    val selectedAccountType: LiveData<AccountType> = _selectedAccountType
+    private val _selectedAccountType: MutableLiveData<AccountType?> = MutableLiveData()
+    val selectedAccountType: LiveData<AccountType?> = _selectedAccountType
     private val _selectedTrxCategory: MutableLiveData<TransactionCategory> = MutableLiveData()
     val selectedTrxCategory: LiveData<TransactionCategory> = _selectedTrxCategory
     private val _accountTypes: MutableLiveData<List<AccountType>> = MutableLiveData()
