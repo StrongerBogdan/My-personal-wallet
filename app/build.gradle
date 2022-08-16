@@ -77,7 +77,6 @@ dependencies {
     kapt "androidx.room:room-compiler:$room_version"
     // Coroutines
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutines_version"
-    implementation 'androidx.fragment:fragment-ktx:1.5.1'
     // ViewModel
     implementation 'androidx.fragment:fragment-ktx:1.5.1'
     // LiveData
