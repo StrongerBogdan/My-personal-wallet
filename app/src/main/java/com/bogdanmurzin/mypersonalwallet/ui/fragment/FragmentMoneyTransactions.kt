@@ -1,5 +1,7 @@
 package com.bogdanmurzin.mypersonalwallet.ui.fragment
 
+import android.animation.AnimatorInflater
+import android.animation.ObjectAnimator
 import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
@@ -51,7 +53,6 @@ class FragmentMoneyTransactions : Fragment() {
         binding.fab.setOnClickListener(onFabClickListener)
 
         viewModel.transactionsList.observe(viewLifecycleOwner) {
-//            recyclerAdapter.submitList(it)
             recyclerAdapter.submitList(
                 viewModel.addHeaders(it)
             )
@@ -125,9 +126,21 @@ class FragmentMoneyTransactions : Fragment() {
         }
     }
 
+    private fun rollFab() {
+        with(
+            AnimatorInflater
+                .loadAnimator(requireContext(), R.animator.slide_left) as ObjectAnimator
+        ) {
+            target = binding.fab
+            start()
+        }
+
+    }
+
     // For correct menu update
     override fun onResume() {
         super.onResume()
+        rollFab()
         updateToolbar(viewModel.isDeleteEnabled)
     }
 
