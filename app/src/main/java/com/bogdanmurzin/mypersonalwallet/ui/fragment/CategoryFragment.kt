@@ -19,20 +19,14 @@ abstract class CategoryFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        toolbar = activity?.findViewById(R.id.toolbar)
-        toolbar?.let { toolbar ->
-            updateToolbar(true)
-            toolbar.setOnMenuItemClickListener {
-                when (it.itemId) {
-                    R.id.m_add -> {
-                        add()
-                        true
-                    }
-                    else -> false
-                }
-            }
-        }
+        setupToolbar()
         return super.onCreateView(inflater, container, savedInstanceState)
+    }
+
+    // For correct menu update
+    override fun onResume() {
+        super.onResume()
+        setupToolbar()
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -54,6 +48,22 @@ abstract class CategoryFragment : Fragment() {
             it.menu.findItem(R.id.m_add).isVisible = isShowAddIcon
             it.menu.findItem(R.id.m_delete).isVisible = !isShowAddIcon
             it.menu.findItem(R.id.m_settings).isVisible = !isShowAddIcon
+        }
+    }
+
+    private fun setupToolbar() {
+        toolbar = activity?.findViewById(R.id.toolbar)
+        toolbar?.let { toolbar ->
+            updateToolbar(true)
+            toolbar.setOnMenuItemClickListener {
+                when (it.itemId) {
+                    R.id.m_add -> {
+                        add()
+                        true
+                    }
+                    else -> false
+                }
+            }
         }
     }
 }

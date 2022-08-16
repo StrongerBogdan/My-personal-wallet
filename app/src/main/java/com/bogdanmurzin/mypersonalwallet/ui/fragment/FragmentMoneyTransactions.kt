@@ -125,6 +125,7 @@ class FragmentMoneyTransactions : Fragment() {
         }
     }
 
+    // For correct menu update
     override fun onResume() {
         super.onResume()
         updateToolbar(viewModel.isDeleteEnabled)
