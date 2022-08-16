@@ -129,7 +129,7 @@ class FragmentMoneyTransactions : Fragment() {
     private fun rollFab() {
         with(
             AnimatorInflater
-                .loadAnimator(requireContext(), R.animator.slide_left) as ObjectAnimator
+                .loadAnimator(requireContext(), R.animator.rotate) as ObjectAnimator
         ) {
             target = binding.fab
             start()
