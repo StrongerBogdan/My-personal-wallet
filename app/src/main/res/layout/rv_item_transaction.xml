@@ -60,8 +60,8 @@
 
         <ImageView
             android:id="@+id/account_iv"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="@dimen/icon_category_size"
+            android:layout_height="@dimen/icon_category_size"
             android:contentDescription="@string/category_icon_desc"
             android:paddingEnd="@dimen/small_half_margin"
             app:layout_constraintBottom_toTopOf="@id/description_tv"
@@ -76,7 +76,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/small_margin"
+
             android:textSize="@dimen/button_text_size"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="@id/category_tv"
             app:layout_constraintTop_toBottomOf="@id/account_type_tv"
             tools:text="Blah-blah-blah" />

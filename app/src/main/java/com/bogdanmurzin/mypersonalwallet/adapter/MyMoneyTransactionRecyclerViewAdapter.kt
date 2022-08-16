@@ -12,6 +12,7 @@ import com.bogdanmurzin.mypersonalwallet.R
 import com.bogdanmurzin.mypersonalwallet.common.Constants
 import com.bogdanmurzin.mypersonalwallet.data.TrxCategoryUiModel
 import com.bogdanmurzin.mypersonalwallet.data.transaction_recycer_items.HeaderItemUiModel
+import com.bogdanmurzin.mypersonalwallet.data.transaction_recycer_items.RecyclerMultiTypeItem
 import com.bogdanmurzin.mypersonalwallet.data.transaction_recycer_items.TransactionItemUiModel
 import com.bogdanmurzin.mypersonalwallet.databinding.RvItemHeaderBinding
 import com.bogdanmurzin.mypersonalwallet.databinding.RvItemTransactionBinding
@@ -21,7 +22,7 @@ class MyMoneyTransactionRecyclerViewAdapter(
     private val onItemClicked: (TransactionItemUiModel) -> Unit,
     private val showMenuDelete: (Boolean) -> Unit,
     private val getAllSelectedItems: (List<TransactionItemUiModel>) -> Unit
-) : ListAdapter<TransactionItemUiModel, RecyclerView.ViewHolder>(ItemDiffCallback) {
+) : ListAdapter<RecyclerMultiTypeItem, RecyclerView.ViewHolder>(ItemDiffCallback) {
 
     var isEnabledDeleting = false
     private var itemSelectedList = mutableListOf<TransactionItemUiModel>()
@@ -49,7 +50,7 @@ class MyMoneyTransactionRecyclerViewAdapter(
                     // Set on short click listener
                     viewHolder.itemView.setOnClickListener {
                         val position = viewHolder.absoluteAdapterPosition
-                        val item = getItem(position)
+                        val item = getItem(position) as TransactionItemUiModel
                         if (isEnabledDeleting) {
                             // If this item is already selected
                             if (itemSelectedList.contains(item)) {
@@ -66,7 +67,7 @@ class MyMoneyTransactionRecyclerViewAdapter(
                     // Set on long click listener
                     viewHolder.itemView.setOnLongClickListener {
                         val position = viewHolder.absoluteAdapterPosition
-                        val item = getItem(position)
+                        val item = getItem(position) as TransactionItemUiModel
                         selectItem(viewHolder, item)
                         provideAllSelectedItems()
                         true
@@ -82,7 +83,7 @@ class MyMoneyTransactionRecyclerViewAdapter(
             ITEM_TYPE_TRANSACTION ->
                 (holder as MoneyTransactionViewHolder).bind(getItem(position) as TransactionItemUiModel)
                     .also {
-                        val item = getItem(position)
+                        val item = getItem(position) as TransactionItemUiModel
                         if (item.isSelected) {
                             selectItem(holder, item)
                         }
@@ -181,19 +182,19 @@ class MyMoneyTransactionRecyclerViewAdapter(
             .into(categoryIv)
     }
 
-    object ItemDiffCallback : DiffUtil.ItemCallback<TransactionItemUiModel>() {
+    object ItemDiffCallback : DiffUtil.ItemCallback<RecyclerMultiTypeItem>() {
         override fun areItemsTheSame(
-            oldItem: TransactionItemUiModel,
-            newItem: TransactionItemUiModel
+            oldItem: RecyclerMultiTypeItem,
+            newItem: RecyclerMultiTypeItem
         ): Boolean {
-            return oldItem.id == newItem.id
+            return oldItem == newItem
         }
 
         override fun areContentsTheSame(
-            oldItem: TransactionItemUiModel,
-            newItem: TransactionItemUiModel
+            oldItem: RecyclerMultiTypeItem,
+            newItem: RecyclerMultiTypeItem
         ): Boolean {
-            return oldItem == newItem
+            return oldItem.type == newItem.type
         }
     }
 

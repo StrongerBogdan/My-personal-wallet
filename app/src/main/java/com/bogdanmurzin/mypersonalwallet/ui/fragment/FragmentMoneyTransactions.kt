@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bogdanmurzin.mypersonalwallet.R
 import com.bogdanmurzin.mypersonalwallet.adapter.MyMoneyTransactionRecyclerViewAdapter
+import com.bogdanmurzin.mypersonalwallet.data.transaction_recycer_items.TransactionItemUiModel
 import com.bogdanmurzin.mypersonalwallet.databinding.FragmentMoneyTransactionsListBinding
 import com.bogdanmurzin.mypersonalwallet.ui.activity.SettingsActivity
 import com.bogdanmurzin.mypersonalwallet.ui.viewmodel.MainViewModel
@@ -50,7 +51,10 @@ class FragmentMoneyTransactions : Fragment() {
         binding.fab.setOnClickListener(onFabClickListener)
 
         viewModel.transactionsList.observe(viewLifecycleOwner) {
-            recyclerAdapter.submitList(it)
+//            recyclerAdapter.submitList(it)
+            recyclerAdapter.submitList(
+                viewModel.addHeaders(it)
+            )
         }
 
         viewModel.action.observe(viewLifecycleOwner) { event ->
@@ -136,7 +140,9 @@ class FragmentMoneyTransactions : Fragment() {
             .setMessage(messageString)
             .setPositiveButton(deleteString) { _, _ ->
                 val selectedList =
-                    recyclerAdapter.currentList.filter { it.isSelected }.map { it.id }
+                    recyclerAdapter.currentList
+                        .filter { it is TransactionItemUiModel && it.isSelected }
+                        .map { (it as TransactionItemUiModel).id }
                 viewModel.deleteTransactions(selectedList)
                 viewModel.isDeleteEnabled = false
                 recyclerAdapter.isEnabledDeleting = viewModel.isDeleteEnabled

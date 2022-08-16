@@ -8,8 +8,8 @@
     <dimen name="color_picker_size">40dp</dimen>
     <dimen name="color_picker_margin">8dp</dimen>
 
-
     <dimen name="icon_size">48dp</dimen>
+    <dimen name="icon_category_size">32dp</dimen>
     <dimen name="image_button_size">32dp</dimen>
 
     <!--    Text size   -->
@@ -20,4 +20,5 @@
     <dimen name="subtitle_text_size">16sp</dimen>
     <dimen name="headline6_text_size">20sp</dimen>
     <dimen name="headline5_text_size">24sp</dimen>
+    <dimen name="headline3_text_size">32sp</dimen>
 </resources>
