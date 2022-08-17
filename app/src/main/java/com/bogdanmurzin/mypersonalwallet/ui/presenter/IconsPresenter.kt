@@ -29,10 +29,12 @@ class IconsPresenter(private val getIconsUseCase: GetIconsUseCase) {
                             view?.showIcons(it)
                         }
                         result.onFailure {
+                            view?.showMessageTv(it.message)
                             Log.e(TAG, "loadIcons: ${it.message}")
                         }
                     },
                     { t -> //onError
+                        view?.showMessageTv(t.message)
                         view?.hideProgressBar()
                         Log.e(TAG, "loadIcons: ${t.message}")
                     }
@@ -83,5 +85,7 @@ class IconsPresenter(private val getIconsUseCase: GetIconsUseCase) {
         fun showIcons(list: List<Icon>)
         fun showProgressBar()
         fun hideProgressBar()
+        fun showMessageTv(message: String?)
+        fun hideMessageTv()
     }
 }

@@ -9,6 +9,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.navigation.navGraphViewModels
@@ -24,6 +25,7 @@ import com.bogdanmurzin.mypersonalwallet.ui.viewmodel.AddTransactionViewModel
 import com.bogdanmurzin.mypersonalwallet.util.CategoryArg
 import com.bogdanmurzin.mypersonalwallet.util.EditingState
 import com.bogdanmurzin.mypersonalwallet.util.Event
+import com.bogdanmurzin.mypersonalwallet.util.Extensions.onDone
 import com.bogdanmurzin.mypersonalwallet.util.getNavigationResultLiveData
 import com.bumptech.glide.Glide
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
@@ -72,12 +74,11 @@ class BottomSheetAddTransaction : BottomSheetDialogFragment() {
         // When the user clicks the Done button, use the data here to either update
         // an existing item or create a new one
         binding.doneBtn.setOnClickListener {
-            viewModel.onBottomSheetDoneBtnClicked(
-                args.transactionId,
-                binding.transactionAmountTv.text.toString(),
-                binding.transactionDescription.text.toString(),
-                editingState
-            )
+            done(args, editingState)
+        }
+
+        binding.transactionDescription.onDone {
+            done(args, editingState)
         }
 
         setupViewModel()
@@ -141,7 +142,11 @@ class BottomSheetAddTransaction : BottomSheetDialogFragment() {
             }
             result.onFailure {
                 Log.e(Constants.TAG, "setupViewModel: ${it.message} ")
-                // TODO add canceling dialog
+                Toast.makeText(
+                    requireContext(),
+                    getString(R.string.fill_all_required_transaction),
+                    Toast.LENGTH_LONG
+                ).show()
             }
         }
         // clicked on cardView
@@ -171,6 +176,15 @@ class BottomSheetAddTransaction : BottomSheetDialogFragment() {
         binding.transactionCv.setOnClickListener {
             viewModel.openCategoryChoose(CategoryArg.TRANSACTION_CATEGORY)
         }
+    }
+
+    private fun done(args: BottomSheetAddTransactionArgs, editingState: EditingState) {
+        viewModel.onBottomSheetDoneBtnClicked(
+            args.transactionId,
+            binding.transactionAmountTv.text.toString(),
+            binding.transactionDescription.text.toString(),
+            editingState
+        )
     }
 
     private fun setupEditText() {

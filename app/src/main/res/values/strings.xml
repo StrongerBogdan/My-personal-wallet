@@ -27,4 +27,6 @@
     <string name="settings">Settings</string>
     <string name="choose_color">Choose theme color</string>
     <string name="theme_color">Theme color</string>
+    <string name="fill_all_required_category">Fill in all required fields and select an icon</string>
+    <string name="fill_all_required_transaction">Fill in all required fields and select Account type and Transaction category</string>
 </resources>

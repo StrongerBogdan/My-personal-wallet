@@ -92,6 +92,15 @@ class IconsChooseFragment : DialogFragment(), IconsPresenter.IconView {
         recyclerAdapter.submitList(list)
     }
 
+    override fun showMessageTv(message: String?) {
+        binding.nothingMessageTv.text = message
+        binding.nothingMessageTv.visibility = View.VISIBLE
+    }
+
+    override fun hideMessageTv() {
+        binding.nothingMessageTv.visibility = View.INVISIBLE
+    }
+
     override fun showProgressBar() {
         binding.progressBar.visibility = View.VISIBLE
     }

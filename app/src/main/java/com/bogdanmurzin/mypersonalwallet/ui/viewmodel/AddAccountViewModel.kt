@@ -15,6 +15,7 @@ import com.bumptech.glide.request.RequestOptions
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import java.io.IOException
 import javax.inject.Inject
 
 
@@ -29,6 +30,8 @@ class AddAccountViewModel @Inject constructor(
     val loadedAccountType: LiveData<AccountType> = _loadedAccountType
     private val _currentImageUrl: MutableLiveData<String?> = MutableLiveData(null)
     val currentImageUrl: LiveData<String?> = _currentImageUrl
+    private val _doneAction: SingleLiveEvent<Result<Boolean>> = SingleLiveEvent()
+    var doneAction: LiveData<Result<Boolean>> = _doneAction
 
     //var currentImageUrl: String? = null
 
@@ -41,11 +44,7 @@ class AddAccountViewModel @Inject constructor(
         }
     }
 
-    fun onBottomSheetDoneBtnClicked(
-        id: Int,
-        title: String,
-        state: EditingState
-    ): Boolean {
+    fun validateData(id: Int, title: String, state: EditingState): Boolean {
         val image = currentImageUrl.value
 
         if (image != null && title.isNotEmpty()) {
@@ -62,6 +61,14 @@ class AddAccountViewModel @Inject constructor(
             return true
         }
         return false
+    }
+
+    fun addNewAccountType(id: Int, title: String, state: EditingState) {
+        if (validateData(id, title, state)) {
+            _doneAction.postValue(Result.success(true))
+        } else {
+            _doneAction.postValue(Result.failure(IOException("Not all fields have filled")))
+        }
     }
 
     private fun updateAccount(accountType: AccountType) {

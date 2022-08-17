@@ -7,6 +7,7 @@ import com.bogdanmurzin.mypersonalwallet.util.EditingState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import java.io.IOException
 import javax.inject.Inject
 
 @HiltViewModel
@@ -23,6 +24,8 @@ class AddTrxCategoryViewModel @Inject constructor(
     val currentImageUrl: LiveData<String?> = _currentImageUrl
     private val _trxSubCategories: MutableLiveData<List<TransactionCategory>> = MutableLiveData()
     var trxSubCategories: LiveData<List<TransactionCategory>> = _trxSubCategories
+    private val _doneAction: SingleLiveEvent<Result<Boolean>> = SingleLiveEvent()
+    var doneAction: LiveData<Result<Boolean>> = _doneAction
 
     private var selectedTrxCategoryTitle: String? = null
     private var selectedTrxSubcategoryTitle: String? = null
@@ -40,11 +43,8 @@ class AddTrxCategoryViewModel @Inject constructor(
         }
     }
 
-    fun addNewTrxCategory(
-        id: Int,
-        category: String,
-        state: EditingState
-    ): Boolean {
+    fun validateData(id: Int, category: String, state: EditingState): Boolean {
+
         val image = currentImageUrl.value
 
         if (image != null && category.isNotEmpty()) {
@@ -62,6 +62,14 @@ class AddTrxCategoryViewModel @Inject constructor(
             return true
         }
         return false
+    }
+
+    fun addNewTrxCategory(id: Int, category: String, state: EditingState) {
+        if (validateData(id, category, state)) {
+            _doneAction.postValue(Result.success(true))
+        } else {
+            _doneAction.postValue(Result.failure(IOException("Not all fields have filled")))
+        }
     }
 
     private fun updateTrxCategory(trxCategory: TransactionCategory) {
