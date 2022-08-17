@@ -182,7 +182,7 @@ class BottomSheetAddTransaction : BottomSheetDialogFragment() {
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) = Unit
 
             override fun afterTextChanged(s: Editable?) {
-                if (s != null) {
+                if (!s.isNullOrEmpty()) {
                     textview.removeTextChangedListener(this)
                     val cleanString: String = s.replace(DOLLAR_OR_COMA_OR_DOT_REGEX, EMPTY_STRING)
                     val parsed = cleanString.toDouble()
