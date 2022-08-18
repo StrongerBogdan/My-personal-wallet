@@ -29,8 +29,8 @@ object Constants {
 
     // Notification
     const val NOTIFICATION_ID = 1
-    const val NOTIFICATION_NAME = "appName"
-    const val NOTIFICATION_CHANNEL = "appName_channel_01"
+    const val NOTIFICATION_NAME = "Reminder"
+    const val NOTIFICATION_CHANNEL = "Default notification"
     const val NOTIFICATION_WORKER_TAG = "appName_notification_work"
     const val REQUEST_CODE = 0
     const val FLAGS = 0
