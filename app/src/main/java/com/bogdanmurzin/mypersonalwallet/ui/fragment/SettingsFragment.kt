@@ -74,17 +74,6 @@ class SettingsFragment : Fragment() {
             binding.reminderSwitch.isChecked = isReminderOn
         }
 
-        viewModel.themeColor.observe(viewLifecycleOwner) { themeResId ->
-            // get color and set the theme
-            val theme = requireContext().theme
-//            theme.applyStyle(themeResId, true)
-            val typedValue = TypedValue()
-            theme.resolveAttribute(android.R.attr.colorPrimary, typedValue, true)
-            @ColorInt val color = typedValue.data
-
-            binding.settingsThemeColor.background.setTint(color)
-        }
-
         // get result from Choosing color
         val themeColorResult =
             getNavigationResultLiveData<Int>(COLOR_RESULT)

@@ -18,8 +18,6 @@ class SettingsViewModel @Inject constructor(
     private val preferences: SharedPreferences
 ) : ViewModel() {
 
-    private val _themeColor = MutableLiveData<Int>()
-    val themeColor: LiveData<Int> = _themeColor
     private val _reminderOn = MutableLiveData<Boolean>()
     val reminderOn: LiveData<Boolean> = _reminderOn
     private val _action: SingleLiveEvent<Event> = SingleLiveEvent()
@@ -40,15 +38,14 @@ class SettingsViewModel @Inject constructor(
     }
 
     fun changeThemeColor(themeId: Int) {
-        _themeColor.value = themeId
-        updateThemePref()
+        updateThemePref(themeId)
     }
 
-    private fun updateThemePref() {
+    private fun updateThemePref(themeId: Int) {
         with(preferences.edit()) {
             putInt(
                 PREF_THEME_COLOR,
-                _themeColor.value ?: DEFAULT_THEME
+                themeId
             )
             apply()
         }
