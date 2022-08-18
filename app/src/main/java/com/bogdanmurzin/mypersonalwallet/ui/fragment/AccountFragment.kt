@@ -4,7 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.Fragment
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
@@ -15,8 +15,8 @@ import com.bogdanmurzin.mypersonalwallet.common.Constants.SPAN_COUNT
 import com.bogdanmurzin.mypersonalwallet.databinding.FragmentAccountBinding
 import com.bogdanmurzin.mypersonalwallet.ui.viewmodel.AccountViewModel
 import com.bogdanmurzin.mypersonalwallet.util.Event
-import com.google.android.material.appbar.MaterialToolbar
 import dagger.hilt.android.AndroidEntryPoint
+
 
 @AndroidEntryPoint
 class AccountFragment : CategoryFragment() {
@@ -32,6 +32,11 @@ class AccountFragment : CategoryFragment() {
         super.onCreateView(inflater, container, savedInstanceState)
         binding = FragmentAccountBinding.inflate(layoutInflater)
         return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        (activity as AppCompatActivity).supportActionBar?.setSubtitle(R.string.account_type)
     }
 
     override fun observeViewModel() {

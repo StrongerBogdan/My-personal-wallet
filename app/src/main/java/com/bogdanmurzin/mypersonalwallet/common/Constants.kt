@@ -1,12 +1,13 @@
 package com.bogdanmurzin.mypersonalwallet.common
 
-import android.graphics.Color
 import com.bogdanmurzin.mypersonalwallet.R
 
 object Constants {
     // Shared prefs
     const val PREF_THEME_COLOR = "shared_pref_theme_color"
     const val DEFAULT_THEME = R.style.OverlayPrimaryColorGreen
+    const val PREF_REMINDER = "shared_pref_reminder"
+    const val DEFAULT_PREF_REMINDER = false
 
     // UI
     const val ICON_SCALE = 100
@@ -25,4 +26,12 @@ object Constants {
     const val DATE_RESULT_KEY = "date_result_key"
     const val TRX_CATEGORY_RESULT_KEY = "trx_category_result_key"
     const val ACCOUNT_TYPE_RESULT_KEY = "account_type_result_key"
+
+    // Notification
+    const val NOTIFICATION_ID = 1
+    const val NOTIFICATION_NAME = "appName"
+    const val NOTIFICATION_CHANNEL = "appName_channel_01"
+    const val NOTIFICATION_WORKER_TAG = "appName_notification_work"
+    const val REQUEST_CODE = 0
+    const val FLAGS = 0
 }
