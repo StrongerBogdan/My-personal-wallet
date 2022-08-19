@@ -1,5 +1,6 @@
 package com.bogdanmurzin.mypersonalwallet.ui.fragment
 
+import android.Manifest
 import android.content.Intent
 import android.os.Bundle
 import android.util.TypedValue
@@ -7,6 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.ColorInt
+import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -58,6 +60,13 @@ class SettingsFragment : Fragment() {
             }
         }
         binding.saveBtn.setOnClickListener {
+            // TODO DELETE
+            ActivityCompat.requestPermissions(
+                requireActivity(),
+                arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE),
+                101
+            )
+
             requireContext().applicationContext.startService(
                 Intent(requireContext().applicationContext, SaveToFileForegroundService::class.java)
             )
