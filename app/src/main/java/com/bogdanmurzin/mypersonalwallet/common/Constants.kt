@@ -40,4 +40,7 @@ object Constants {
     const val NOTIFICATION_SAVE_NAME = "Save transactions"
     const val NOTIFICATION_SERVICE_CHANNEL = "service_notification"
     const val NOTIFICATION_SERVICE_CHANNEL_NAME = "Service notification"
+
+    // Permission
+    const val PERMISSION_REQUEST_CODE = 101
 }

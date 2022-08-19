@@ -1,23 +1,35 @@
 package com.bogdanmurzin.mypersonalwallet.ui.fragment
 
-import android.Manifest
+import android.Manifest.permission.READ_EXTERNAL_STORAGE
+import android.Manifest.permission.WRITE_EXTERNAL_STORAGE
+import android.app.Activity
+import android.app.AlertDialog
+import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
+import android.net.Uri
+import android.os.Build
+import android.os.Build.VERSION.SDK_INT
 import android.os.Bundle
-import android.util.TypedValue
+import android.os.Environment
+import android.provider.Settings
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.annotation.ColorInt
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import androidx.test.core.app.ApplicationProvider.getApplicationContext
 import androidx.work.ExistingPeriodicWorkPolicy
 import androidx.work.PeriodicWorkRequest
 import androidx.work.WorkManager
 import com.bogdanmurzin.mypersonalwallet.R
 import com.bogdanmurzin.mypersonalwallet.common.Constants.COLOR_RESULT
 import com.bogdanmurzin.mypersonalwallet.common.Constants.NOTIFICATION_WORKER_TAG
+import com.bogdanmurzin.mypersonalwallet.common.Constants.PERMISSION_REQUEST_CODE
 import com.bogdanmurzin.mypersonalwallet.databinding.FragmentSettingsBinding
 import com.bogdanmurzin.mypersonalwallet.services.SaveToFileForegroundService
 import com.bogdanmurzin.mypersonalwallet.ui.viewmodel.SettingsViewModel
@@ -38,6 +50,13 @@ class SettingsFragment : Fragment() {
 
     private lateinit var binding: FragmentSettingsBinding
     private val viewModel: SettingsViewModel by viewModels()
+
+    private val getResult =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+            if (it.resultCode == Activity.RESULT_OK) {
+                startSaveService()
+            }
+        }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -60,16 +79,12 @@ class SettingsFragment : Fragment() {
             }
         }
         binding.saveBtn.setOnClickListener {
-            // TODO DELETE
-            ActivityCompat.requestPermissions(
-                requireActivity(),
-                arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE),
-                101
-            )
+            if (checkPermission()) {
+                startSaveService()
+            } else {
+                displayRationale()
+            }
 
-            requireContext().applicationContext.startService(
-                Intent(requireContext().applicationContext, SaveToFileForegroundService::class.java)
-            )
         }
         return binding.root
     }
@@ -129,6 +144,15 @@ class SettingsFragment : Fragment() {
         }
     }
 
+    private fun startSaveService() {
+        requireContext().applicationContext.startService(
+            Intent(
+                requireContext().applicationContext,
+                SaveToFileForegroundService::class.java
+            )
+        )
+    }
+
     private fun scheduleNotification(delay: Long) {
         val notificationWork =
             PeriodicWorkRequest
@@ -146,11 +170,56 @@ class SettingsFragment : Fragment() {
             )
     }
 
+    private fun checkPermission(): Boolean {
+        return if (SDK_INT >= Build.VERSION_CODES.R) {
+            Environment.isExternalStorageManager()
+        } else {
+            val result =
+                ContextCompat.checkSelfPermission(requireContext(), READ_EXTERNAL_STORAGE)
+            val result1 =
+                ContextCompat.checkSelfPermission(requireActivity(), WRITE_EXTERNAL_STORAGE)
+            result == PackageManager.PERMISSION_GRANTED && result1 == PackageManager.PERMISSION_GRANTED
+        }
+    }
+
+    private fun requestPermission() {
+        if (SDK_INT >= Build.VERSION_CODES.R) {
+            try {
+                val intent = Intent(Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION)
+                intent.addCategory(INTENT_CATEGORY)
+                intent.data = Uri.parse("package:${getApplicationContext<Context>().packageName}")
+                getResult.launch(intent)
+            } catch (e: Exception) {
+                val intent = Intent()
+                intent.action = Settings.ACTION_MANAGE_ALL_FILES_ACCESS_PERMISSION
+                getResult.launch(intent)
+            }
+        } else {
+            //below android 11
+            ActivityCompat.requestPermissions(
+                requireActivity(),
+                arrayOf(WRITE_EXTERNAL_STORAGE),
+                PERMISSION_REQUEST_CODE
+            )
+        }
+    }
+
+    private fun displayRationale() {
+        AlertDialog.Builder(requireContext())
+            .setTitle(getString(R.string.dialog_permission_title))
+            .setMessage(getString(R.string.dialog_permission_message))
+            .setCancelable(false)
+            .setPositiveButton(getString(R.string.dialog_permission_button_positive)) { _, _ ->
+                requestPermission()
+            }
+            .show()
+    }
+
     companion object {
         const val REMINDER_HOURS = 19
         const val REMINDER_MINUTES = 0
         const val REMINDER_SECONDS = 0
         const val REMINDER_INTERVAL_DAYS = 1
+        const val INTENT_CATEGORY = "android.intent.category.DEFAULT"
     }
-
 }

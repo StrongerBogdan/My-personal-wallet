@@ -40,4 +40,8 @@
     <string name="save_transactions_into_file">Save transactions into file</string>
     <string name="notification_save_title">Save transactions</string>
     <string name="notification_save_subtitle">Saving transactions into file</string>
+    <string name="dialog_permission_title">Permission required</string>
+    <string name="dialog_permission_message">For saving transactions to file, please give app media access</string>
+    <string name="dialog_permission_button_positive">OK</string>
+    <string name="storage_permission_denied">Storage Permission Denied</string>
 </resources>
