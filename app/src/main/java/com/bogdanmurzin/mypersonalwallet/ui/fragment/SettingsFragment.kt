@@ -1,5 +1,6 @@
 package com.bogdanmurzin.mypersonalwallet.ui.fragment
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.TypedValue
 import android.view.LayoutInflater
@@ -16,6 +17,7 @@ import com.bogdanmurzin.mypersonalwallet.R
 import com.bogdanmurzin.mypersonalwallet.common.Constants.COLOR_RESULT
 import com.bogdanmurzin.mypersonalwallet.common.Constants.NOTIFICATION_WORKER_TAG
 import com.bogdanmurzin.mypersonalwallet.databinding.FragmentSettingsBinding
+import com.bogdanmurzin.mypersonalwallet.services.SaveToFileForegroundService
 import com.bogdanmurzin.mypersonalwallet.ui.viewmodel.SettingsViewModel
 import com.bogdanmurzin.mypersonalwallet.util.Event
 import com.bogdanmurzin.mypersonalwallet.util.NotifyWorker
@@ -54,6 +56,11 @@ class SettingsFragment : Fragment() {
                 WorkManager.getInstance(requireContext())
                     .cancelAllWorkByTag(NOTIFICATION_WORKER_TAG)
             }
+        }
+        binding.saveBtn.setOnClickListener {
+            requireContext().applicationContext.startService(
+                Intent(requireContext().applicationContext, SaveToFileForegroundService::class.java)
+            )
         }
         return binding.root
     }

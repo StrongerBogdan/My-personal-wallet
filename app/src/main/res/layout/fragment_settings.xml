@@ -49,7 +49,6 @@
             android:layout_height="@dimen/height_settings_item">
 
             <TextView
-                android:id="@+id/textView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:padding="@dimen/medium_margin"
@@ -70,6 +69,18 @@
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/height_settings_item">
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/save_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="@string/save_transactions_into_file"
+                android:textSize="@dimen/caption_text_size" />
+        </FrameLayout>
 
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

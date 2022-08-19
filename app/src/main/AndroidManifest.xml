@@ -4,6 +4,7 @@
     package="com.bogdanmurzin.mypersonalwallet">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>
 
     <application
         android:name=".App"
@@ -35,11 +36,13 @@
             android:exported="false"/>
         <service
             android:name=".services.PushService"
-            android:exported="true">
+            android:exported="false">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
         </service>
+        <service android:name=".services.SaveToFileForegroundService"
+            android:exported="false" />
     </application>
 
 </manifest>

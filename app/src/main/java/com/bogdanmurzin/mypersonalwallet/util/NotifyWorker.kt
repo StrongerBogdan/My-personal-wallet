@@ -5,7 +5,6 @@ import android.app.Notification.DEFAULT_ALL
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.NotificationManager.IMPORTANCE_HIGH
-import android.app.PendingIntent
 import android.app.PendingIntent.getActivity
 import android.content.Context
 import android.content.Intent
@@ -23,14 +22,13 @@ import android.os.Build.VERSION_CODES.O
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationCompat.PRIORITY_MAX
-import androidx.core.content.ContextCompat
 import androidx.work.Worker
 import androidx.work.WorkerParameters
 import com.bogdanmurzin.mypersonalwallet.R
 import com.bogdanmurzin.mypersonalwallet.common.Constants.FLAGS
-import com.bogdanmurzin.mypersonalwallet.common.Constants.NOTIFICATION_CHANNEL
-import com.bogdanmurzin.mypersonalwallet.common.Constants.NOTIFICATION_ID
-import com.bogdanmurzin.mypersonalwallet.common.Constants.NOTIFICATION_NAME
+import com.bogdanmurzin.mypersonalwallet.common.Constants.NOTIFICATION_DEFAULT_CHANNEL
+import com.bogdanmurzin.mypersonalwallet.common.Constants.NOTIFICATION_REM_ID
+import com.bogdanmurzin.mypersonalwallet.common.Constants.NOTIFICATION_REM_NAME
 import com.bogdanmurzin.mypersonalwallet.common.Constants.REQUEST_CODE
 import com.bogdanmurzin.mypersonalwallet.ui.activity.MainActivity
 
@@ -51,12 +49,12 @@ class NotifyWorker(context: Context, params: WorkerParameters) : Worker(context,
             applicationContext.getSystemService(AppCompatActivity.NOTIFICATION_SERVICE) as NotificationManager
 
         val bitmap = applicationContext.vectorToBitmap(R.mipmap.ic_launcher_round)
-        val titleNotification = applicationContext.getString(R.string.notification_title)
-        val subtitleNotification = applicationContext.getString(R.string.notification_subtitle)
+        val titleNotification = applicationContext.getString(R.string.notification_reminder_title)
+        val subtitleNotification = applicationContext.getString(R.string.notification_reminder_subtitle)
 
         val pendingIntent = getActivity(applicationContext, REQUEST_CODE, intent, FLAGS)
 
-        val notification = NotificationCompat.Builder(applicationContext, NOTIFICATION_CHANNEL)
+        val notification = NotificationCompat.Builder(applicationContext, NOTIFICATION_DEFAULT_CHANNEL)
             .setLargeIcon(bitmap).setSmallIcon(R.mipmap.ic_launcher_round)
             .setContentTitle(titleNotification).setContentText(subtitleNotification)
             .setDefaults(DEFAULT_ALL).setContentIntent(pendingIntent).setAutoCancel(true)
@@ -64,14 +62,14 @@ class NotifyWorker(context: Context, params: WorkerParameters) : Worker(context,
         notification.priority = PRIORITY_MAX
 
         if (SDK_INT >= O) {
-            notification.setChannelId(NOTIFICATION_CHANNEL)
+            notification.setChannelId(NOTIFICATION_DEFAULT_CHANNEL)
 
             val ringtoneManager = getDefaultUri(TYPE_NOTIFICATION)
             val audioAttributes = AudioAttributes.Builder().setUsage(USAGE_NOTIFICATION_RINGTONE)
                 .setContentType(CONTENT_TYPE_SONIFICATION).build()
 
             val channel =
-                NotificationChannel(NOTIFICATION_CHANNEL, NOTIFICATION_NAME, IMPORTANCE_HIGH)
+                NotificationChannel(NOTIFICATION_DEFAULT_CHANNEL, NOTIFICATION_REM_NAME, IMPORTANCE_HIGH)
 
             channel.enableLights(true)
             channel.lightColor = RED
@@ -81,7 +79,7 @@ class NotifyWorker(context: Context, params: WorkerParameters) : Worker(context,
             notificationManager.createNotificationChannel(channel)
         }
 
-        notificationManager.notify(NOTIFICATION_ID, notification.build())
+        notificationManager.notify(NOTIFICATION_REM_ID, notification.build())
     }
 }
 

@@ -30,11 +30,14 @@
     <string name="theme_color">Theme color</string>
     <string name="fill_all_required_category">Fill in all required fields and select an icon</string>
     <string name="fill_all_required_transaction">Fill in all required fields and select Account type and Transaction category</string>
-    <string name="notification_title">Reminder</string>
-    <string name="notification_subtitle">Don\'t forget to write down the expense</string>
+    <string name="notification_reminder_title">Reminder</string>
+    <string name="notification_reminder_subtitle">Don\'t forget to write down the expense</string>
     <string name="notification_schedule_title">Schedule notification:\u00a0</string>
     <string name="notification_schedule_pattern">dd.MM.yy \u00B7 HH:mm</string>
     <string name="notification_schedule_error">Schedule notification: Incorrect Date and Time</string>
     <string name="reminder">Reminder</string>
     <string name="set_reminder_time">Set reminder time</string>
+    <string name="save_transactions_into_file">Save transactions into file</string>
+    <string name="notification_save_title">Save transactions</string>
+    <string name="notification_save_subtitle">Saving transactions into file</string>
 </resources>

@@ -27,11 +27,17 @@ object Constants {
     const val TRX_CATEGORY_RESULT_KEY = "trx_category_result_key"
     const val ACCOUNT_TYPE_RESULT_KEY = "account_type_result_key"
 
-    // Notification
-    const val NOTIFICATION_ID = 1
-    const val NOTIFICATION_NAME = "Reminder"
-    const val NOTIFICATION_CHANNEL = "Default notification"
+    // Notification Reminder
+    const val NOTIFICATION_REM_ID = 1
+    const val NOTIFICATION_REM_NAME = "Reminder"
+    const val NOTIFICATION_DEFAULT_CHANNEL = "Default notification"
     const val NOTIFICATION_WORKER_TAG = "appName_notification_work"
     const val REQUEST_CODE = 0
     const val FLAGS = 0
+
+    // Notification Foreground service
+    const val NOTIFICATION_SAVE_ID = 2
+    const val NOTIFICATION_SAVE_NAME = "Save transactions"
+    const val NOTIFICATION_SERVICE_CHANNEL = "service_notification"
+    const val NOTIFICATION_SERVICE_CHANNEL_NAME = "Service notification"
 }
