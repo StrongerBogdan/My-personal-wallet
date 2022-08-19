@@ -9,7 +9,6 @@ import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
-import java.util.*
 import javax.inject.Inject
 
 class TransactionsLocalDataSourceImpl @Inject constructor(
@@ -37,10 +36,6 @@ class TransactionsLocalDataSourceImpl @Inject constructor(
             }
         }
 
-    override suspend fun getLocalDateTransaction(date: Date?): Transaction {
-        TODO("Not yet implemented")
-    }
-
     override suspend fun getLocalTransactionById(id: Int): Transaction =
         withContext(dispatcher) {
             val transactionEntity = transactionsDao.getById(id)
@@ -54,10 +49,6 @@ class TransactionsLocalDataSourceImpl @Inject constructor(
                 accountType
             )
         }
-
-    override suspend fun insertTransactions(transactions: List<Transaction>): List<Transaction> {
-        TODO("Not yet implemented")
-    }
 
     override suspend fun insertTransaction(transaction: Transaction) =
         withContext(dispatcher) {
