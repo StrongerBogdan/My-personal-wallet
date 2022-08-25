@@ -4,14 +4,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/light_gray">
+    android:background="@color/gray">
 
     <TextView
         android:id="@+id/day_tv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="@dimen/headline5_text_size"
-        android:textColor="@color/gray_dark"
+        android:textColor="@color/grayish_white"
         android:layout_marginStart="@dimen/small_margin"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -23,7 +23,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="@dimen/subtitle_text_size"
-        android:textColor="@color/gray_dark"
+        android:textColor="@color/grayish_white"
         android:layout_marginStart="@dimen/small_margin"
         app:layout_constraintStart_toEndOf="@id/day_tv"
         app:layout_constraintTop_toTopOf="parent"
@@ -34,7 +34,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="@dimen/subtitle_text_size"
-        android:textColor="@color/gray_dark"
+        android:textColor="@color/grayish_white"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="@id/day_of_the_week_tv"
         app:layout_constraintTop_toBottomOf="@id/day_of_the_week_tv"
@@ -45,7 +45,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="@dimen/subtitle_text_size"
-        android:textColor="@color/gray_dark"
+        android:textColor="@color/grayish_white"
         android:visibility="invisible"
         android:layout_marginEnd="@dimen/small_margin"
         app:layout_constraintBaseline_toBaselineOf="@+id/day_of_the_week_tv"
