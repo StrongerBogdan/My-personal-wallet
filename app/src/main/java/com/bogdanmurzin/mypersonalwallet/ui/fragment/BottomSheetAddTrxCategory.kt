@@ -108,6 +108,7 @@ class BottomSheetAddTrxCategory : BottomSheetDialogFragment() {
                 isSingleSelection = true
 
                 setOnCheckedStateChangeListener { group, checkedList ->
+                    if (checkedList.isEmpty()) return@setOnCheckedStateChangeListener
                     // There is always one element
                     val chip: Chip = group.findViewById(checkedList[0])
                     // If chip has "+" icon? -> add new subcategory

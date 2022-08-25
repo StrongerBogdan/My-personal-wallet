@@ -31,7 +31,7 @@ class TrxCategoryChooseDialogFragment : CategoryChooseDialogFragment() {
         super.onCreateView(inflater, container, savedInstanceState)
 
         binding.titleAccountChoose.text = resources.getString(R.string.choose_category)
-
+        binding.doneBtn.visibility = View.VISIBLE
         binding.doneBtn.setOnClickListener {
             chooseViewModel.chooseCategory()
         }
@@ -64,6 +64,7 @@ class TrxCategoryChooseDialogFragment : CategoryChooseDialogFragment() {
                     isSingleSelection = true
 
                     setOnCheckedStateChangeListener { group, checkedList ->
+                        if (checkedList.isEmpty()) return@setOnCheckedStateChangeListener
                         // There is always one element
                         val chip: Chip = group.findViewById(checkedList[0])
                         //viewModel.selectSubcategory(chip.text.toString())

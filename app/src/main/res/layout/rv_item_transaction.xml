@@ -53,23 +53,36 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/small_margin"
+            android:layout_marginStart="@dimen/small_half_margin"
             android:textSize="@dimen/button_text_size"
-            app:layout_constraintStart_toEndOf="@id/account_iv"
+            app:layout_constraintStart_toEndOf="@id/account_iv_container"
             app:layout_constraintTop_toBottomOf="@id/category_tv"
+            app:layout_constraintBottom_toTopOf="@id/description_tv"
             tools:text="Card" />
 
-        <ImageView
-            android:id="@+id/account_iv"
+        <androidx.cardview.widget.CardView
+            android:id="@+id/account_iv_container"
             android:layout_width="@dimen/icon_category_size"
             android:layout_height="@dimen/icon_category_size"
-            android:contentDescription="@string/category_icon_desc"
-            android:paddingEnd="@dimen/small_half_margin"
+            android:layout_gravity="center"
+            android:layout_margin="@dimen/small_half_margin"
+            app:cardCornerRadius="50dp"
             app:layout_constraintBottom_toTopOf="@id/description_tv"
             app:layout_constraintEnd_toStartOf="@id/account_type_tv"
             app:layout_constraintStart_toStartOf="@id/category_tv"
-            app:layout_constraintTop_toBottomOf="@id/category_tv"
-            tools:ignore="RtlSymmetry"
+            app:layout_constraintTop_toBottomOf="@id/category_tv">
+
+        <ImageView
+            android:id="@+id/account_iv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@color/white"
+            android:layout_gravity="center"
+            android:scaleType="centerInside"
+            android:padding="8dp"
+            android:contentDescription="@string/category_icon_desc"
             tools:src="@drawable/ic_card" />
+        </androidx.cardview.widget.CardView>
 
         <TextView
             android:id="@+id/description_tv"
