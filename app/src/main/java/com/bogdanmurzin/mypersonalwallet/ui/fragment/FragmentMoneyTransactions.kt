@@ -105,6 +105,7 @@ class FragmentMoneyTransactions : Fragment() {
         viewModel.updateTransactions()
 
         toolbar = activity?.findViewById(R.id.toolbar)
+        toolbar?.title = getString(R.string.transactions)
 
         toolbar?.setOnMenuItemClickListener {
             when (it.itemId) {

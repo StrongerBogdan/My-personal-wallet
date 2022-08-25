@@ -37,7 +37,8 @@ class TrxCategoryFragment : CategoryFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        (activity as AppCompatActivity).supportActionBar?.setSubtitle(R.string.transaction)
+        val toolbar: MaterialToolbar? = activity?.findViewById(R.id.toolbar)
+        toolbar?.title = getString(R.string.trxcategory_type)
     }
 
     override fun observeViewModel() {
