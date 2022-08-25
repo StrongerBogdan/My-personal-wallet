@@ -1,20 +1,16 @@
 package com.bogdanmurzin.mypersonalwallet.adapter
 
-import android.content.Context
-import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bogdanmurzin.domain.entities.CategoryEntity
-import com.bogdanmurzin.mypersonalwallet.R
 import com.bogdanmurzin.mypersonalwallet.common.Constants.ICON_SCALE
 import com.bogdanmurzin.mypersonalwallet.databinding.RvCategoryItemBinding
 import com.bumptech.glide.Glide
 
-
-class ImageRecyclerViewAdapter(
+open class ImageRecyclerViewAdapter(
     private val onItemClicked: (CategoryEntity) -> Unit
 ) :
     ListAdapter<CategoryEntity, ImageRecyclerViewAdapter.ViewHolder>(ItemDiffCallback) {
@@ -35,15 +31,7 @@ class ImageRecyclerViewAdapter(
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val item = getItem(position)
         holder.bind(item)
-        holder.itemView.setBackgroundResource(if (selectedPosition == position) R.drawable.round_rect_shape_recycler else Color.TRANSPARENT)
-        holder.itemView.setOnClickListener {
-            // First notifyItemChanged for unhighlighting item
-            // Second for highlighting selected item
-            notifyItemChanged(selectedPosition)
-            selectedPosition = position
-            notifyItemChanged(selectedPosition)
-            onItemClicked(item)
-        }
+        holder.itemView.setOnClickListener { onItemClicked(item) }
     }
 
     inner class ViewHolder(

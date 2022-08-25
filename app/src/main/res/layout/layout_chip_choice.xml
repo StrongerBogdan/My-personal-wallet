@@ -7,7 +7,7 @@
     android:layout_height="wrap_content"
     android:layout_margin="@dimen/small_half_margin"
     android:textSize="@dimen/caption_text_size"
-    tools:checked="true"
+    tools:checked="false"
     tools:text="123123123123123123">
 
 </com.google.android.material.chip.Chip>

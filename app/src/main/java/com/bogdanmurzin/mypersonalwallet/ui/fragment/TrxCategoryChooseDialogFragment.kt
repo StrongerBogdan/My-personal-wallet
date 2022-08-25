@@ -13,6 +13,7 @@ import com.bogdanmurzin.domain.entities.CategoryEntity
 import com.bogdanmurzin.domain.entities.TransactionCategory
 import com.bogdanmurzin.mypersonalwallet.R
 import com.bogdanmurzin.mypersonalwallet.adapter.ImageRecyclerViewAdapter
+import com.bogdanmurzin.mypersonalwallet.adapter.ImageRecyclerViewAdapterWithSelection
 import com.bogdanmurzin.mypersonalwallet.common.Constants
 import com.bogdanmurzin.mypersonalwallet.databinding.DialogCategoryChooseBinding
 import com.bogdanmurzin.mypersonalwallet.ui.viewmodel.CategoryChooseViewModel
@@ -77,7 +78,7 @@ class TrxCategoryChooseDialogFragment : CategoryChooseDialogFragment() {
     }
 
     override fun setupRecycler() {
-        imageRecyclerAdapter = ImageRecyclerViewAdapter {
+        imageRecyclerAdapter = ImageRecyclerViewAdapterWithSelection {
             // Remove selected subcategory
             chooseViewModel.selectSubcategory(null)
             // "trx" it's short form of "transaction"
