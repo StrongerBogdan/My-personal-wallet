@@ -151,8 +151,10 @@ class BottomSheetAddTrxCategory : BottomSheetDialogFragment() {
 
     private fun ChipGroup.addAddChip() {
         val chip = layoutInflater.inflate(R.layout.layout_chip_choice, this, false) as Chip
+
         chip.apply {
             setChipIconResource(R.drawable.ic_baseline_add)
+            setChipIconTintResource(R.color.black)
             isChipIconVisible = true
             id = View.generateViewId()
             addView(this)
