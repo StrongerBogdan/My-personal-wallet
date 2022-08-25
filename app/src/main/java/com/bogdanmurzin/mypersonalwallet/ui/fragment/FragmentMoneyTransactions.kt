@@ -54,9 +54,7 @@ class FragmentMoneyTransactions : Fragment() {
         binding.fab.setOnClickListener(onFabClickListener)
 
         viewModel.transactionsList.observe(viewLifecycleOwner) {
-            recyclerAdapter.submitList(
-                viewModel.addHeaders(it)
-            )
+            recyclerAdapter.submitList(it)
         }
 
         viewModel.action.observe(viewLifecycleOwner) { event ->

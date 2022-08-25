@@ -1,6 +1,5 @@
 package com.bogdanmurzin.mypersonalwallet.ui.viewmodel
 
-import android.content.SharedPreferences
 import androidx.lifecycle.*
 import com.bogdanmurzin.domain.usecases.transaction.DeleteTransactionsUseCase
 import com.bogdanmurzin.domain.usecases.transaction.GetTransactionsUseCase
@@ -24,8 +23,8 @@ class MainViewModel @Inject constructor(
     private val headerItemUiMapper: HeaderItemUiMapper
 ) : ViewModel() {
 
-    private val _transactionList: MutableLiveData<List<TransactionItemUiModel>> = MutableLiveData()
-    var transactionsList: LiveData<List<TransactionItemUiModel>> = _transactionList
+    private val _transactionList: MutableLiveData<List<RecyclerMultiTypeItem>> = MutableLiveData()
+    var transactionsList: LiveData<List<RecyclerMultiTypeItem>> = _transactionList
     private val _action: SingleLiveEvent<Event> = SingleLiveEvent()
     val action: LiveData<Event> = _action
 
@@ -43,7 +42,7 @@ class MainViewModel @Inject constructor(
             .map { list ->
                 transactionUiMapper.toListOfTransactionUiModel(list, selectedTransactionsIds)
             }
-            .collect { _transactionList.postValue(it) }
+            .collect { _transactionList.postValue(addHeaders(it)) }
     }
 
     fun openBottomSheet(id: Int) {
@@ -60,7 +59,7 @@ class MainViewModel @Inject constructor(
         _action.postValue(Event.OpenSettingsActivity)
     }
 
-    fun addHeaders(transactionList: List<TransactionItemUiModel>): List<RecyclerMultiTypeItem> {
+    private fun addHeaders(transactionList: List<TransactionItemUiModel>): List<RecyclerMultiTypeItem> {
         val customComparator =
             compareBy<Date> { it.year }.thenBy { it.month }.thenBy { it.day }
         val resultList = mutableListOf<RecyclerMultiTypeItem>()
