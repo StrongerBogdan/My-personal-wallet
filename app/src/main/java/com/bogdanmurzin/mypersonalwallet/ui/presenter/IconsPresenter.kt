@@ -18,6 +18,8 @@ class IconsPresenter(private val getIconsUseCase: GetIconsUseCase) {
     private val compositeDisposable = CompositeDisposable()
 
     private fun loadIcons(query: String) {
+        view?.hideMessageTv()
+        view?.hideRecycler()
         view?.showProgressBar()
         compositeDisposable.add(
             getIconsUseCase.invoke(query)
@@ -27,6 +29,7 @@ class IconsPresenter(private val getIconsUseCase: GetIconsUseCase) {
                         view?.hideProgressBar()
                         result.onSuccess {
                             view?.showIcons(it)
+                            view?.showRecycler()
                         }
                         result.onFailure {
                             view?.showMessageTv(it.message)
@@ -87,5 +90,7 @@ class IconsPresenter(private val getIconsUseCase: GetIconsUseCase) {
         fun hideProgressBar()
         fun showMessageTv(message: String?)
         fun hideMessageTv()
+        fun showRecycler()
+        fun hideRecycler()
     }
 }

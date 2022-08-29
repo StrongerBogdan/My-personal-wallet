@@ -101,6 +101,14 @@ class IconsChooseFragment : DialogFragment(), IconsPresenter.IconView {
         binding.nothingMessageTv.visibility = View.INVISIBLE
     }
 
+    override fun showRecycler() {
+        binding.recycler.visibility = View.VISIBLE
+    }
+
+    override fun hideRecycler() {
+        binding.recycler.visibility = View.INVISIBLE
+    }
+
     override fun showProgressBar() {
         binding.progressBar.visibility = View.VISIBLE
     }
