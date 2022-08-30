@@ -1,19 +1,14 @@
 package com.bogdanmurzin.mypersonalwallet.ui.viewmodel
 
-import android.content.Context
-import android.net.Uri
 import androidx.lifecycle.*
 import com.bogdanmurzin.domain.entities.AccountType
 import com.bogdanmurzin.domain.usecases.account_type.GetAccountTypeUseCase
 import com.bogdanmurzin.domain.usecases.account_type.InsertAccountUseCase
 import com.bogdanmurzin.domain.usecases.account_type.UpdateAccountUseCase
-import com.bogdanmurzin.mypersonalwallet.common.Constants
+import com.bogdanmurzin.mypersonalwallet.util.CoroutineDispatcherProvider
+import com.bogdanmurzin.mypersonalwallet.util.DefaultCoroutineDispatcherProvider
 import com.bogdanmurzin.mypersonalwallet.util.EditingState
-import com.bumptech.glide.Glide
-import com.bumptech.glide.load.engine.DiskCacheStrategy
-import com.bumptech.glide.request.RequestOptions
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.io.IOException
 import javax.inject.Inject
@@ -23,7 +18,8 @@ import javax.inject.Inject
 class AddAccountViewModel @Inject constructor(
     private val getAccountTypeUseCase: GetAccountTypeUseCase,
     private val updateAccountUseCase: UpdateAccountUseCase,
-    private val insertAccountUseCase: InsertAccountUseCase
+    private val insertAccountUseCase: InsertAccountUseCase,
+    private val coroutineDispatcherProvider: CoroutineDispatcherProvider
 ) : ViewModel() {
 
     private val _loadedAccountType: MutableLiveData<AccountType> = MutableLiveData()
@@ -33,10 +29,8 @@ class AddAccountViewModel @Inject constructor(
     private val _doneAction: SingleLiveEvent<Result<Boolean>> = SingleLiveEvent()
     var doneAction: LiveData<Result<Boolean>> = _doneAction
 
-    //var currentImageUrl: String? = null
-
     fun setUpData(id: Int) {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch(coroutineDispatcherProvider.io()) {
             val account = getAccountTypeUseCase.invoke(id)
             // Save image URL
             _currentImageUrl.postValue(account.imageUri)
@@ -44,7 +38,7 @@ class AddAccountViewModel @Inject constructor(
         }
     }
 
-    fun validateData(id: Int, title: String, state: EditingState): Boolean {
+    private fun validateData(id: Int, title: String, state: EditingState): Boolean {
         val image = currentImageUrl.value
 
         if (image != null && title.isNotEmpty()) {
@@ -72,13 +66,13 @@ class AddAccountViewModel @Inject constructor(
     }
 
     private fun updateAccount(accountType: AccountType) {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch(coroutineDispatcherProvider.io()) {
             updateAccountUseCase.invoke(accountType)
         }
     }
 
     private fun addAccount(accountType: AccountType) {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch(coroutineDispatcherProvider.io()) {
             insertAccountUseCase.invoke(accountType)
         }
     }
@@ -91,14 +85,16 @@ class AddAccountViewModel @Inject constructor(
     class Factory(
         private val getAccountTypeUseCase: GetAccountTypeUseCase,
         private val updateAccountUseCase: UpdateAccountUseCase,
-        private val insertAccountUseCase: InsertAccountUseCase
+        private val insertAccountUseCase: InsertAccountUseCase,
+        private val coroutineDispatcherProvider: DefaultCoroutineDispatcherProvider
     ) : ViewModelProvider.NewInstanceFactory() {
 
         override fun <T : ViewModel> create(modelClass: Class<T>): T =
             AddAccountViewModel(
                 getAccountTypeUseCase,
                 updateAccountUseCase,
-                insertAccountUseCase
+                insertAccountUseCase,
+                coroutineDispatcherProvider
             ) as T
     }
 }

@@ -1,7 +1,6 @@
 package com.bogdanmurzin.mypersonalwallet.ui.viewmodel
 
 import androidx.lifecycle.*
-import androidx.navigation.NavDirections
 import com.bogdanmurzin.domain.entities.AccountType
 import com.bogdanmurzin.domain.entities.Transaction
 import com.bogdanmurzin.domain.usecases.account_type.GetAccountTypeUseCase
@@ -13,13 +12,8 @@ import com.bogdanmurzin.mypersonalwallet.data.TrxCategoryUiModel
 import com.bogdanmurzin.mypersonalwallet.data.transaction_recycer_items.TransactionItemUiModel
 import com.bogdanmurzin.mypersonalwallet.mapper.TransactionUiMapper
 import com.bogdanmurzin.mypersonalwallet.mapper.TrxCategoryUiMapper
-import com.bogdanmurzin.mypersonalwallet.ui.fragment.BottomSheetAddTransactionDirections
-import com.bogdanmurzin.mypersonalwallet.util.CategoryArg
-import com.bogdanmurzin.mypersonalwallet.util.EditingState
-import com.bogdanmurzin.mypersonalwallet.util.Event
-import com.bogdanmurzin.mypersonalwallet.util.TransactionComponentsFormatter
+import com.bogdanmurzin.mypersonalwallet.util.*
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.io.IOException
 import java.util.*
@@ -36,7 +30,9 @@ class AddTransactionViewModel @Inject constructor(
 
     private val transactionUiMapper: TransactionUiMapper,
     private val trxCategoryUiMapper: TrxCategoryUiMapper,
-    private val transactionComponentsFormatter: TransactionComponentsFormatter
+    private val transactionComponentsFormatter: TransactionComponentsFormatter,
+
+    private val coroutineDispatcherProvider: CoroutineDispatcherProvider
 ) : ViewModel() {
 
     private val _selectedAccountType: MutableLiveData<AccountType?> = MutableLiveData()
@@ -53,13 +49,13 @@ class AddTransactionViewModel @Inject constructor(
     var action: LiveData<Event> = _action
 
     private fun addTransaction(transaction: Transaction) {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch(coroutineDispatcherProvider.io()) {
             insertTransactionUseCase.invoke(transaction)
         }
     }
 
     private fun updateTransaction(transaction: Transaction) {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch(coroutineDispatcherProvider.io()) {
             updateTransactionUseCase.invoke(transaction)
         }
     }
@@ -69,7 +65,7 @@ class AddTransactionViewModel @Inject constructor(
     }
 
     fun setUpData(id: Int) {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch(coroutineDispatcherProvider.io()) {
             val transaction = transactionUiMapper.toTransactionUiModel(
                 getTransactionByIdUseCase.invoke(id)
             )
@@ -80,7 +76,7 @@ class AddTransactionViewModel @Inject constructor(
         }
     }
 
-    fun validateData(
+    private fun validateData(
         id: Int,
         rawTransactionAmount: String,
         rawDescription: String,
@@ -117,7 +113,7 @@ class AddTransactionViewModel @Inject constructor(
     }
 
     fun selectAccountType(accountId: Int) {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch(coroutineDispatcherProvider.io()) {
             _selectedAccountType.postValue(
                 getAccountTypeUseCase.invoke(accountId)
             )
@@ -125,7 +121,7 @@ class AddTransactionViewModel @Inject constructor(
     }
 
     fun selectTrxCategory(trxCategoryId: Int) {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch(coroutineDispatcherProvider.io()) {
             _selectedTrxCategory.postValue(
                 trxCategoryUiMapper.toTrxCategoryUiModel(
                     getTrxCategoryUseCase.invoke(trxCategoryId)
@@ -163,7 +159,9 @@ class AddTransactionViewModel @Inject constructor(
 
         private val transactionUiMapper: TransactionUiMapper,
         private val trxCategoryUiMapper: TrxCategoryUiMapper,
-        private val transactionComponentsFormatter: TransactionComponentsFormatter
+        private val transactionComponentsFormatter: TransactionComponentsFormatter,
+
+        private val coroutineDispatcherProvider: CoroutineDispatcherProvider
     ) : ViewModelProvider.NewInstanceFactory() {
 
         override fun <T : ViewModel> create(modelClass: Class<T>): T =
@@ -175,7 +173,8 @@ class AddTransactionViewModel @Inject constructor(
                 updateTransactionUseCase,
                 transactionUiMapper,
                 trxCategoryUiMapper,
-                transactionComponentsFormatter
+                transactionComponentsFormatter,
+                coroutineDispatcherProvider
             ) as T
     }
 }

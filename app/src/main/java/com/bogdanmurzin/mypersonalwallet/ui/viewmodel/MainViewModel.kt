@@ -7,9 +7,10 @@ import com.bogdanmurzin.mypersonalwallet.data.transaction_recycer_items.Recycler
 import com.bogdanmurzin.mypersonalwallet.data.transaction_recycer_items.TransactionItemUiModel
 import com.bogdanmurzin.mypersonalwallet.mapper.HeaderItemUiMapper
 import com.bogdanmurzin.mypersonalwallet.mapper.TransactionUiMapper
+import com.bogdanmurzin.mypersonalwallet.util.CoroutineDispatcherProvider
+import com.bogdanmurzin.mypersonalwallet.util.DefaultCoroutineDispatcherProvider
 import com.bogdanmurzin.mypersonalwallet.util.Event
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import java.util.*
@@ -20,7 +21,8 @@ class MainViewModel @Inject constructor(
     private val getTransactionsUseCase: GetTransactionsUseCase,
     private val deleteTransactionsUseCase: DeleteTransactionsUseCase,
     private val transactionUiMapper: TransactionUiMapper,
-    private val headerItemUiMapper: HeaderItemUiMapper
+    private val headerItemUiMapper: HeaderItemUiMapper,
+    private val coroutineDispatcherProvider: CoroutineDispatcherProvider
 ) : ViewModel() {
 
     private val _transactionList: MutableLiveData<List<RecyclerMultiTypeItem>> = MutableLiveData()
@@ -50,7 +52,7 @@ class MainViewModel @Inject constructor(
     }
 
     fun deleteTransactions(transactionIds: List<Int>) {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch(coroutineDispatcherProvider.io()) {
             deleteTransactionsUseCase.invoke(transactionIds)
         }
     }
@@ -92,7 +94,8 @@ class MainViewModel @Inject constructor(
         private val getTransactionsUseCase: GetTransactionsUseCase,
         private val deleteTransactionsUseCase: DeleteTransactionsUseCase,
         private val transactionUiMapper: TransactionUiMapper,
-        private val headerItemUiMapper: HeaderItemUiMapper
+        private val headerItemUiMapper: HeaderItemUiMapper,
+        private val coroutineDispatcherProvider: DefaultCoroutineDispatcherProvider
     ) : ViewModelProvider.NewInstanceFactory() {
 
         override fun <T : ViewModel> create(modelClass: Class<T>): T =
@@ -100,7 +103,8 @@ class MainViewModel @Inject constructor(
                 getTransactionsUseCase,
                 deleteTransactionsUseCase,
                 transactionUiMapper,
-                headerItemUiMapper
+                headerItemUiMapper,
+                coroutineDispatcherProvider
             ) as T
     }
 }

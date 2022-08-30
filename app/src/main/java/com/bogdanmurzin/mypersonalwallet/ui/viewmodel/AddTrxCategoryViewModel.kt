@@ -2,10 +2,13 @@ package com.bogdanmurzin.mypersonalwallet.ui.viewmodel
 
 import androidx.lifecycle.*
 import com.bogdanmurzin.domain.entities.TransactionCategory
-import com.bogdanmurzin.domain.usecases.transaction_category.*
+import com.bogdanmurzin.domain.usecases.transaction_category.GetAllTrxSubCategoriesUseCase
+import com.bogdanmurzin.domain.usecases.transaction_category.GetTrxCategoryUseCase
+import com.bogdanmurzin.domain.usecases.transaction_category.InsertTrxCategoryUseCase
+import com.bogdanmurzin.domain.usecases.transaction_category.UpdateTrxCategoryUseCase
+import com.bogdanmurzin.mypersonalwallet.util.CoroutineDispatcherProvider
 import com.bogdanmurzin.mypersonalwallet.util.EditingState
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.io.IOException
 import javax.inject.Inject
@@ -15,7 +18,8 @@ class AddTrxCategoryViewModel @Inject constructor(
     private val getTrxCategoryUseCase: GetTrxCategoryUseCase,
     private val updateTrxCategoryUseCase: UpdateTrxCategoryUseCase,
     private val insertTrxCategoryUseCase: InsertTrxCategoryUseCase,
-    private val getAllTrxSubCategoriesUseCase: GetAllTrxSubCategoriesUseCase
+    private val getAllTrxSubCategoriesUseCase: GetAllTrxSubCategoriesUseCase,
+    private val coroutineDispatcherProvider: CoroutineDispatcherProvider
 ) : ViewModel() {
 
     private val _selectedTrxCategory: MutableLiveData<TransactionCategory> = MutableLiveData()
@@ -31,7 +35,7 @@ class AddTrxCategoryViewModel @Inject constructor(
     private var selectedTrxSubcategoryTitle: String? = null
 
     fun setUpData(id: Int) {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch(coroutineDispatcherProvider.io()) {
             val trxCategory = getTrxCategoryUseCase.invoke(id)
             // Save image URL
             _currentImageUrl.postValue(trxCategory.imageUri)
@@ -43,7 +47,7 @@ class AddTrxCategoryViewModel @Inject constructor(
         }
     }
 
-    fun validateData(id: Int, category: String, state: EditingState): Boolean {
+    private fun validateData(id: Int, category: String, state: EditingState): Boolean {
 
         val image = currentImageUrl.value
 
@@ -73,13 +77,13 @@ class AddTrxCategoryViewModel @Inject constructor(
     }
 
     private fun updateTrxCategory(trxCategory: TransactionCategory) {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch(coroutineDispatcherProvider.io()) {
             updateTrxCategoryUseCase.invoke(trxCategory)
         }
     }
 
     private fun addTrxCategory(trxCategory: TransactionCategory) {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch(coroutineDispatcherProvider.io()) {
             insertTrxCategoryUseCase.invoke(trxCategory)
         }
     }
@@ -92,8 +96,8 @@ class AddTrxCategoryViewModel @Inject constructor(
         selectedTrxSubcategoryTitle = chipSubcategory
     }
 
-    fun loadAllTrxSubCategories(trxCategory: TransactionCategory) {
-        viewModelScope.launch(Dispatchers.IO) {
+    private fun loadAllTrxSubCategories(trxCategory: TransactionCategory) {
+        viewModelScope.launch(coroutineDispatcherProvider.io()) {
             // Load all subcategories selected category (by title)
             getAllTrxSubCategoriesUseCase.invoke(trxCategory.title).collect {
                 _trxSubCategories.postValue(it)
@@ -118,7 +122,8 @@ class AddTrxCategoryViewModel @Inject constructor(
         private val getTrxCategoryUseCase: GetTrxCategoryUseCase,
         private val updateTrxCategoryUseCase: UpdateTrxCategoryUseCase,
         private val insertTrxCategoryUseCase: InsertTrxCategoryUseCase,
-        private val getAllTrxSubCategoriesUseCase: GetAllTrxSubCategoriesUseCase
+        private val getAllTrxSubCategoriesUseCase: GetAllTrxSubCategoriesUseCase,
+        private val coroutineDispatcherProvider: CoroutineDispatcherProvider
     ) : ViewModelProvider.NewInstanceFactory() {
 
         override fun <T : ViewModel> create(modelClass: Class<T>): T =
@@ -126,7 +131,8 @@ class AddTrxCategoryViewModel @Inject constructor(
                 getTrxCategoryUseCase,
                 updateTrxCategoryUseCase,
                 insertTrxCategoryUseCase,
-                getAllTrxSubCategoriesUseCase
+                getAllTrxSubCategoriesUseCase,
+                coroutineDispatcherProvider
             ) as T
     }
 }

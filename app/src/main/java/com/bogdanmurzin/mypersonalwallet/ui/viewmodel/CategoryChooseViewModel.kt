@@ -8,8 +8,8 @@ import com.bogdanmurzin.domain.usecases.account_type.GetAllAccountTypesUseCase
 import com.bogdanmurzin.domain.usecases.transaction_category.GetAllTrxCategoryUseCase
 import com.bogdanmurzin.domain.usecases.transaction_category.GetAllTrxSubCategoriesUseCase
 import com.bogdanmurzin.domain.usecases.transaction_category.GetTrxCategoryBySubcategoryUseCase
+import com.bogdanmurzin.mypersonalwallet.util.CoroutineDispatcherProvider
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -20,7 +20,9 @@ class CategoryChooseViewModel @Inject constructor(
 
     private val getAllTrxCategoryUseCase: GetAllTrxCategoryUseCase,
     private val getAllTrxSubCategoriesUseCase: GetAllTrxSubCategoriesUseCase,
-    private val getTrxCategoryBySubcategoryUseCase: GetTrxCategoryBySubcategoryUseCase
+    private val getTrxCategoryBySubcategoryUseCase: GetTrxCategoryBySubcategoryUseCase,
+
+    private val coroutineDispatcherProvider: CoroutineDispatcherProvider
 ) : ViewModel() {
 
     private val _selectedAccountType: MutableLiveData<AccountType?> = MutableLiveData()
@@ -46,7 +48,7 @@ class CategoryChooseViewModel @Inject constructor(
     }
 
     private fun selectTransactionCategory(selectedCategoryTitle: String) {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch(coroutineDispatcherProvider.io()) {
             val trxCategory = getTrxCategoryIdBySubcategory(
                 selectedCategoryTitle,
                 selectedSubcategoryTitle
@@ -59,7 +61,7 @@ class CategoryChooseViewModel @Inject constructor(
     }
 
     fun selectAccountType(accountType: AccountType) {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch(coroutineDispatcherProvider.io()) {
             _selectedAccountType.postValue(
                 getAccountTypeUseCase.invoke(accountType.id)
             )
@@ -70,7 +72,7 @@ class CategoryChooseViewModel @Inject constructor(
             : TransactionCategory = getTrxCategoryBySubcategoryUseCase.invoke(title, subcategory)
 
     fun showAllAccounts() {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch(coroutineDispatcherProvider.io()) {
             getAllAccountTypesUseCase.invoke().collect {
                 _accountTypes.postValue(it)
             }
@@ -78,7 +80,7 @@ class CategoryChooseViewModel @Inject constructor(
     }
 
     fun showAllTrxCategories() {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch(coroutineDispatcherProvider.io()) {
             getAllTrxCategoryUseCase.invoke().collect {
                 _trxCategories.postValue(it)
             }
@@ -90,7 +92,7 @@ class CategoryChooseViewModel @Inject constructor(
     }
 
     fun loadAllTrxSubCategories(trxCategory: TransactionCategory) {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch(coroutineDispatcherProvider.io()) {
             // Save title
             selectedCategoryTitle = trxCategory.title
             // Load all subcategories selected category (by title)
@@ -107,7 +109,9 @@ class CategoryChooseViewModel @Inject constructor(
 
         private val getAllTrxCategoryUseCase: GetAllTrxCategoryUseCase,
         private val getAllTrxSubCategoriesUseCase: GetAllTrxSubCategoriesUseCase,
-        private val getTrxCategoryBySubcategoryUseCase: GetTrxCategoryBySubcategoryUseCase
+        private val getTrxCategoryBySubcategoryUseCase: GetTrxCategoryBySubcategoryUseCase,
+
+        private val coroutineDispatcherProvider: CoroutineDispatcherProvider
     ) : ViewModelProvider.NewInstanceFactory() {
 
         override fun <T : ViewModel> create(modelClass: Class<T>): T =
@@ -116,7 +120,8 @@ class CategoryChooseViewModel @Inject constructor(
                 getAllAccountTypesUseCase,
                 getAllTrxCategoryUseCase,
                 getAllTrxSubCategoriesUseCase,
-                getTrxCategoryBySubcategoryUseCase
+                getTrxCategoryBySubcategoryUseCase,
+                coroutineDispatcherProvider
             ) as T
     }
 }

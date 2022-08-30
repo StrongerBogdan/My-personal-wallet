@@ -5,16 +5,16 @@ import androidx.navigation.NavDirections
 import com.bogdanmurzin.domain.entities.AccountType
 import com.bogdanmurzin.domain.usecases.account_type.GetAllAccountTypesUseCase
 import com.bogdanmurzin.mypersonalwallet.ui.fragment.AccountFragmentDirections
-import com.bogdanmurzin.mypersonalwallet.ui.fragment.FragmentMoneyTransactionsDirections
+import com.bogdanmurzin.mypersonalwallet.util.CoroutineDispatcherProvider
 import com.bogdanmurzin.mypersonalwallet.util.Event
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class AccountViewModel @Inject constructor(
-    private val getAllAccountTypesUseCase: GetAllAccountTypesUseCase
+    private val getAllAccountTypesUseCase: GetAllAccountTypesUseCase,
+    private val coroutineDispatcherProvider: CoroutineDispatcherProvider
 ) : ViewModel() {
 
     private val _accountTypes: MutableLiveData<List<AccountType>> = MutableLiveData()
@@ -27,7 +27,7 @@ class AccountViewModel @Inject constructor(
     }
 
     fun showAllAccounts() {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch(coroutineDispatcherProvider.io()) {
             getAllAccountTypesUseCase.invoke().collect {
                 _accountTypes.postValue(it)
             }
@@ -46,11 +46,13 @@ class AccountViewModel @Inject constructor(
     @Suppress("UNCHECKED_CAST")
     class Factory(
         private val getAllAccountTypesUseCase: GetAllAccountTypesUseCase,
+        private val coroutineDispatcherProvider: CoroutineDispatcherProvider
     ) : ViewModelProvider.NewInstanceFactory() {
 
         override fun <T : ViewModel> create(modelClass: Class<T>): T =
             AccountViewModel(
-                getAllAccountTypesUseCase
+                getAllAccountTypesUseCase,
+                coroutineDispatcherProvider
             ) as T
     }
 }
