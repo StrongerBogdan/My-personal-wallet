@@ -59,7 +59,7 @@
     <HorizontalScrollView
         android:id="@+id/subcategories_scroll"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
+        android:layout_height="@dimen/subcategory_choose_height"
         android:scrollbars="none"
         android:visibility="gone"
         app:layout_constraintBottom_toTopOf="@id/done_btn"

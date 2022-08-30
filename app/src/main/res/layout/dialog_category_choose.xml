@@ -22,7 +22,7 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/account_recycler"
         android:layout_width="wrap_content"
-        android:layout_height="100dp"
+        android:layout_height="@dimen/big_element_height"
         android:layout_margin="@dimen/medium_margin"
         app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
         app:layout_constraintBottom_toTopOf="@id/subcategories_scroll"
@@ -34,7 +34,7 @@
     <HorizontalScrollView
         android:id="@+id/subcategories_scroll"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
+        android:layout_height="@dimen/subcategory_choose_height"
         android:scrollbars="none"
         android:visibility="gone"
         app:layout_constraintBottom_toTopOf="@id/done_btn"

@@ -7,8 +7,8 @@
     android:layout_height="wrap_content"
     android:theme="@style/DarkCardView"
     style="@style/DarkCardView"
-    android:layout_marginTop="1dp"
-    android:elevation="1dp">
+    android:layout_marginTop="@dimen/recycler_item_minimum_margin"
+    android:elevation="@dimen/recycler_item_elevation">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -20,7 +20,7 @@
             android:layout_height="@dimen/icon_size"
             android:layout_gravity="center"
             android:layout_margin="@dimen/small_half_margin"
-            app:cardCornerRadius="50dp"
+            app:cardCornerRadius="@dimen/cared_corner_radius"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
@@ -32,7 +32,7 @@
             android:contentDescription="@string/category_icon_desc"
             android:layout_gravity="center"
             android:scaleType="centerInside"
-            android:padding="8dp"
+            android:padding="@dimen/small_margin"
             android:background="@color/white"
             tools:src="@drawable/ic_shopping_cart" />
         </androidx.cardview.widget.CardView>
@@ -66,7 +66,7 @@
             android:layout_height="@dimen/icon_category_size"
             android:layout_gravity="center"
             android:layout_margin="@dimen/small_half_margin"
-            app:cardCornerRadius="50dp"
+            app:cardCornerRadius="@dimen/cared_corner_radius"
             app:layout_constraintBottom_toTopOf="@id/description_tv"
             app:layout_constraintEnd_toStartOf="@id/account_type_tv"
             app:layout_constraintStart_toStartOf="@id/category_tv"
@@ -79,7 +79,7 @@
             android:background="@color/white"
             android:layout_gravity="center"
             android:scaleType="centerInside"
-            android:padding="8dp"
+            android:padding="@dimen/small_margin"
             android:contentDescription="@string/category_icon_desc"
             tools:src="@drawable/ic_card" />
         </androidx.cardview.widget.CardView>
@@ -89,7 +89,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/small_margin"
-
             android:textSize="@dimen/button_text_size"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="@id/category_tv"

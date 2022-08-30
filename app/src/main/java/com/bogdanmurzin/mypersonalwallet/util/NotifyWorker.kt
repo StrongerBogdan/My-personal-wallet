@@ -50,14 +50,16 @@ class NotifyWorker(context: Context, params: WorkerParameters) : Worker(context,
 
         val bitmap = applicationContext.vectorToBitmap(R.mipmap.ic_launcher_round)
         val titleNotification = applicationContext.getString(R.string.notification_reminder_title)
-        val subtitleNotification = applicationContext.getString(R.string.notification_reminder_subtitle)
+        val subtitleNotification =
+            applicationContext.getString(R.string.notification_reminder_subtitle)
 
         val pendingIntent = getActivity(applicationContext, REQUEST_CODE, intent, FLAGS)
 
-        val notification = NotificationCompat.Builder(applicationContext, NOTIFICATION_DEFAULT_CHANNEL)
-            .setLargeIcon(bitmap).setSmallIcon(R.mipmap.ic_launcher_round)
-            .setContentTitle(titleNotification).setContentText(subtitleNotification)
-            .setDefaults(DEFAULT_ALL).setContentIntent(pendingIntent).setAutoCancel(true)
+        val notification =
+            NotificationCompat.Builder(applicationContext, NOTIFICATION_DEFAULT_CHANNEL)
+                .setLargeIcon(bitmap).setSmallIcon(R.mipmap.ic_launcher_round)
+                .setContentTitle(titleNotification).setContentText(subtitleNotification)
+                .setDefaults(DEFAULT_ALL).setContentIntent(pendingIntent).setAutoCancel(true)
 
         notification.priority = PRIORITY_MAX
 
@@ -69,7 +71,9 @@ class NotifyWorker(context: Context, params: WorkerParameters) : Worker(context,
                 .setContentType(CONTENT_TYPE_SONIFICATION).build()
 
             val channel =
-                NotificationChannel(NOTIFICATION_DEFAULT_CHANNEL, NOTIFICATION_REM_NAME, IMPORTANCE_HIGH)
+                NotificationChannel(
+                    NOTIFICATION_DEFAULT_CHANNEL, NOTIFICATION_REM_NAME, IMPORTANCE_HIGH
+                )
 
             channel.enableLights(true)
             channel.lightColor = RED

@@ -29,7 +29,7 @@ class MyMoneyTransactionRecyclerViewAdapter(
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder =
         when (viewType) {
-            // TODO in future it is a good idea to make it through the delegates or factories
+            // in future it is a good idea to make it through the delegates or factories
             ITEM_TYPE_HEADER -> {
                 HeaderViewHolder(
                     RvItemHeaderBinding.inflate(
