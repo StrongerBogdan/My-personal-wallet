@@ -10,6 +10,7 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
+import java.util.*
 
 @Module
 @InstallIn(SingletonComponent::class)
@@ -33,8 +34,10 @@ object AppModule {
         }
 
     @Provides
-    fun provideSharedPreference(@ApplicationContext context: Context): SharedPreferences {
-        return context.getSharedPreferences(PREF_THEME_COLOR, Context.MODE_PRIVATE)
-    }
+    fun provideSharedPreference(@ApplicationContext context: Context): SharedPreferences =
+        context.getSharedPreferences(PREF_THEME_COLOR, Context.MODE_PRIVATE)
+
+    @Provides
+    fun provideLocale(): Locale = Locale.getDefault()
 
 }
