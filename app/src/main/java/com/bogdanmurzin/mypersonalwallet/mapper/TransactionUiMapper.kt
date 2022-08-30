@@ -6,7 +6,10 @@ import java.text.NumberFormat
 import java.util.*
 import javax.inject.Inject
 
-class TransactionUiMapper @Inject constructor(private val trxCategoryUiMapper: TrxCategoryUiMapper) {
+class TransactionUiMapper @Inject constructor(
+    private val trxCategoryUiMapper: TrxCategoryUiMapper,
+    private val locale: Locale
+) {
 
     fun toListOfTransactionUiModel(
         list: List<Transaction>,
@@ -21,14 +24,13 @@ class TransactionUiMapper @Inject constructor(private val trxCategoryUiMapper: T
         item: Transaction,
         isSelected: Boolean = false
     ): TransactionItemUiModel {
-        val locate = Locale.getDefault()
         return TransactionItemUiModel(
             item.id,
             trxCategoryUiMapper.toTrxCategoryUiModel(item.category),
             item.date,
             item.description,
             item.accountType,
-            NumberFormat.getCurrencyInstance(locate).format(item.transactionAmount),
+            NumberFormat.getCurrencyInstance(locale).format(item.transactionAmount),
             isSelected
         )
     }

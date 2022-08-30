@@ -6,21 +6,20 @@ import java.text.SimpleDateFormat
 import java.util.*
 import javax.inject.Inject
 
-class HeaderItemUiMapper @Inject constructor() {
+class HeaderItemUiMapper @Inject constructor(private val locale: Locale) {
 
-    private val locate = Locale.getDefault()
-    private val dayFormat = SimpleDateFormat("dd", locate)
-    private val dayOfTheWeekFormat = SimpleDateFormat("EEEE", locate)
-    private val monthYearFormat = SimpleDateFormat("MMMM yyyy", locate)
+    private val dayFormat = SimpleDateFormat("dd", locale)
+    private val dayOfTheWeekFormat = SimpleDateFormat("EEEE", locale)
+    private val monthYearFormat = SimpleDateFormat("MMMM yyyy", locale)
 
     fun toHeaderItemUiMapper(date: Date, sumOfTransactionsAmount: Float): HeaderItemUiModel {
-        val locate = Locale.getDefault()
 
         return HeaderItemUiModel(
             day = dayFormat.format(date),
             dayOfTheWeek = dayOfTheWeekFormat.format(date).uppercase(),
             monthYear = monthYearFormat.format(date).uppercase(),
-            sumOfTransactions = NumberFormat.getCurrencyInstance(locate).format(sumOfTransactionsAmount)
+            sumOfTransactions = NumberFormat.getCurrencyInstance(locale)
+                .format(sumOfTransactionsAmount)
         )
     }
 }

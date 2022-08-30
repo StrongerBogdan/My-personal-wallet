@@ -6,7 +6,7 @@ import androidx.room.Index
 import androidx.room.PrimaryKey
 
 @Entity(
-    tableName = "transaction_category",
+    tableName = "trx_category",
     indices = [Index(
         value = ["title", "subcategory", "transaction_pic_uri"],
         unique = true

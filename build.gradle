@@ -43,13 +43,9 @@ ext {
     coroutines_version = '1.6.4'
     lifeData_version = '2.5.1'
     glide_version = '4.13.2'
+    mockk_version = '1.12.5'
+    espresso_version = '3.3.0'
 }
-
-//allprojects {
-//    repositories {
-//        google()
-//    }
-//}
 
 task clean(type: Delete) {
     delete rootProject.buildDir
