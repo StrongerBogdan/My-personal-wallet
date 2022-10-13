@@ -1,29 +1,35 @@
 package com.bogdanmurzin.mypersonalwallet.adapter
 
-import android.graphics.drawable.BitmapDrawable
-import androidx.recyclerview.widget.RecyclerView
+import android.net.Uri
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.core.content.ContextCompat
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
+import androidx.recyclerview.widget.RecyclerView
 import com.bogdanmurzin.mypersonalwallet.R
-
+import com.bogdanmurzin.mypersonalwallet.common.Constants
+import com.bogdanmurzin.mypersonalwallet.data.TrxCategoryUiModel
+import com.bogdanmurzin.mypersonalwallet.data.transaction_recycer_items.HeaderItemUiModel
+import com.bogdanmurzin.mypersonalwallet.data.transaction_recycer_items.RecyclerMultiTypeItem
+import com.bogdanmurzin.mypersonalwallet.data.transaction_recycer_items.TransactionItemUiModel
 import com.bogdanmurzin.mypersonalwallet.databinding.RvItemHeaderBinding
 import com.bogdanmurzin.mypersonalwallet.databinding.RvItemTransactionBinding
-import com.bogdanmurzin.mypersonalwallet.data.transaction_recycer_items.HeaderItem
-import com.bogdanmurzin.mypersonalwallet.data.transaction_recycer_items.RecyclerMultiTypeItem
-import com.bogdanmurzin.mypersonalwallet.data.transaction_recycer_items.TransactionItem
-import java.text.NumberFormat
-import java.text.SimpleDateFormat
-import java.util.*
+import com.bumptech.glide.Glide
 
 class MyMoneyTransactionRecyclerViewAdapter(
-    private val list: List<RecyclerMultiTypeItem>
-) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+    private val onItemClicked: (TransactionItemUiModel) -> Unit,
+    private val showMenuDelete: (Boolean) -> Unit,
+    private val getAllSelectedItems: (List<TransactionItemUiModel>) -> Unit
+) : ListAdapter<RecyclerMultiTypeItem, RecyclerView.ViewHolder>(ItemDiffCallback) {
+
+    var isEnabledDeleting = false
+    private var itemSelectedList = mutableListOf<TransactionItemUiModel>()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder =
         when (viewType) {
+            // in future it is a good idea to make it through the delegates or factories
             ITEM_TYPE_HEADER -> {
                 HeaderViewHolder(
                     RvItemHeaderBinding.inflate(
@@ -40,22 +46,53 @@ class MyMoneyTransactionRecyclerViewAdapter(
                         parent,
                         false
                     )
-                )
+                ).also { viewHolder ->
+                    // Set on short click listener
+                    viewHolder.itemView.setOnClickListener {
+                        val position = viewHolder.absoluteAdapterPosition
+                        val item = getItem(position) as TransactionItemUiModel
+                        if (isEnabledDeleting) {
+                            // If this item is already selected
+                            if (itemSelectedList.contains(item)) {
+                                unselectItem(viewHolder, item)
+                            } else {
+                                // If this item is not selected
+                                selectItem(viewHolder, item)
+                            }
+                            provideAllSelectedItems()
+                        } else {
+                            onItemClicked(item)
+                        }
+                    }
+                    // Set on long click listener
+                    viewHolder.itemView.setOnLongClickListener {
+                        val position = viewHolder.absoluteAdapterPosition
+                        val item = getItem(position) as TransactionItemUiModel
+                        selectItem(viewHolder, item)
+                        provideAllSelectedItems()
+                        true
+                    }
+                }
             }
         }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         when (holder.itemViewType) {
             ITEM_TYPE_HEADER ->
-                (holder as HeaderViewHolder).bind(list[position] as HeaderItem)
+                (holder as HeaderViewHolder).bind(getItem(position) as HeaderItemUiModel)
             ITEM_TYPE_TRANSACTION ->
-                (holder as MoneyTransactionViewHolder).bind(list[position] as TransactionItem)
+                (holder as MoneyTransactionViewHolder).bind(getItem(position) as TransactionItemUiModel)
+                    .also {
+                        val item = getItem(position) as TransactionItemUiModel
+                        if (item.isSelected) {
+                            selectItem(holder, item)
+                        }
+                    }
         }
     }
 
-    override fun getItemViewType(position: Int): Int = list[position].type
+    override fun getItemViewType(position: Int): Int = getItem(position).type
 
-    override fun getItemCount(): Int = list.size
 
     inner class HeaderViewHolder(binding: RvItemHeaderBinding) :
         RecyclerView.ViewHolder(binding.root) {
@@ -64,71 +101,100 @@ class MyMoneyTransactionRecyclerViewAdapter(
         private val monthYearTv: TextView = binding.monthYearTv
         private val transactionAmountTv: TextView = binding.transactionAmountTv
 
-        fun bind(item: HeaderItem) {
-            val locate = Locale.getDefault()
-
-            dayTv.text =
-                SimpleDateFormat("dd", locate).format(item.date)
-            dayOfTheWeekTv.text =
-                SimpleDateFormat("EEE", locate).format(item.date)
-                    .uppercase()
-            monthYearTv.text =
-                SimpleDateFormat("MMMM yyyy", locate).format(item.date)
-                    .uppercase()
-            transactionAmountTv.text =
-                NumberFormat.getCurrencyInstance(locate).format(item.transactionAmount)
+        fun bind(item: HeaderItemUiModel) {
+            dayTv.text = item.day
+            dayOfTheWeekTv.text = item.dayOfTheWeek
+            monthYearTv.text = item.monthYear
+            transactionAmountTv.text = item.sumOfTransactions
         }
     }
 
-    inner class MoneyTransactionViewHolder(binding: RvItemTransactionBinding) :
+    inner class MoneyTransactionViewHolder(val binding: RvItemTransactionBinding) :
         RecyclerView.ViewHolder(binding.root) {
-        private val imageView: ImageView = binding.categoryIv
-        private val categoryTv: TextView = binding.categoryTv
-        private val accountTypeTv: TextView = binding.accountTypeTv
-        private val descriptionTv: TextView = binding.descriptionTv
-        private val transactionAmountTv: TextView = binding.transactionAmountTv
 
-        fun bind(item: TransactionItem) {
-            val locate = Locale.getDefault()
-            val context = categoryTv.context
+        fun bind(item: TransactionItemUiModel) {
+            with(binding) {
+                val context = categoryTv.context
 
-            // get picture TODO refactor
-            val transactionPic = if (item.category.transactionPicUri != null) {
-                BitmapDrawable(context.resources, item.category.transactionPicUri)
-            } else {
-                // Default resource icon
-                ContextCompat.getDrawable(context, R.drawable.ic_card)
+                // set picture to Category
+                Glide.with(context)
+                    .load(Uri.parse(item.category.imageUri))
+                    .override(Constants.ICON_SCALE, Constants.ICON_SCALE)
+                    .into(categoryIv)
+
+                // set picture to Account type
+                Glide.with(context)
+                    .load(Uri.parse(item.accountType.imageUri))
+                    .override(Constants.ICON_SCALE, Constants.ICON_SCALE)
+                    .into(accountIv)
+
+                categoryTv.text = item.category.compositeTitle
+                transactionAmountTv.text = item.transactionAmount
+
+                accountTypeTv.text = item.accountType.title
+                descriptionTv.text = item.description
+                if (item.description.isNullOrEmpty()) descriptionTv.visibility = ViewGroup.GONE
             }
-            imageView.setImageDrawable(transactionPic)
-            //imageView.setImageDrawable()
-            categoryTv.text =
-                if (item.category.subcategory != null) {
-                    context.getString(
-                        R.string.category_with_subcategory,
-                        item.category.title,
-                        item.category.subcategory
-                    )
-                } else {
-                    item.category.title
-                }
-            accountTypeTv.text = item.accountType.title
 
-            // get picture
-            val accountPic = if (item.accountType.accountPicUri != null) {
-                BitmapDrawable(context.resources, item.accountType.accountPicUri)
-            } else {
-                // Default resource icon
-                ContextCompat.getDrawable(context, R.drawable.ic_shopping_cart)
-            }
-            accountTypeTv.setCompoundDrawablesWithIntrinsicBounds(
-                accountPic,
-                null,
-                null,
-                null
-            )
-            descriptionTv.text = item.description
-            transactionAmountTv.text =
-                NumberFormat.getCurrencyInstance(locate).format(item.transactionAmount)
+        }
+    }
+
+    private fun selectItem(
+        holder: MyMoneyTransactionRecyclerViewAdapter.MoneyTransactionViewHolder,
+        item: TransactionItemUiModel
+    ) {
+        isEnabledDeleting = true
+        itemSelectedList.add(item)
+        item.isSelected = true
+        holder.binding.categoryIv.setImageResource(R.drawable.ic_baseline_check)
+        showMenuDelete(true)
+    }
+
+    private fun unselectItem(
+        holder: MoneyTransactionViewHolder,
+        item: TransactionItemUiModel
+    ) {
+        itemSelectedList.remove(item)
+        item.isSelected = false
+        // return imageView
+        setCategoryImageView(
+            holder.binding.categoryIv,
+            item.category
+        )
+        if (itemSelectedList.isEmpty()) {
+            showMenuDelete(false)
+            isEnabledDeleting = false
+        }
+    }
+
+    private fun provideAllSelectedItems() {
+        // Clear item selected list. There may be excess after removal
+        itemSelectedList =
+            itemSelectedList.filter { currentList.contains(it) } as MutableList<TransactionItemUiModel>
+        // Provide data
+        getAllSelectedItems(itemSelectedList)
+    }
+
+    private fun setCategoryImageView(categoryIv: ImageView, itemCategory: TrxCategoryUiModel) {
+        Glide.with(categoryIv.context)
+            .load(Uri.parse(itemCategory.imageUri))
+            .override(Constants.ICON_SCALE, Constants.ICON_SCALE)
+            .into(categoryIv)
+    }
+
+    object ItemDiffCallback : DiffUtil.ItemCallback<RecyclerMultiTypeItem>() {
+        override fun areItemsTheSame(
+            oldItem: RecyclerMultiTypeItem,
+            newItem: RecyclerMultiTypeItem
+        ): Boolean {
+            return oldItem == newItem
+        }
+
+        override fun areContentsTheSame(
+            oldItem: RecyclerMultiTypeItem,
+            newItem: RecyclerMultiTypeItem
+        ): Boolean {
+            return oldItem.type == newItem.type
         }
     }
 

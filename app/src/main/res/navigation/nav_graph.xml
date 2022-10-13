@@ -9,5 +9,130 @@
         android:id="@+id/fragmentMoneyTransactions"
         android:name="com.bogdanmurzin.mypersonalwallet.ui.fragment.FragmentMoneyTransactions"
         android:label="fragment_money_transactions_list"
-        tools:layout="@layout/fragment_money_transactions_list" />
+        tools:layout="@layout/fragment_money_transactions_list">
+        <action
+            android:id="@+id/action_fragmentMoneyTransactions_to_bottomSheetAddTransaction"
+            app:destination="@id/add_transaction_flow_graph" />
+    </fragment>
+    <navigation
+        android:id="@+id/add_transaction_flow_graph"
+        app:startDestination="@id/bottomSheetAddTransaction">
+        <dialog
+            android:id="@+id/bottomSheetAddTransaction"
+            android:name="com.bogdanmurzin.mypersonalwallet.ui.fragment.BottomSheetAddTransaction"
+            android:label="BottomSheetAddTransaction">
+            <argument
+                android:name="transactionId"
+                android:defaultValue="0"
+                app:argType="integer" />
+            <action
+                android:id="@+id/action_bottomSheetAddTransaction_to_datePickerFragment"
+                app:destination="@id/datePickerFragment" />
+            <action
+                android:id="@+id/action_bottomSheetAddTransaction_to_accountTypeChooseDialogFragment"
+                app:destination="@id/accountTypeChooseDialogFragment" />
+            <action
+                android:id="@+id/action_bottomSheetAddTransaction_to_trxCategoryChooseDialogFragment"
+                app:destination="@id/trxCategoryChooseDialogFragment" />
+        </dialog>
+        <dialog
+            android:id="@+id/datePickerFragment"
+            android:name="com.bogdanmurzin.mypersonalwallet.ui.fragment.DatePickerFragment"
+            android:label="DatePickerFragment" />
+        <argument
+            android:name="transactionId"
+            android:defaultValue="0"
+            app:argType="integer" />
+        <dialog
+            android:id="@+id/accountTypeChooseDialogFragment"
+            android:name="com.bogdanmurzin.mypersonalwallet.ui.fragment.AccountTypeChooseDialogFragment"
+            android:label="AccountTypeChooseDialogFragment" />
+        <dialog
+            android:id="@+id/trxCategoryChooseDialogFragment"
+            android:name="com.bogdanmurzin.mypersonalwallet.ui.fragment.TrxCategoryChooseDialogFragment"
+            android:label="TrxCategoryChooseDialogFragment" />
+    </navigation>
+    <fragment
+        android:id="@+id/accountFragment"
+        android:name="com.bogdanmurzin.mypersonalwallet.ui.fragment.AccountFragment"
+        android:label="fragment_account"
+        tools:layout="@layout/fragment_account">
+        <action
+            android:id="@+id/action_accountFragment_to_add_account_flow_graph"
+            app:destination="@id/add_account_flow_graph" />
+    </fragment>
+    <fragment
+        android:id="@+id/categoryFragment"
+        android:name="com.bogdanmurzin.mypersonalwallet.ui.fragment.TrxCategoryFragment"
+        android:label="fragment_category"
+        tools:layout="@layout/fragment_category" >
+        <action
+            android:id="@+id/action_categoryFragment_to_add_trx_category_flow_graph"
+            app:destination="@id/add_trx_category_flow_graph" />
+    </fragment>
+    <navigation
+        android:id="@+id/add_account_flow_graph"
+        app:startDestination="@id/bottomSheetAddAccount">
+        <dialog
+            android:id="@+id/bottomSheetAddAccount"
+            android:name="com.bogdanmurzin.mypersonalwallet.ui.fragment.BottomSheetAddAccount"
+            android:label="BottomSheetAddAccount">
+            <argument
+                android:name="accountId"
+                android:defaultValue="0"
+                app:argType="integer" />
+            <action
+                android:id="@+id/action_bottomSheetAddAccount_to_iconsActivity"
+                app:destination="@id/iconsFragment" />
+        </dialog>
+        <argument
+            android:name="accountId"
+            android:defaultValue="0"
+            app:argType="integer" />
+        <dialog
+            android:id="@+id/iconsFragment"
+            android:name="com.bogdanmurzin.mypersonalwallet.ui.fragment.IconsChooseFragment"
+            android:label="activity_icons"
+            tools:layout="@layout/fragemnt_icons" >
+            <argument
+                android:name="category"
+                app:argType="com.bogdanmurzin.mypersonalwallet.util.CategoryArg" />
+        </dialog>
+    </navigation>
+    <navigation
+        android:id="@+id/add_trx_category_flow_graph"
+        app:startDestination="@id/bottomSheetAddTrxCategory">
+        <dialog
+            android:id="@+id/iconsFragment"
+            android:name="com.bogdanmurzin.mypersonalwallet.ui.fragment.IconsChooseFragment"
+            android:label="activity_icons"
+            tools:layout="@layout/fragemnt_icons" >
+            <argument
+                android:name="category"
+                app:argType="com.bogdanmurzin.mypersonalwallet.util.CategoryArg" />
+        </dialog>
+        <dialog
+            android:id="@+id/bottomSheetAddTrxCategory"
+            android:name="com.bogdanmurzin.mypersonalwallet.ui.fragment.BottomSheetAddTrxCategory"
+            android:label="BottomSheetAddTrxCategory" >
+            <action
+                android:id="@+id/action_bottomSheetAddTrxCategory_to_iconsActivity"
+                app:destination="@id/iconsFragment" />
+            <argument
+                android:name="trxCategoryId"
+                android:defaultValue="0"
+                app:argType="integer" />
+            <action
+                android:id="@+id/action_bottomSheetAddTrxCategory_to_addSubcategoryFragment"
+                app:destination="@id/addSubcategoryFragment" />
+        </dialog>
+        <argument
+            android:name="trxCategoryId"
+            android:defaultValue="0"
+            app:argType="integer" />
+        <dialog
+            android:id="@+id/addSubcategoryFragment"
+            android:name="com.bogdanmurzin.mypersonalwallet.ui.fragment.AddSubcategoryFragment"
+            android:label="AddSubcategoryFragment" />
+    </navigation>
 </navigation>

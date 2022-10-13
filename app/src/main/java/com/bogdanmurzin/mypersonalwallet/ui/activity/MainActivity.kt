@@ -1,13 +1,60 @@
 package com.bogdanmurzin.mypersonalwallet.ui.activity
 
-import androidx.appcompat.app.AppCompatActivity
+import android.content.SharedPreferences
+import android.content.SharedPreferences.OnSharedPreferenceChangeListener
+import android.content.res.Configuration
 import android.os.Bundle
-import com.bogdanmurzin.mypersonalwallet.ui.fragment.FragmentMoneyTransactions
+import androidx.appcompat.app.AppCompatActivity
+import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.ui.setupWithNavController
 import com.bogdanmurzin.mypersonalwallet.R
+import com.bogdanmurzin.mypersonalwallet.common.Constants
+import com.bogdanmurzin.mypersonalwallet.common.Constants.PREF_THEME_COLOR
+import com.bogdanmurzin.mypersonalwallet.databinding.ActivityMainBinding
+import com.google.android.material.navigation.NavigationBarView
+import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
+
+@AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
+
+    private lateinit var binding: ActivityMainBinding
+
+    @Inject
+    lateinit var preferences: SharedPreferences
+
+    var listener =
+        OnSharedPreferenceChangeListener { prefs, key ->
+            if (key == PREF_THEME_COLOR) {
+                val themeResId = prefs.getInt(PREF_THEME_COLOR, Constants.DEFAULT_THEME)
+                theme.applyStyle(themeResId, true)
+                recreate()
+            }
+        }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+
+        val themeResId = preferences.getInt(PREF_THEME_COLOR, Constants.DEFAULT_THEME)
+        theme.applyStyle(themeResId, true)
+
+        preferences.registerOnSharedPreferenceChangeListener(listener)
+
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+
+        binding.toolbar.inflateMenu(R.menu.add_menu)
+
+        val navHostFragment =
+            supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
+        val navController = navHostFragment.navController
+
+        (binding.bottomNavView as NavigationBarView).setupWithNavController(navController)
+    }
+
+    override fun onConfigurationChanged(newConfig: Configuration) {
+        super.onConfigurationChanged(newConfig)
+        recreate()
     }
 }
