@@ -55,6 +55,11 @@ class BottomSheetAddAccount : BottomSheetDialogFragment() {
         // If we arrived here with an itemId of >= 0, then we are editing an existing item
         if (editingState == EditingState.EXISTING_TRANSACTION) {
             viewModel.setUpData(args.accountId)
+            // TODO delete btn
+            binding.deleteBtn.visibility = View.VISIBLE
+            binding.deleteBtn.setOnClickListener {
+
+            }
         }
 
         // When the user clicks the Done button, use the data here to either update

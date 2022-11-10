@@ -3,6 +3,7 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Android/MyPersonalWalletGitHub/MyPersonalWallet/app/src/main/res/layout/fragment_bottomsheet_add_account.xml" value="0.25" />
         <entry key="..\:/Android/PetProjects/my-personal-wallet/app/src/debug/res/drawable/ic_baseline_add.xml" value="0.225" />
         <entry key="..\:/Android/PetProjects/my-personal-wallet/app/src/debug/res/drawable/ic_card.xml" value="0.225" />
         <entry key="..\:/Android/PetProjects/my-personal-wallet/app/src/debug/res/drawable/ic_example.xml" value="0.225" />
