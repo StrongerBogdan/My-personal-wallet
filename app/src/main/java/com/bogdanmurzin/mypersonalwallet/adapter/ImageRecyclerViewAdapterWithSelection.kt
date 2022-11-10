@@ -1,12 +1,15 @@
 package com.bogdanmurzin.mypersonalwallet.adapter
 
 import android.graphics.Color
+import androidx.recyclerview.widget.RecyclerView
 import com.bogdanmurzin.domain.entities.CategoryEntity
 import com.bogdanmurzin.mypersonalwallet.R
 
 class ImageRecyclerViewAdapterWithSelection(
     private val onItemClicked: (CategoryEntity) -> Unit
 ) : ImageRecyclerViewAdapter(onItemClicked) {
+
+    var selectedPosition = RecyclerView.NO_POSITION
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val item = getItem(position)
