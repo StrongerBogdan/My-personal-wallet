@@ -50,4 +50,9 @@ class AccountLocalDataSourceImpl @Inject constructor(
                 accountTypeEntityMapper.toAccountEntity(account)
             )
         }
+
+    override suspend fun deleteAccountById(id: Int) =
+        withContext(dispatcher) {
+            accountTypeDao.deleteAccountById(id)
+        }
 }

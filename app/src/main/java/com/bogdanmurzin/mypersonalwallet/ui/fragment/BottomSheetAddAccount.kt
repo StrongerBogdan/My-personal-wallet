@@ -7,11 +7,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.navigation.navGraphViewModels
 import com.bogdanmurzin.mypersonalwallet.R
 import com.bogdanmurzin.mypersonalwallet.common.Constants
+import com.bogdanmurzin.mypersonalwallet.data.transaction_recycer_items.TransactionItemUiModel
 import com.bogdanmurzin.mypersonalwallet.databinding.FragmentBottomsheetAddAccountBinding
 import com.bogdanmurzin.mypersonalwallet.ui.viewmodel.AddAccountViewModel
 import com.bogdanmurzin.mypersonalwallet.util.CategoryArg
@@ -58,7 +60,7 @@ class BottomSheetAddAccount : BottomSheetDialogFragment() {
             // TODO delete btn
             binding.deleteBtn.visibility = View.VISIBLE
             binding.deleteBtn.setOnClickListener {
-
+                delete(args.accountId)
             }
         }
 
@@ -83,6 +85,23 @@ class BottomSheetAddAccount : BottomSheetDialogFragment() {
             binding.accountTitle.text.toString(),
             editingState
         )
+    }
+
+    private fun delete(id: Int) {
+        val deleteString = requireContext().getString(R.string.delete)
+        val messageString = requireContext().getString(R.string.delete_message)
+        val cancelString = requireContext().getString(R.string.cancel)
+
+        val alertDialog = AlertDialog.Builder(requireContext())
+            .setTitle(deleteString)
+            .setMessage(messageString)
+            .setPositiveButton(deleteString) { _, _ ->
+                viewModel.deleteAccountType(id)
+                // close bottomSheet
+                dismiss()
+            }
+            .setNegativeButton(cancelString) { _, _ -> }
+        alertDialog.show()
     }
 
     private fun setupViewModel() {
