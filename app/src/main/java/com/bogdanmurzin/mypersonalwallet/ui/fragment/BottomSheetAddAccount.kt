@@ -24,7 +24,7 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class BottomSheetAddAccount : BottomSheetDialogFragment() {
+class BottomSheetAddAccount : BottomSheetDialogFragment(), IBottomSheetAdd<BottomSheetAddAccountArgs> {
 
     private lateinit var binding: FragmentBottomsheetAddAccountBinding
     private val viewModel: AddAccountViewModel by navGraphViewModels(R.id.add_account_flow_graph) {
@@ -76,7 +76,7 @@ class BottomSheetAddAccount : BottomSheetDialogFragment() {
         setupViewModel()
     }
 
-    private fun done(
+    override fun done(
         args: BottomSheetAddAccountArgs,
         editingState: EditingState
     ) {
@@ -104,7 +104,7 @@ class BottomSheetAddAccount : BottomSheetDialogFragment() {
         alertDialog.show()
     }
 
-    private fun setupViewModel() {
+    override fun setupViewModel() {
         // Loaded AccountType for editing
         viewModel.loadedAccountType.observe(viewLifecycleOwner) { account ->
             binding.accountTitle.setText(account.title)

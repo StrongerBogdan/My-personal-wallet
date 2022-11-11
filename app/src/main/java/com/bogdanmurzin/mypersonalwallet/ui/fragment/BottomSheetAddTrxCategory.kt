@@ -24,7 +24,8 @@ import com.google.android.material.chip.ChipGroup
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class BottomSheetAddTrxCategory : BottomSheetDialogFragment() {
+class BottomSheetAddTrxCategory : BottomSheetDialogFragment(),
+    IBottomSheetAdd<BottomSheetAddTrxCategoryArgs> {
 
     private lateinit var binding: FragmentBottomsheetAddTrxcategoryBinding
     private val viewModel: AddTrxCategoryViewModel by navGraphViewModels(R.id.add_trx_category_flow_graph) {
@@ -72,10 +73,7 @@ class BottomSheetAddTrxCategory : BottomSheetDialogFragment() {
         setupViewModel()
     }
 
-    private fun done(
-        args: BottomSheetAddTrxCategoryArgs,
-        editingState: EditingState
-    ) {
+    override fun done(args: BottomSheetAddTrxCategoryArgs, editingState: EditingState) {
         viewModel.addNewTrxCategory(
             args.trxCategoryId,
             binding.trxcategoryCategory.text.toString(),
@@ -83,7 +81,8 @@ class BottomSheetAddTrxCategory : BottomSheetDialogFragment() {
         )
     }
 
-    private fun setupViewModel() {
+
+    override fun setupViewModel() {
         // Loaded Transaction categories for editing
         viewModel.loadedTrxCategories.observe(viewLifecycleOwner) { trxCategory ->
             binding.trxcategoryCategory.setText(trxCategory.title)

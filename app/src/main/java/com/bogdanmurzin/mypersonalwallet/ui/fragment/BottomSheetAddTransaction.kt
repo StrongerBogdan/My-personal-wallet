@@ -35,7 +35,8 @@ import java.util.*
 
 
 @AndroidEntryPoint
-class BottomSheetAddTransaction : BottomSheetDialogFragment() {
+class BottomSheetAddTransaction : BottomSheetDialogFragment(),
+    IBottomSheetAdd<BottomSheetAddTransactionArgs> {
 
     private lateinit var binding: FragmentBottomsheetAddTransactionBinding
     private val viewModel: AddTransactionViewModel by navGraphViewModels(R.id.add_transaction_flow_graph) {
@@ -100,7 +101,7 @@ class BottomSheetAddTransaction : BottomSheetDialogFragment() {
 
     }
 
-    private fun setupViewModel() {
+    override fun setupViewModel() {
         // Loaded Transaction for editing
         viewModel.loadedTransaction.observe(viewLifecycleOwner) { transactionUiModel ->
             binding.transactionAmountTv.setText(transactionUiModel.transactionAmount)
@@ -158,7 +159,7 @@ class BottomSheetAddTransaction : BottomSheetDialogFragment() {
                             .actionBottomSheetAddTransactionToAccountTypeChooseDialogFragment()
                     )
                 }
-                if (event.type == CategoryArg.TRANSACTION_CATEGORY){
+                if (event.type == CategoryArg.TRANSACTION_CATEGORY) {
                     findNavController().navigate(
                         BottomSheetAddTransactionDirections
                             .actionBottomSheetAddTransactionToTrxCategoryChooseDialogFragment()
@@ -178,7 +179,7 @@ class BottomSheetAddTransaction : BottomSheetDialogFragment() {
         }
     }
 
-    private fun done(args: BottomSheetAddTransactionArgs, editingState: EditingState) {
+    override fun done(args: BottomSheetAddTransactionArgs, editingState: EditingState) {
         viewModel.onBottomSheetDoneBtnClicked(
             args.transactionId,
             binding.transactionAmountTv.text.toString(),
