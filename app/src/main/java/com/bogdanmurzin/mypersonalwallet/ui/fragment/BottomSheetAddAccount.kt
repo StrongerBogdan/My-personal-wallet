@@ -57,7 +57,6 @@ class BottomSheetAddAccount : BottomSheetDialogFragment(), IBottomSheetAdd<Botto
         // If we arrived here with an itemId of >= 0, then we are editing an existing item
         if (editingState == EditingState.EXISTING_TRANSACTION) {
             viewModel.setUpData(args.accountId)
-            // TODO delete btn
             binding.deleteBtn.visibility = View.VISIBLE
             binding.deleteBtn.setOnClickListener {
                 delete(args.accountId)

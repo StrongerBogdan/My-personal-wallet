@@ -4,6 +4,7 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="..\:/Android/MyPersonalWalletGitHub/MyPersonalWallet/app/src/main/res/layout/fragment_bottomsheet_add_account.xml" value="0.33" />
+        <entry key="..\:/Android/MyPersonalWalletGitHub/MyPersonalWallet/app/src/main/res/layout/fragment_bottomsheet_add_trxcategory.xml" value="0.25" />
         <entry key="..\:/Android/MyPersonalWalletGitHub/MyPersonalWallet/app/src/main/res/layout/fragment_money_transactions_list.xml" value="0.16945288753799392" />
         <entry key="..\:/Android/PetProjects/my-personal-wallet/app/src/debug/res/drawable/ic_baseline_add.xml" value="0.225" />
         <entry key="..\:/Android/PetProjects/my-personal-wallet/app/src/debug/res/drawable/ic_card.xml" value="0.225" />

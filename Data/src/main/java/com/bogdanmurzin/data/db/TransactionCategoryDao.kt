@@ -36,4 +36,7 @@ interface TransactionCategoryDao {
 
     @Query("Update `trx_category` SET title = :titleNew, transaction_pic_uri = :imageUri WHERE title = :titleOld")
     fun update(titleNew: String, titleOld: String, imageUri: String)
+
+    @Query("DELETE FROM trx_category WHERE title = :trxCategoryTitle")
+    suspend fun delete(trxCategoryTitle: String)
 }

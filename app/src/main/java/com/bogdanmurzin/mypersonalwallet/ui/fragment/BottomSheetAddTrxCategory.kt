@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.navigation.navGraphViewModels
@@ -59,6 +60,10 @@ class BottomSheetAddTrxCategory : BottomSheetDialogFragment(),
         if (editingState == EditingState.EXISTING_TRANSACTION) {
             viewModel.setUpData(args.trxCategoryId)
             binding.subcategoriesScroll.visibility = View.VISIBLE
+            binding.deleteBtn.visibility = View.VISIBLE
+            binding.deleteBtn.setOnClickListener {
+                delete(args.trxCategoryId)
+            }
         }
 
         // When the user clicks the Done button, use the data here to either update
@@ -81,6 +86,22 @@ class BottomSheetAddTrxCategory : BottomSheetDialogFragment(),
         )
     }
 
+    private fun delete(id: Int) {
+        val deleteString = requireContext().getString(R.string.delete)
+        val messageString = requireContext().getString(R.string.delete_message)
+        val cancelString = requireContext().getString(R.string.cancel)
+
+        val alertDialog = AlertDialog.Builder(requireContext())
+            .setTitle(deleteString)
+            .setMessage(messageString)
+            .setPositiveButton(deleteString) { _, _ ->
+                viewModel.deleteTrxCategory(id)
+                // close bottomSheet
+                dismiss()
+            }
+            .setNegativeButton(cancelString) { _, _ -> }
+        alertDialog.show()
+    }
 
     override fun setupViewModel() {
         // Loaded Transaction categories for editing
