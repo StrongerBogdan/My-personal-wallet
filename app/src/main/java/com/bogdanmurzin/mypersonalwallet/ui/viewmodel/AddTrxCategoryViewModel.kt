@@ -2,10 +2,7 @@ package com.bogdanmurzin.mypersonalwallet.ui.viewmodel
 
 import androidx.lifecycle.*
 import com.bogdanmurzin.domain.entities.TransactionCategory
-import com.bogdanmurzin.domain.usecases.transaction_category.GetAllTrxSubCategoriesUseCase
-import com.bogdanmurzin.domain.usecases.transaction_category.GetTrxCategoryUseCase
-import com.bogdanmurzin.domain.usecases.transaction_category.InsertTrxCategoryUseCase
-import com.bogdanmurzin.domain.usecases.transaction_category.UpdateTrxCategoryUseCase
+import com.bogdanmurzin.domain.usecases.transaction_category.*
 import com.bogdanmurzin.mypersonalwallet.util.CoroutineDispatcherProvider
 import com.bogdanmurzin.mypersonalwallet.util.EditingState
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -18,6 +15,7 @@ class AddTrxCategoryViewModel @Inject constructor(
     private val getTrxCategoryUseCase: GetTrxCategoryUseCase,
     private val updateTrxCategoryUseCase: UpdateTrxCategoryUseCase,
     private val insertTrxCategoryUseCase: InsertTrxCategoryUseCase,
+    private val deleteTrxCategoryUseCase: DeleteTrxCategoryUseCase,
     private val getAllTrxSubCategoriesUseCase: GetAllTrxSubCategoriesUseCase,
     private val coroutineDispatcherProvider: CoroutineDispatcherProvider
 ) : ViewModel() {
@@ -66,6 +64,12 @@ class AddTrxCategoryViewModel @Inject constructor(
             return true
         }
         return false
+    }
+
+    fun deleteTrxCategory(id: Int) {
+        viewModelScope.launch(coroutineDispatcherProvider.io()) {
+            deleteTrxCategoryUseCase.invoke(id)
+        }
     }
 
     fun addNewTrxCategory(id: Int, category: String, state: EditingState) {
@@ -122,6 +126,7 @@ class AddTrxCategoryViewModel @Inject constructor(
         private val getTrxCategoryUseCase: GetTrxCategoryUseCase,
         private val updateTrxCategoryUseCase: UpdateTrxCategoryUseCase,
         private val insertTrxCategoryUseCase: InsertTrxCategoryUseCase,
+        private val deleteTrxCategoryUseCase: DeleteTrxCategoryUseCase,
         private val getAllTrxSubCategoriesUseCase: GetAllTrxSubCategoriesUseCase,
         private val coroutineDispatcherProvider: CoroutineDispatcherProvider
     ) : ViewModelProvider.NewInstanceFactory() {
@@ -131,6 +136,7 @@ class AddTrxCategoryViewModel @Inject constructor(
                 getTrxCategoryUseCase,
                 updateTrxCategoryUseCase,
                 insertTrxCategoryUseCase,
+                deleteTrxCategoryUseCase,
                 getAllTrxSubCategoriesUseCase,
                 coroutineDispatcherProvider
             ) as T

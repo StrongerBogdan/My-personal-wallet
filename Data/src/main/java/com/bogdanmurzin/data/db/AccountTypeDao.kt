@@ -24,4 +24,7 @@ interface AccountTypeDao {
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insert(accountType: AccountTypeEntity)
+
+    @Query("DELETE FROM account_type WHERE id = :aId")
+    suspend fun deleteAccountById(aId: Int)
 }

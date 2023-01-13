@@ -70,4 +70,10 @@ class TrxCategoryLocalDataSourceImpl @Inject constructor(
                 trxCategory.title, trxCategoryOld.title, trxCategory.imageUri
             )
         }
+
+    override suspend fun deleteTrxCategory(id: Int) =
+        withContext(dispatcher) {
+            val deleteEntity = transactionCategoryDao.getTrxCategoryById(id)
+            transactionCategoryDao.delete(deleteEntity.title)
+        }
 }

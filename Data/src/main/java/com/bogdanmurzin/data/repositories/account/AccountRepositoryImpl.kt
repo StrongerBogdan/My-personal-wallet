@@ -27,4 +27,7 @@ class AccountRepositoryImpl @Inject constructor(
     override suspend fun insertAccount(account: AccountType) =
         localDataSource.insertAccount(account)
 
+    override suspend fun deleteAccountById(id: Int) =
+        localDataSource.deleteAccountById(id)
+
 }

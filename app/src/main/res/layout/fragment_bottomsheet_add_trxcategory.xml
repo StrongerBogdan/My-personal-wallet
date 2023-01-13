@@ -78,9 +78,9 @@
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/done_btn"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/medium_margin"
+        android:layout_marginStart="@dimen/small_half_margin"
         android:layout_marginTop="@dimen/small_half_margin"
         android:layout_marginEnd="@dimen/medium_margin"
         android:layout_marginBottom="@dimen/small_half_margin"
@@ -91,9 +91,34 @@
         android:text="@string/done"
         android:textColor="?attr/colorOnPrimary"
         android:textSize="@dimen/button_text_size"
+        app:layout_constraintHorizontal_weight="0.85"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintStart_toEndOf="@id/delete_btn"
         app:layout_constraintTop_toBottomOf="@id/subcategories_scroll" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/delete_btn"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="@dimen/medium_margin"
+        android:layout_marginEnd="@dimen/small_half_margin"
+        android:backgroundTint="?attr/colorError"
+        android:gravity="center"
+        android:paddingTop="@dimen/small_margin"
+        android:paddingBottom="@dimen/small_margin"
+        app:icon="@drawable/ic_baseline_delete"
+        app:iconGravity="textStart"
+        app:iconPadding="0dp"
+        app:iconTint="@color/grayish_white"
+        android:textColor="?attr/colorOnError"
+        app:layout_constraintHorizontal_weight="0.15"
+        android:textSize="@dimen/button_text_size"
+        app:layout_constraintBottom_toBottomOf="@id/done_btn"
+        app:layout_constraintEnd_toStartOf="@id/done_btn"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@id/done_btn"
+        android:visibility="gone"
+        tools:visibility="visible"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

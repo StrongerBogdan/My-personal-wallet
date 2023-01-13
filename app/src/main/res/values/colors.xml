@@ -10,6 +10,7 @@
     <color name="light_gray">#ECECECEC</color>
     <color name="gray">#55555555</color>
     <color name="gray_dark">#121212</color>
+    <color name="cancel_red">#D30B0B</color>
 
     <color name="green">#228047</color>
     <color name="green_dark">#00521e</color>

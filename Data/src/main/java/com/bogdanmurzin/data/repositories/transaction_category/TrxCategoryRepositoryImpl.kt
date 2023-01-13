@@ -30,4 +30,7 @@ class TrxCategoryRepositoryImpl @Inject constructor(
     override suspend fun updateTrxCategory(trxCategory: TransactionCategory) =
         localDataSource.updateTrxCategory(trxCategory)
 
+    override suspend fun deleteTrxCategory(id: Int) =
+        localDataSource.deleteTrxCategory(id)
+
 }
