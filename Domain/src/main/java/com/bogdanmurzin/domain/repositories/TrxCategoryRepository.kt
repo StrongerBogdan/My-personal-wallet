@@ -20,4 +20,6 @@ interface TrxCategoryRepository {
 
     suspend fun updateTrxCategory(trxCategory: TransactionCategory)
 
+    suspend fun deleteTrxCategory(id: Int)
+
 }

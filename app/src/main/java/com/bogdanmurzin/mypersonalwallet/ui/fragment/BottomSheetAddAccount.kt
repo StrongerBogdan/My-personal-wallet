@@ -7,11 +7,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.navigation.navGraphViewModels
 import com.bogdanmurzin.mypersonalwallet.R
 import com.bogdanmurzin.mypersonalwallet.common.Constants
+import com.bogdanmurzin.mypersonalwallet.data.transaction_recycer_items.TransactionItemUiModel
 import com.bogdanmurzin.mypersonalwallet.databinding.FragmentBottomsheetAddAccountBinding
 import com.bogdanmurzin.mypersonalwallet.ui.viewmodel.AddAccountViewModel
 import com.bogdanmurzin.mypersonalwallet.util.CategoryArg
@@ -22,7 +24,7 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class BottomSheetAddAccount : BottomSheetDialogFragment() {
+class BottomSheetAddAccount : BottomSheetDialogFragment(), IBottomSheetAdd<BottomSheetAddAccountArgs> {
 
     private lateinit var binding: FragmentBottomsheetAddAccountBinding
     private val viewModel: AddAccountViewModel by navGraphViewModels(R.id.add_account_flow_graph) {
@@ -55,6 +57,10 @@ class BottomSheetAddAccount : BottomSheetDialogFragment() {
         // If we arrived here with an itemId of >= 0, then we are editing an existing item
         if (editingState == EditingState.EXISTING_TRANSACTION) {
             viewModel.setUpData(args.accountId)
+            binding.deleteBtn.visibility = View.VISIBLE
+            binding.deleteBtn.setOnClickListener {
+                delete(args.accountId)
+            }
         }
 
         // When the user clicks the Done button, use the data here to either update
@@ -69,7 +75,7 @@ class BottomSheetAddAccount : BottomSheetDialogFragment() {
         setupViewModel()
     }
 
-    private fun done(
+    override fun done(
         args: BottomSheetAddAccountArgs,
         editingState: EditingState
     ) {
@@ -80,7 +86,24 @@ class BottomSheetAddAccount : BottomSheetDialogFragment() {
         )
     }
 
-    private fun setupViewModel() {
+    private fun delete(id: Int) {
+        val deleteString = requireContext().getString(R.string.delete)
+        val messageString = requireContext().getString(R.string.delete_message)
+        val cancelString = requireContext().getString(R.string.cancel)
+
+        val alertDialog = AlertDialog.Builder(requireContext())
+            .setTitle(deleteString)
+            .setMessage(messageString)
+            .setPositiveButton(deleteString) { _, _ ->
+                viewModel.deleteAccountType(id)
+                // close bottomSheet
+                dismiss()
+            }
+            .setNegativeButton(cancelString) { _, _ -> }
+        alertDialog.show()
+    }
+
+    override fun setupViewModel() {
         // Loaded AccountType for editing
         viewModel.loadedAccountType.observe(viewLifecycleOwner) { account ->
             binding.accountTitle.setText(account.title)

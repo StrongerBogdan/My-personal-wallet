@@ -15,8 +15,6 @@ open class ImageRecyclerViewAdapter(
 ) :
     ListAdapter<CategoryEntity, ImageRecyclerViewAdapter.ViewHolder>(ItemDiffCallback) {
 
-    var selectedPosition = RecyclerView.NO_POSITION
-
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int

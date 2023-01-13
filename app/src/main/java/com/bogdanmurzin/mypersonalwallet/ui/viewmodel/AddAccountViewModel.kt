@@ -2,6 +2,7 @@ package com.bogdanmurzin.mypersonalwallet.ui.viewmodel
 
 import androidx.lifecycle.*
 import com.bogdanmurzin.domain.entities.AccountType
+import com.bogdanmurzin.domain.usecases.account_type.DeleteAccountUseCase
 import com.bogdanmurzin.domain.usecases.account_type.GetAccountTypeUseCase
 import com.bogdanmurzin.domain.usecases.account_type.InsertAccountUseCase
 import com.bogdanmurzin.domain.usecases.account_type.UpdateAccountUseCase
@@ -19,6 +20,7 @@ class AddAccountViewModel @Inject constructor(
     private val getAccountTypeUseCase: GetAccountTypeUseCase,
     private val updateAccountUseCase: UpdateAccountUseCase,
     private val insertAccountUseCase: InsertAccountUseCase,
+    private val deleteAccountUseCase: DeleteAccountUseCase,
     private val coroutineDispatcherProvider: CoroutineDispatcherProvider
 ) : ViewModel() {
 
@@ -65,6 +67,12 @@ class AddAccountViewModel @Inject constructor(
         }
     }
 
+    fun deleteAccountType(id: Int) {
+        viewModelScope.launch(coroutineDispatcherProvider.io()) {
+            deleteAccountUseCase.invoke(id)
+        }
+    }
+
     private fun updateAccount(accountType: AccountType) {
         viewModelScope.launch(coroutineDispatcherProvider.io()) {
             updateAccountUseCase.invoke(accountType)
@@ -86,6 +94,7 @@ class AddAccountViewModel @Inject constructor(
         private val getAccountTypeUseCase: GetAccountTypeUseCase,
         private val updateAccountUseCase: UpdateAccountUseCase,
         private val insertAccountUseCase: InsertAccountUseCase,
+        private val deleteAccountUseCase: DeleteAccountUseCase,
         private val coroutineDispatcherProvider: DefaultCoroutineDispatcherProvider
     ) : ViewModelProvider.NewInstanceFactory() {
 
@@ -94,6 +103,7 @@ class AddAccountViewModel @Inject constructor(
                 getAccountTypeUseCase,
                 updateAccountUseCase,
                 insertAccountUseCase,
+                deleteAccountUseCase,
                 coroutineDispatcherProvider
             ) as T
     }

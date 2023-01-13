@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.navigation.navGraphViewModels
@@ -24,7 +25,8 @@ import com.google.android.material.chip.ChipGroup
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class BottomSheetAddTrxCategory : BottomSheetDialogFragment() {
+class BottomSheetAddTrxCategory : BottomSheetDialogFragment(),
+    IBottomSheetAdd<BottomSheetAddTrxCategoryArgs> {
 
     private lateinit var binding: FragmentBottomsheetAddTrxcategoryBinding
     private val viewModel: AddTrxCategoryViewModel by navGraphViewModels(R.id.add_trx_category_flow_graph) {
@@ -58,6 +60,10 @@ class BottomSheetAddTrxCategory : BottomSheetDialogFragment() {
         if (editingState == EditingState.EXISTING_TRANSACTION) {
             viewModel.setUpData(args.trxCategoryId)
             binding.subcategoriesScroll.visibility = View.VISIBLE
+            binding.deleteBtn.visibility = View.VISIBLE
+            binding.deleteBtn.setOnClickListener {
+                delete(args.trxCategoryId)
+            }
         }
 
         // When the user clicks the Done button, use the data here to either update
@@ -72,10 +78,7 @@ class BottomSheetAddTrxCategory : BottomSheetDialogFragment() {
         setupViewModel()
     }
 
-    private fun done(
-        args: BottomSheetAddTrxCategoryArgs,
-        editingState: EditingState
-    ) {
+    override fun done(args: BottomSheetAddTrxCategoryArgs, editingState: EditingState) {
         viewModel.addNewTrxCategory(
             args.trxCategoryId,
             binding.trxcategoryCategory.text.toString(),
@@ -83,7 +86,24 @@ class BottomSheetAddTrxCategory : BottomSheetDialogFragment() {
         )
     }
 
-    private fun setupViewModel() {
+    private fun delete(id: Int) {
+        val deleteString = requireContext().getString(R.string.delete)
+        val messageString = requireContext().getString(R.string.delete_message)
+        val cancelString = requireContext().getString(R.string.cancel)
+
+        val alertDialog = AlertDialog.Builder(requireContext())
+            .setTitle(deleteString)
+            .setMessage(messageString)
+            .setPositiveButton(deleteString) { _, _ ->
+                viewModel.deleteTrxCategory(id)
+                // close bottomSheet
+                dismiss()
+            }
+            .setNegativeButton(cancelString) { _, _ -> }
+        alertDialog.show()
+    }
+
+    override fun setupViewModel() {
         // Loaded Transaction categories for editing
         viewModel.loadedTrxCategories.observe(viewLifecycleOwner) { trxCategory ->
             binding.trxcategoryCategory.setText(trxCategory.title)

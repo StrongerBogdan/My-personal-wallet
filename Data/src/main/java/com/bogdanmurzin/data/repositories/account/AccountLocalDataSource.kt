@@ -16,4 +16,6 @@ interface AccountLocalDataSource {
     suspend fun updateAccount(account: AccountType)
 
     suspend fun insertAccount(account: AccountType)
+
+    suspend fun deleteAccountById(id: Int)
 }
