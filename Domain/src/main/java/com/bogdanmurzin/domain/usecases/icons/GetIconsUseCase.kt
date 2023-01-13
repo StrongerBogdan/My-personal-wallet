@@ -1,4 +1,4 @@
-package com.epam.elearn.domain.usecases.icons
+package com.bogdanmurzin.domain.usecases.icons
 
 import com.bogdanmurzin.domain.entities.Icon
 import com.bogdanmurzin.domain.repositories.IconRepository

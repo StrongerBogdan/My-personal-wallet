@@ -4,7 +4,7 @@ import android.util.Log
 import android.widget.SearchView
 import com.bogdanmurzin.domain.entities.Icon
 import com.bogdanmurzin.mypersonalwallet.common.Constants.TAG
-import com.epam.elearn.domain.usecases.icons.GetIconsUseCase
+import com.bogdanmurzin.domain.usecases.icons.GetIconsUseCase
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.disposables.CompositeDisposable

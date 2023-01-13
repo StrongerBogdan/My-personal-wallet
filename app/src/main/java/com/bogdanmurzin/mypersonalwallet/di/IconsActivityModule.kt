@@ -1,7 +1,7 @@
 package com.bogdanmurzin.mypersonalwallet.di
 
 import com.bogdanmurzin.mypersonalwallet.ui.presenter.IconsPresenter
-import com.epam.elearn.domain.usecases.icons.GetIconsUseCase
+import com.bogdanmurzin.domain.usecases.icons.GetIconsUseCase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
