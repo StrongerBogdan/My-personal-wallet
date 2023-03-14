@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/accountFragment"
+        android:title="@string/account"
+        android:icon="@drawable/ic_baseline_credit_card"/>
+    <item
+        android:id="@+id/fragmentMoneyTransactions"
+        android:title="@string/home"
+        android:icon="@drawable/ic_baseline_home"/>
+    <item
+        android:id="@+id/categoryFragment"
+        android:title="@string/category"
+        android:icon="@drawable/ic_shopping_cart"/>
+</menu>
