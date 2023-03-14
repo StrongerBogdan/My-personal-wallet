@@ -1,6 +1,6 @@
 # My personal wallet
 
-
+![GitHub release (latest by date including pre-releases)](https://img.shields.io/github/v/release/StrongerBogdan/My-personal-wallet?include_prereleases)
 
 ## Used Technologies
 
